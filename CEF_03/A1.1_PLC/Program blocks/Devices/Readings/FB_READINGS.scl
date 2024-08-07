@@ -42,7 +42,7 @@ BEGIN
 	//TITLE = 'READINGS'
 	//AUTHOR: RAUL ROBINS
 	//CREATED ON: 03/24/2023
-	//VERSION: 1.0
+	//VERSION: 1.1
 	
 	#NumberOfReadings := "DB_ProductionProgramActual".Program.NumberOfReadings;
 	
