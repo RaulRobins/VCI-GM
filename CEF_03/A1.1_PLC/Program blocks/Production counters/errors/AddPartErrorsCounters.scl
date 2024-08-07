@@ -1,0 +1,32 @@
+﻿FUNCTION "AddPartErrorsCounters" : Void
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_INPUT 
+      iShiftStatus : "UDT_ShiftStatus";
+   END_VAR
+
+   VAR_TEMP 
+      i : Int;
+      shift : Int;
+   END_VAR
+
+
+BEGIN
+	CASE #iShiftStatus.ShiftNumber OF
+	    1..3:
+	        #shift := #iShiftStatus.ShiftNumber;
+	    ELSE
+	        #shift := 1;
+	END_CASE;
+	
+	IF "DB_ProductionProgramActual".ProgrammNumber > 0 AND "DB_ProductionProgramActual".ProgrammNumber <= "NumberOfProductionPrograms" THEN
+	    FOR #i := 1 TO 50 DO
+	        IF "Alarms".PartErrorsHMI[#i] = true THEN
+	            "PartErrorsCounter".CountersRef["DB_ProductionProgramActual".ProgrammNumber].Counters[#shift, #i] :=
+	            "PartErrorsCounter".CountersRef["DB_ProductionProgramActual".ProgrammNumber].Counters[#shift, #i] + 1;
+	        END_IF;
+	    END_FOR;
+	END_IF;
+	        
+END_FUNCTION
+

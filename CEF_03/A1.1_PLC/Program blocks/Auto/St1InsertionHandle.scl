@@ -1,0 +1,87 @@
+﻿FUNCTION "St1InsertionHandle" : Void
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_TEMP 
+      i : Int;
+      res : Bool;
+      empty : Bool;
+      lastNOKIndex : Int;
+   END_VAR
+
+
+BEGIN
+	
+	#i := 1;
+	"St1Insertion".SensorsState[#i] := "DevicesData".Camera[1].Result = 1;
+	#i := #i + 1;
+	"St1Insertion".SensorsState[#i] := "DevicesData".Camera[2].Result = 1;
+	#i := #i + 1;
+	"St1Insertion".SensorsState[#i] := "DevicesData".Camera[3].Result = 1;
+	#i := #i + 1;
+	"St1Insertion".SensorsState[#i] := "DevicesData".Camera[4].Result = 1;
+	#i := #i + 1;
+	"St1Insertion".SensorsState[#i] := "DB_INST_READINGS".Reading[1].OK = 1;
+	#i := #i + 1;
+	"St1Insertion".SensorsState[#i] := "DB_INST_READINGS".Reading[2].OK = 1;
+	#i := #i + 1;
+	"St1Insertion".SensorsState[#i] := "DB_INST_READINGS".Reading[3].OK = 1;
+	#i := #i + 1;
+	"St1Insertion".SensorsState[#i] := "DB_INST_READINGS".Reading[4].OK = 1;
+	#i := #i + 1;
+	"St1Insertion".SensorsState[#i] := "DB_INST_READINGS".Reading[5].OK = 1;
+	#i := #i + 1;
+	"St1Insertion".SensorsState[#i] := "DB_INST_READINGS".Reading[6].OK = 1;
+	#i := #i + 1;
+	"St1Insertion".SensorsState[#i] := "DB_INST_READINGS".Reading[7].OK = 1;
+	#i := #i + 1;
+	"St1Insertion".SensorsState[#i] := "DB_INST_READINGS".Reading[8].OK = 1;
+	#i := #i + 1;
+	"St1Insertion".SensorsState[#i] := FALSE;
+	#i := #i + 1;
+	"St1Insertion".SensorsState[#i] := FALSE;
+	#i := #i + 1;
+	"St1Insertion".SensorsState[#i] := FALSE;
+	#i := #i + 1;
+	"St1Insertion".SensorsState[#i] := FALSE;
+	#i := #i + 1;
+	"St1Insertion".SensorsState[#i] := FALSE;
+	#i := #i + 1;
+	"St1Insertion".SensorsState[#i] := "Sensor_LH_PP" = 1;
+	#i := #i + 1;
+	"St1Insertion".SensorsState[#i] := "Sensor_RH_PP" = 1;
+	
+	#lastNOKIndex := 1;
+	
+	#res := TRUE;
+	#empty := true;
+	FOR #i := 1 TO 20 DO
+	    
+	    //Check if all sensors are zero
+	    IF "St1Insertion".SensorsState[#i] THEN
+	        #empty := false;
+	    END_IF;
+	    //Check if sensor is correct
+	    IF ("St1Insertion".SensorsState[#i] <> "St1Insertion".ExpectedSensors[#i]) AND
+	            "St1Insertion".UsedSensors[#i] THEN
+	            #res := false;
+	            "St1Insertion".SensorsNOK[#i] := true;
+	            "St1Insertion".NOKList[#lastNOKIndex] := #i;
+	            #lastNOKIndex := #lastNOKIndex + 1;
+	        ELSE
+	            "St1Insertion".SensorsNOK[#i] := false;
+	    END_IF;
+	END_FOR;
+	    
+	//Reset rest of nok list
+	FOR #i := #lastNOKIndex TO 20 DO
+	        "St1Insertion".NOKList[#i] := 0;
+	END_FOR;
+	
+	"St1Insertion".InsertionOK := #res;
+	"St1Insertion".InsertionNOK := NOT #empty AND NOT #res;
+	"St1Insertion".InsertionEmpty := #empty;
+	
+	
+	
+END_FUNCTION
+

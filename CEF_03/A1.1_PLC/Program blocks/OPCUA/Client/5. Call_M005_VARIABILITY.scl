@@ -1,0 +1,72 @@
+﻿FUNCTION_BLOCK "5. Call_M005_VARIABILITY"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_INPUT 
+      equipmentVariability : WString;
+      errorDInt : Array[1..32] of DInt;
+      errorWString : Array[1..32] of WString;
+      x : Bool;
+   END_VAR
+
+   VAR 
+      variabilityIndex { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Array[1..32] of WString[1] := [WSTRING#'0', WSTRING#'1', WSTRING#'2', WSTRING#'3', WSTRING#'4', WSTRING#'5', WSTRING#'6', WSTRING#'7', WSTRING#'8', WSTRING#'9', WSTRING#'A', WSTRING#'B', WSTRING#'C', WSTRING#'D', WSTRING#'E', WSTRING#'F', WSTRING#'G', WSTRING#'H', WSTRING#'I', WSTRING#'J', WSTRING#'K', WSTRING#'L', WSTRING#'M', WSTRING#'N', WSTRING#'O', WSTRING#'P', WSTRING#'Q', WSTRING#'R', WSTRING#'S', WSTRING#'T', WSTRING#'U', WSTRING#'V'];
+      actualValue : Array[1..32] of DInt;
+      timestamp {InstructionName := 'DTL'; LibVersion := '1.0'} : DTL;
+      timestampStr : Struct
+         year : WString;
+         month : WString;
+         day : WString;
+         hour : WString;
+         minute : WString;
+         second : WString;
+      END_STRUCT;
+      datestring : String;
+   END_VAR
+
+   VAR_TEMP 
+      i : Int;
+      ret : Int;
+   END_VAR
+
+
+BEGIN
+	#ret := RD_LOC_T(#timestamp);
+	// convert Date/hour to string
+	    
+	#datestring:= "LGF_DTLtoString_ISO"("date":=#timestamp, separator:='-');
+	#datestring := REPLACE(IN1 := #datestring, IN2 := 'T',L:=1, P := 11);
+	
+	
+	"MII_Interface_Data".MII_METHODS.M005_VARIABILITY.Inputs.PLC_ID := "MII_Parameters".Connection.PLC_ID;
+	"MII_Interface_Data".MII_METHODS.M005_VARIABILITY.Inputs.PLANT := "MII_Parameters".Connection.PlantID;
+	
+	FOR #i := 1 TO 32 DO
+	    IF #errorDInt[#i] <> #actualValue[#i] AND NOT "1. DMC_setConnection_DB".CallBuffer[8] THEN
+	        
+	        IF #x THEN
+	            "MII_Interface_Data".MII_METHODS.M005_VARIABILITY.Inputs.VARIABILITY_CODE := CONCAT_WSTRING(IN1 := #equipmentVariability,
+	                                                                                                        IN2 := #variabilityIndex[#i],
+	                                                                                                        IN3 := WSTRING#'x');
+	        ELSE
+	            "MII_Interface_Data".MII_METHODS.M005_VARIABILITY.Inputs.VARIABILITY_CODE := CONCAT_WSTRING(IN1 := #equipmentVariability,
+	                                                                                                        IN2 := #variabilityIndex[#i],
+	                                                                                                        IN3 := WSTRING#'0');
+	        END_IF;
+	        
+	        
+	        "MII_Interface_Data".MII_METHODS.M005_VARIABILITY.Inputs.STATUS := #errorWString[#i];
+	        
+	        //Get error timestamp 
+	        "MII_Interface_Data".MII_METHODS.M005_VARIABILITY.Inputs.TIMESTAMP := MID(IN:=STRING_TO_WSTRING(#datestring), L:=19, P:=1);
+	        
+	        #actualValue[#i] := #errorDInt[#i];
+	        //Call the method 
+	        "1. DMC_setConnection_DB".CallBuffer[8] := TRUE;
+	        
+	        EXIT;
+	        
+	    END_IF;
+	END_FOR;
+	
+END_FUNCTION_BLOCK
+

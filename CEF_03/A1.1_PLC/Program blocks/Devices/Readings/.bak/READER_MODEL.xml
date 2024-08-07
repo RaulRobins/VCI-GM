@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Document>
+  <Engineering version="V17" />
+  <DocumentInfo>
+    <Created>2024-08-07T21:43:58.7275331Z</Created>
+    <ExportSetting>WithDefaults</ExportSetting>
+    <InstalledProducts>
+      <Product>
+        <DisplayName>Totally Integrated Automation Portal</DisplayName>
+        <DisplayVersion>V17 Update 7</DisplayVersion>
+      </Product>
+      <OptionPackage>
+        <DisplayName>TIA Portal Openness</DisplayName>
+        <DisplayVersion>V17 Update 7</DisplayVersion>
+      </OptionPackage>
+      <OptionPackage>
+        <DisplayName>TIA Portal Version Control Interface</DisplayName>
+        <DisplayVersion>V17</DisplayVersion>
+      </OptionPackage>
+      <Product>
+        <DisplayName>SINAMICS Startdrive Advanced</DisplayName>
+        <DisplayVersion>V17 SP2</DisplayVersion>
+      </Product>
+      <OptionPackage>
+        <DisplayName>SINAMICS Startdrive G110M, G120, G120C, G120D, G120P, G115D</DisplayName>
+        <DisplayVersion>V17 SP2</DisplayVersion>
+      </OptionPackage>
+      <OptionPackage>
+        <DisplayName>SINAMICS Startdrive G130, G150, S120, S150, SINAMICS MV, S210</DisplayName>
+        <DisplayVersion>V17 SP2</DisplayVersion>
+      </OptionPackage>
+      <Product>
+        <DisplayName>STEP 7 Professional</DisplayName>
+        <DisplayVersion>V17 Update 7</DisplayVersion>
+      </Product>
+      <OptionPackage>
+        <DisplayName>STEP 7 Safety</DisplayName>
+        <DisplayVersion>V17 Update 6</DisplayVersion>
+      </OptionPackage>
+      <Product>
+        <DisplayName>WinCC Advanced / Unified PC</DisplayName>
+        <DisplayVersion>V17 Update 7</DisplayVersion>
+      </Product>
+    </InstalledProducts>
+  </DocumentInfo>
+  <SW.Blocks.GlobalDB ID="0">
+    <AttributeList>
+      <AutoNumber>true</AutoNumber>
+      <DBAccessibleFromOPCUA>true</DBAccessibleFromOPCUA>
+      <DBAccessibleFromWebserver>true</DBAccessibleFromWebserver>
+      <HeaderAuthor />
+      <HeaderFamily />
+      <HeaderName />
+      <HeaderVersion>0.1</HeaderVersion>
+      <Interface><Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v5">
+  <Section Name="Static">
+    <Member Name="PRODUCT" Datatype="Array[0..&quot;NumberOfProductionPrograms&quot;] of &quot;READER_PRODUCT&quot;" Remanence="Retain" Accessibility="Public"><AttributeList><BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="SetPoint" SystemDefined="true">true</BooleanAttribute></AttributeList><Sections><Section Name="None"><Member Name="SIDE_RH" Datatype="Struct"><Member Name="POSITION" Datatype="Int"><Subelement Path="1"><StartValue>13</StartValue></Subelement><Subelement Path="2"><StartValue>13</StartValue></Subelement><Subelement Path="3"><StartValue>13</StartValue></Subelement><Subelement Path="4"><StartValue>13</StartValue></Subelement></Member><Member Name="LEN" Datatype="Int"><Subelement Path="1"><StartValue>3</StartValue></Subelement><Subelement Path="2"><StartValue>3</StartValue></Subelement><Subelement Path="3"><StartValue>3</StartValue></Subelement><Subelement Path="4"><StartValue>3</StartValue></Subelement></Member><Member Name="STRING_LABEL" Datatype="String"><Subelement Path="1"><StartValue>'336'</StartValue></Subelement><Subelement Path="2"><StartValue>'532'</StartValue></Subelement><Subelement Path="3"><StartValue>'336'</StartValue></Subelement><Subelement Path="4"><StartValue>'532'</StartValue></Subelement></Member><Member Name="READER_BYPASS" Datatype="Bool"><Subelement Path="1"><StartValue>FALSE</StartValue></Subelement><Subelement Path="2"><StartValue>FALSE</StartValue></Subelement><Subelement Path="3"><StartValue>FALSE</StartValue></Subelement><Subelement Path="4"><StartValue>FALSE</StartValue></Subelement></Member></Member><Member Name="SIDE_LH" Datatype="Struct"><Member Name="POSITION" Datatype="Int"><Subelement Path="1"><StartValue>13</StartValue></Subelement><Subelement Path="2"><StartValue>13</StartValue></Subelement><Subelement Path="3"><StartValue>13</StartValue></Subelement><Subelement Path="4"><StartValue>13</StartValue></Subelement></Member><Member Name="LEN" Datatype="Int"><Subelement Path="1"><StartValue>3</StartValue></Subelement><Subelement Path="2"><StartValue>3</StartValue></Subelement><Subelement Path="3"><StartValue>3</StartValue></Subelement><Subelement Path="4"><StartValue>3</StartValue></Subelement></Member><Member Name="STRING_LABEL" Datatype="String"><Subelement Path="1"><StartValue>'328'</StartValue></Subelement><Subelement Path="2"><StartValue>'526'</StartValue></Subelement><Subelement Path="3"><StartValue>'328'</StartValue></Subelement><Subelement Path="4"><StartValue>'526'</StartValue></Subelement></Member><Member Name="READER_BYPASS" Datatype="Bool"><Subelement Path="1"><StartValue>FALSE</StartValue></Subelement><Subelement Path="2"><StartValue>FALSE</StartValue></Subelement><Subelement Path="3"><StartValue>FALSE</StartValue></Subelement><Subelement Path="4"><StartValue>FALSE</StartValue></Subelement></Member></Member><Member Name="REAR_TUBE" Datatype="Struct"><Member Name="POSITION" Datatype="Int"><Subelement Path="1"><StartValue>13</StartValue></Subelement><Subelement Path="2"><StartValue>13</StartValue></Subelement><Subelement Path="3"><StartValue>13</StartValue></Subelement><Subelement Path="4"><StartValue>13</StartValue></Subelement></Member><Member Name="LEN" Datatype="Int"><Subelement Path="1"><StartValue>3</StartValue></Subelement><Subelement Path="2"><StartValue>3</StartValue></Subelement><Subelement Path="3"><StartValue>3</StartValue></Subelement><Subelement Path="4"><StartValue>3</StartValue></Subelement></Member><Member Name="STRING_LABEL" Datatype="String"><Subelement Path="1"><StartValue>'343'</StartValue></Subelement><Subelement Path="2"><StartValue>'514'</StartValue></Subelement><Subelement Path="3"><StartValue>'343'</StartValue></Subelement><Subelement Path="4"><StartValue>'514'</StartValue></Subelement></Member><Member Name="READER_BYPASS" Datatype="Bool"><Subelement Path="1"><StartValue>FALSE</StartValue></Subelement><Subelement Path="2"><StartValue>FALSE</StartValue></Subelement><Subelement Path="3"><StartValue>FALSE</StartValue></Subelement><Subelement Path="4"><StartValue>FALSE</StartValue></Subelement></Member></Member><Member Name="FRONT_TUBE" Datatype="Struct"><Member Name="POSITION" Datatype="Int"><Subelement Path="1"><StartValue>13</StartValue></Subelement><Subelement Path="2"><StartValue>13</StartValue></Subelement></Member><Member Name="LEN" Datatype="Int"><Subelement Path="1"><StartValue>3</StartValue></Subelement><Subelement Path="2"><StartValue>3</StartValue></Subelement></Member><Member Name="STRING_LABEL" Datatype="String"><Subelement Path="1"><StartValue>'907'</StartValue></Subelement><Subelement Path="2"><StartValue>'907'</StartValue></Subelement></Member><Member Name="READER_BYPASS" Datatype="Bool"><Subelement Path="1"><StartValue>TRUE</StartValue></Subelement><Subelement Path="2"><StartValue>TRUE</StartValue></Subelement><Subelement Path="3"><StartValue>TRUE</StartValue></Subelement><Subelement Path="4"><StartValue>TRUE</StartValue></Subelement></Member></Member><Member Name="NUM_TUBE" Datatype="Bool"><Subelement Path="1"><StartValue>TRUE</StartValue></Subelement><Subelement Path="2"><StartValue>TRUE</StartValue></Subelement><Subelement Path="3"><StartValue>FALSE</StartValue></Subelement></Member></Section></Sections></Member>
+  </Section>
+</Sections></Interface>
+      <IsOnlyStoredInLoadMemory>false</IsOnlyStoredInLoadMemory>
+      <IsRetainMemResEnabled>false</IsRetainMemResEnabled>
+      <IsWriteProtectedInAS>false</IsWriteProtectedInAS>
+      <MemoryLayout>Optimized</MemoryLayout>
+      <MemoryReserve>100</MemoryReserve>
+      <Name>READER_MODEL</Name>
+      <Number>74</Number>
+      <ProgrammingLanguage>DB</ProgrammingLanguage>
+    </AttributeList>
+    <ObjectList>
+      <MultilingualText ID="1" CompositionName="Comment">
+        <ObjectList>
+          <MultilingualTextItem ID="2" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+          <MultilingualTextItem ID="3" CompositionName="Items">
+            <AttributeList>
+              <Culture>es-MX</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+      <MultilingualText ID="4" CompositionName="Title">
+        <ObjectList>
+          <MultilingualTextItem ID="5" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+          <MultilingualTextItem ID="6" CompositionName="Items">
+            <AttributeList>
+              <Culture>es-MX</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+    </ObjectList>
+  </SW.Blocks.GlobalDB>
+</Document>

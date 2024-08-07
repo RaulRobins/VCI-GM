@@ -1,0 +1,60 @@
+﻿FUNCTION "FC_IJCORE_MANAGEMENT" : Void
+{ S7_Optimized_Access := 'FALSE' }
+VERSION : 0.1
+   VAR_TEMP 
+      lctr1 : Int;
+      lctr2 : Int;
+      cnt1 : Int;
+      cnt2 : Int;
+   END_VAR
+
+
+BEGIN
+	
+	
+	//Awake Bit
+	REGION Awake Bit
+	    "DB_INST_AWAKE_SIGNAL"(ack_error:="Alarms".Reset);
+	END_REGION
+	
+	//Send messages
+	"DB_MAIN_IJCORE".CMD.TRC := "DB_MAIN_IJCORE".STAT.STA_OK;
+	
+	
+	
+	//Manage results
+	REGION STA Answer
+	    #cnt1 := 0;
+	    #cnt2 := 0;
+	    FOR #lctr1 := 1 TO "DB_ProductionProgramActual".Program.NumberOfReadings DO
+	        FOR #lctr2 := 1 TO "NumberOfmessages" DO
+	            IF "DB_ProductionProgramActual".Program.Readings[#lctr1].Enable AND
+	                ("DB_ProductionProgramActual".Program.Readings[#lctr1].Message[#lctr2].MessageType = 1) AND
+	                ("DB_ProductionProgramActual".Program.Readings[#lctr1].Message[#lctr2].MessageFlagNumber > 0) THEN
+	                #cnt1 += 1;
+	            END_IF;
+	            //Count aswer ok
+	            IF "DB_ProductionProgramActual".Program.Readings[#lctr1].Enable AND
+	                ("DB_ProductionProgramActual".Program.Readings[#lctr1].Message[#lctr2].MessageType = 1) AND
+	                ("DB_ProductionProgramActual".Program.Readings[#lctr1].Message[#lctr2].MessageFlagNumber > 0) AND
+	                "DB_INST_READINGS".Reading[#lctr1].IJC[#lctr2].Done THEN
+	                #cnt2 += 1;
+	            END_IF;
+	            
+	            IF #cnt1 = #cnt2 THEN
+	                "DB_MAIN_IJCORE".STAT.STA_OK := TRUE;
+	            ELSE
+	                "DB_MAIN_IJCORE".STAT.STA_OK := FALSE;
+	            END_IF;
+	            
+	        END_FOR;
+	    END_FOR;
+	    
+	END_REGION
+	
+	
+	
+	
+	
+END_FUNCTION
+

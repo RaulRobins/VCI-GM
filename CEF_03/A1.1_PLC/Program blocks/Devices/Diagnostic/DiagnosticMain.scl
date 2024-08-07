@@ -1,0 +1,45 @@
+﻿FUNCTION_BLOCK "DiagnosticMain"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR 
+      i : Int;
+      index : Int;
+      state : Int;
+   END_VAR
+
+
+BEGIN
+	//PN Device diagnostic
+	"Devices_Diagnostic_DB"(PNIdentifier := "Local~PROFINET_IO-System");
+	
+	//IO Visualisation
+	"IODiagnostic_DB"();
+	
+	
+	
+	//Make list of configured devices
+	#index := 1;
+	FOR #i := 1 TO 200 DO
+	    IF "Devices_Diagnostic_DB".PNConfigured[#i] THEN
+	        "DiagnosticConfigured".Adresses[#index] := #i;
+	        #state := 0;
+	        IF "Devices_Diagnostic_DB".PNFaulty[#i] THEN
+	            #state := #state + w#16#0002;
+	        END_IF;
+	        IF "Devices_Diagnostic_DB".PNExist[#i] THEN
+	            #state := #state + w#16#0001;
+	        END_IF;
+	        "DiagnosticConfigured".States[#index] := #state;
+	        
+	        "DiagnosticConfigured".Errors[#index] := "Devices_Diagnostic_DB".PNFaulty[#i];
+	        "DiagnosticConfigured".Exists[#index] := "Devices_Diagnostic_DB".PNExist[#i];
+	        #index := #index + 1;
+	    END_IF;
+	END_FOR;
+	
+	
+	
+	        
+	
+END_FUNCTION_BLOCK
+

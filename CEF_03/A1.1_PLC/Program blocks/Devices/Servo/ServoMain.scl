@@ -1,0 +1,120 @@
+﻿FUNCTION_BLOCK "ServoMain"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR 
+      "TO_BasicPos_TA1-3MA_Instance" {InstructionName := 'TO_BasicPos'; LibVersion := '1.0'} : TO_BasicPos;
+      IEC_Timer_0_Instance {InstructionName := 'TON_TIME'; LibVersion := '1.0'} : TON_TIME;
+      "ServoControl_TA1-3MA_Instance" : "ServoControl";
+      IEC_Timer_0_Instance_1 {InstructionName := 'TP_TIME'; LibVersion := '1.0'} : TP_TIME;
+   END_VAR
+
+
+BEGIN
+	
+	
+	IF "ModeSelection_DB".mode.activeMode <> "mode_1_manual" THEN
+	    "DevicesData"."TA1-3MA".Jog1 := false;
+	    "DevicesData"."TA1-3MA".Jog2 := false;
+	END_IF;
+	
+	#IEC_Timer_0_Instance(IN := "DevicesData"."TA1-3MA".ExecuteMode AND "DevicesData"."TA1-3MA".ActMode = 2 AND NOT #IEC_Timer_0_Instance_1.Q,
+	                      PT := t#100ms);
+	#IEC_Timer_0_Instance_1(IN:=#IEC_Timer_0_Instance.Q,
+	                        PT:=t#100ms);
+	IF #IEC_Timer_0_Instance_1.Q THEN
+	    "DevicesData"."TA1-3MA".ExecuteMode := FALSE;
+	END_IF;
+	
+	#"ServoControl_TA1-3MA_Instance"(ServoParams := "StationParameters".Servo,
+	                                 SafetyOK := "safety_signals"."4L+",
+	                                 "Activate positioning" := FALSE,
+	                                 ResetAlarm := "Alarms".Reset,
+	                                 STOP := "safety_signals"."4L+" (*AND
+	                                 "DevicesData".Cylinders["MM104_AutoejectGripperLifting"].InBp AND
+	                                 "DevicesData".Cylinders["MM104_AutoejectGripperLifting"].ToBp*),
+	                                 ConfigEPos_IO => "TO_TA1-3MA_DB".ConfigEPos,
+	                                 ServoData := "DevicesData"."TA1-3MA");
+	
+	"TO_TA1-3MA_DB"(ModePos := "DevicesData"."TA1-3MA".ModePos,
+	                EnableAxis := "DevicesData"."TA1-3MA".EnableAxis,
+	                CancelTraversing := "DevicesData"."TA1-3MA".CancelTraversing,
+	                IntermediateStop := "DevicesData"."TA1-3MA".IntermediateStop,
+	                Positive := "DevicesData"."TA1-3MA".Positive,
+	                Negative := "DevicesData"."TA1-3MA".Negative,
+	                Jog1 := "DevicesData"."TA1-3MA".Jog1 AND
+	                "DevicesData".Cylinders["MM104_AutoejectGripperLifting"].InBp AND
+	                "DevicesData".Cylinders["MM104_AutoejectGripperLifting"].ToBp,
+	                Jog2 := "DevicesData"."TA1-3MA".Jog2 AND
+	                "DevicesData".Cylinders["MM104_AutoejectGripperLifting"].InBp AND
+	                "DevicesData".Cylinders["MM104_AutoejectGripperLifting"].ToBp,
+	                FlyRef := "DevicesData"."TA1-3MA".FlyRef,
+	                AckError := "DevicesData"."TA1-3MA".AckError,
+	                ExecuteMode := "DevicesData"."TA1-3MA".ExecuteMode AND
+	                "DevicesData".Cylinders["MM104_AutoejectGripperLifting"].InBp AND
+	                "DevicesData".Cylinders["MM104_AutoejectGripperLifting"].ToBp,
+	                Position := "DevicesData"."TA1-3MA".Position,
+	                Velocity := "DevicesData"."TA1-3MA".Velocity,
+	                OverV := "DevicesData"."TA1-3MA".OverV,
+	                OverAcc := "DevicesData"."TA1-3MA".OverAcc,
+	                OverDec := "DevicesData"."TA1-3MA".OverDec,
+	                //                      ConfigEPos:=_dword_in_,
+	                AxisEnabled => "DevicesData"."TA1-3MA".AxisEnabled,
+	                AxisPosOk => "DevicesData"."TA1-3MA".AxisPosOk,
+	                AxisSpFixed => "DevicesData"."TA1-3MA".AxisSpFixed,
+	                AxisRef => "DevicesData"."TA1-3MA".AxisRef,
+	                AxisWarn => "DevicesData"."TA1-3MA".AxisWarn,
+	                AxisError => "DevicesData"."TA1-3MA".AxisError,
+	                Lockout => "DevicesData"."TA1-3MA".Lockout,
+	 //               ActVelocity => "DevicesData"."TA1-3MA".ActVelocity,
+	                ActPosition => "DevicesData"."TA1-3MA".ActPosition,
+	                ActMode => "DevicesData"."TA1-3MA".ActMode,
+	                EPosZSW1 => "DevicesData"."TA1-3MA".EPosZSW1,
+	                EPosZSW2 => "DevicesData"."TA1-3MA".EPosZSW2,
+	                ActWarn => "DevicesData"."TA1-3MA".ActWarn,
+	                ActFault => "DevicesData"."TA1-3MA".ActFault,
+	                Error => "DevicesData"."TA1-3MA".Error,
+	                Status => "DevicesData"."TA1-3MA".Status,
+	                DiagId => "DevicesData"."TA1-3MA".DiagID);
+	
+	"DevicesData"."TA1-3MA".ActVelocity := "TO_TA1-3MA_DB".ActVelocity / 220000;
+	
+	REGION zones
+	    "DevicesData"."TA1-3MA".data.zones.inNOKpos := "DevicesData"."TA1-3MA".AxisRef AND "DevicesData"."TA1-3MA".AxisPosOk AND
+	    "DevicesData"."TA1-3MA".ActPosition >= "StationParameters".ServoPositions[0] - 100 AND
+	    "DevicesData"."TA1-3MA".ActPosition <= "StationParameters".ServoPositions[0] + 100;
+	    
+	    "DevicesData"."TA1-3MA".data.zones.inOKpos := "DevicesData"."TA1-3MA".AxisRef AND "DevicesData"."TA1-3MA".AxisPosOk AND
+	    "DevicesData"."TA1-3MA".ActPosition >= "StationParameters".ServoPositions[1] - 100 AND
+	    "DevicesData"."TA1-3MA".ActPosition <= "StationParameters".ServoPositions[1] + 100;
+	    
+	    "DevicesData"."TA1-3MA".data.zones.inST3jig := "DevicesData"."TA1-3MA".AxisRef AND "DevicesData"."TA1-3MA".AxisPosOk AND
+	    "DevicesData"."TA1-3MA".ActPosition >= "StationParameters".ServoPositions[2] - 100 AND
+	    "DevicesData"."TA1-3MA".ActPosition <= "StationParameters".ServoPositions[2] + 100;
+	    
+	    "DevicesData"."TA1-3MA".data.zones.outOfOKposZone := "DevicesData"."TA1-3MA".AxisRef AND
+	    "DevicesData"."TA1-3MA".ActPosition <= "StationParameters".ServoPositions[0] + 10000 AND
+	    "DevicesData"."TA1-3MA".Position <= "StationParameters".ServoPositions[0] + 100;
+	    
+	    "DevicesData"."TA1-3MA".data.zones.outOfST3zone := "DevicesData"."TA1-3MA".AxisRef AND
+	    "DevicesData"."TA1-3MA".ActPosition <= "StationParameters".ServoPositions[1] + 10000 AND
+	    "DevicesData"."TA1-3MA".Position <= "StationParameters".ServoPositions[1] + 100;
+	END_REGION
+	
+	IF "ModeSelection_DB".mode.modeChanged THEN
+	    "DevicesData"."TA1-3MA".EnableAxis := FALSE;
+	END_IF;
+	
+	IF "ModeSelection_DB".mode.activeMode = "mode_2_base" OR "ModeSelection_DB".mode.activeMode = "mode_3_automat" THEN
+	    "DevicesData"."TA1-3MA".EnableAxis :=
+	    "DevicesData"."TA1-3MA".AxisEnabled
+	    OR
+	    NOT "DevicesData"."TA1-3MA".AxisEnabled AND
+	    "Clock_1Hz";
+	END_IF;
+	
+	
+	
+	
+	
+END_FUNCTION_BLOCK
+

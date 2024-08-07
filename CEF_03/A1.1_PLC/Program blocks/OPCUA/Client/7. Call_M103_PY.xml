@@ -1,0 +1,451 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Document>
+  <Engineering version="V17" />
+  <DocumentInfo>
+    <Created>2024-08-07T21:44:11.0411207Z</Created>
+    <ExportSetting>WithDefaults</ExportSetting>
+    <InstalledProducts>
+      <Product>
+        <DisplayName>Totally Integrated Automation Portal</DisplayName>
+        <DisplayVersion>V17 Update 7</DisplayVersion>
+      </Product>
+      <OptionPackage>
+        <DisplayName>TIA Portal Openness</DisplayName>
+        <DisplayVersion>V17 Update 7</DisplayVersion>
+      </OptionPackage>
+      <OptionPackage>
+        <DisplayName>TIA Portal Version Control Interface</DisplayName>
+        <DisplayVersion>V17</DisplayVersion>
+      </OptionPackage>
+      <Product>
+        <DisplayName>SINAMICS Startdrive Advanced</DisplayName>
+        <DisplayVersion>V17 SP2</DisplayVersion>
+      </Product>
+      <OptionPackage>
+        <DisplayName>SINAMICS Startdrive G110M, G120, G120C, G120D, G120P, G115D</DisplayName>
+        <DisplayVersion>V17 SP2</DisplayVersion>
+      </OptionPackage>
+      <OptionPackage>
+        <DisplayName>SINAMICS Startdrive G130, G150, S120, S150, SINAMICS MV, S210</DisplayName>
+        <DisplayVersion>V17 SP2</DisplayVersion>
+      </OptionPackage>
+      <Product>
+        <DisplayName>STEP 7 Professional</DisplayName>
+        <DisplayVersion>V17 Update 7</DisplayVersion>
+      </Product>
+      <OptionPackage>
+        <DisplayName>STEP 7 Safety</DisplayName>
+        <DisplayVersion>V17 Update 6</DisplayVersion>
+      </OptionPackage>
+      <Product>
+        <DisplayName>WinCC Advanced / Unified PC</DisplayName>
+        <DisplayVersion>V17 Update 7</DisplayVersion>
+      </Product>
+    </InstalledProducts>
+  </DocumentInfo>
+  <SW.Blocks.FB ID="0">
+    <AttributeList>
+      <AutoNumber>false</AutoNumber>
+      <HeaderAuthor />
+      <HeaderFamily />
+      <HeaderName />
+      <HeaderVersion>0.1</HeaderVersion>
+      <Interface><Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v5">
+  <Section Name="Input">
+    <Member Name="PY_ON" Datatype="Bool" Remanence="NonRetain" Accessibility="Public"><AttributeList><BooleanAttribute Name="ExternalAccessible" SystemDefined="true">false</BooleanAttribute><BooleanAttribute Name="ExternalVisible" SystemDefined="true">false</BooleanAttribute><BooleanAttribute Name="ExternalWritable" SystemDefined="true">false</BooleanAttribute></AttributeList></Member>
+    <Member Name="PY_DOWN" Datatype="Bool" Remanence="NonRetain" Accessibility="Public"><AttributeList><BooleanAttribute Name="ExternalAccessible" SystemDefined="true">false</BooleanAttribute><BooleanAttribute Name="ExternalVisible" SystemDefined="true">false</BooleanAttribute><BooleanAttribute Name="ExternalWritable" SystemDefined="true">false</BooleanAttribute></AttributeList></Member>
+    <Member Name="PY_OFF" Datatype="Bool" Remanence="NonRetain" Accessibility="Public"><AttributeList><BooleanAttribute Name="ExternalAccessible" SystemDefined="true">false</BooleanAttribute><BooleanAttribute Name="ExternalVisible" SystemDefined="true">false</BooleanAttribute><BooleanAttribute Name="ExternalWritable" SystemDefined="true">false</BooleanAttribute></AttributeList></Member>
+  </Section>
+  <Section Name="Output" />
+  <Section Name="InOut" />
+  <Section Name="Static">
+    <Member Name="PYOnTemp" Datatype="Bool" Remanence="NonRetain" Accessibility="Public"><AttributeList><BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute></AttributeList></Member>
+    <Member Name="PYDownTemp" Datatype="Bool" Remanence="NonRetain" Accessibility="Public"><AttributeList><BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute></AttributeList></Member>
+    <Member Name="PYOffTemp" Datatype="Bool" Remanence="NonRetain" Accessibility="Public"><AttributeList><BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute></AttributeList></Member>
+  </Section>
+  <Section Name="Temp" />
+  <Section Name="Constant" />
+</Sections></Interface>
+      <IsIECCheckEnabled>false</IsIECCheckEnabled>
+      <IsRetainMemResEnabled>false</IsRetainMemResEnabled>
+      <MemoryLayout>Optimized</MemoryLayout>
+      <MemoryReserve>100</MemoryReserve>
+      <Name>7. Call_M103_PY</Name>
+      <Number>2007</Number>
+      <ProgrammingLanguage>LAD</ProgrammingLanguage>
+      <SetENOAutomatically>false</SetENOAutomatically>
+      <UDABlockProperties />
+      <UDAEnableTagReadback>false</UDAEnableTagReadback>
+    </AttributeList>
+    <ObjectList>
+      <MultilingualText ID="1" CompositionName="Comment">
+        <ObjectList>
+          <MultilingualTextItem ID="2" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+          <MultilingualTextItem ID="3" CompositionName="Items">
+            <AttributeList>
+              <Culture>es-MX</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+      <SW.Blocks.CompileUnit ID="4" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource><StructuredText xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/StructuredText/v3">
+  <Token Text="IF" UId="21" />
+  <Blank Num="1" UId="22" />
+  <Token Text="(" UId="23" />
+  <Access Scope="LocalVariable" UId="24">
+    <Symbol UId="25">
+      <Component Name="PY_ON" UId="26" />
+    </Symbol>
+  </Access>
+  <Blank Num="1" UId="27" />
+  <Token Text="&lt;&gt;" UId="28" />
+  <Blank Num="1" UId="29" />
+  <Access Scope="LocalVariable" UId="30">
+    <Symbol UId="31">
+      <Component Name="PYOnTemp" UId="32" />
+    </Symbol>
+  </Access>
+  <Blank Num="1" UId="33" />
+  <Token Text="OR" UId="34" />
+  <Blank Num="1" UId="35" />
+  <Access Scope="LocalVariable" UId="36">
+    <Symbol UId="37">
+      <Component Name="PY_DOWN" UId="38" />
+    </Symbol>
+  </Access>
+  <Blank Num="1" UId="39" />
+  <Token Text="&lt;&gt;" UId="40" />
+  <Blank Num="1" UId="41" />
+  <Access Scope="LocalVariable" UId="42">
+    <Symbol UId="43">
+      <Component Name="PYDownTemp" UId="44" />
+    </Symbol>
+  </Access>
+  <Blank Num="1" UId="45" />
+  <Token Text="OR" UId="46" />
+  <Blank Num="1" UId="47" />
+  <Access Scope="LocalVariable" UId="48">
+    <Symbol UId="49">
+      <Component Name="PY_OFF" UId="50" />
+    </Symbol>
+  </Access>
+  <Blank Num="1" UId="51" />
+  <Token Text="&lt;&gt;" UId="52" />
+  <Blank Num="1" UId="53" />
+  <Access Scope="LocalVariable" UId="54">
+    <Symbol UId="55">
+      <Component Name="PYOffTemp" UId="56" />
+    </Symbol>
+  </Access>
+  <Token Text=")" UId="57" />
+  <Blank Num="1" UId="58" />
+  <Token Text="AND" UId="59" />
+  <Blank Num="1" UId="60" />
+  <Token Text="(" UId="61" />
+  <Access Scope="LocalVariable" UId="62">
+    <Symbol UId="63">
+      <Component Name="PY_ON" UId="64" />
+    </Symbol>
+  </Access>
+  <Blank Num="1" UId="65" />
+  <Token Text="OR" UId="66" />
+  <Blank Num="1" UId="67" />
+  <Access Scope="LocalVariable" UId="68">
+    <Symbol UId="69">
+      <Component Name="PY_DOWN" UId="70" />
+    </Symbol>
+  </Access>
+  <Blank Num="1" UId="71" />
+  <Token Text="OR" UId="72" />
+  <Blank Num="1" UId="73" />
+  <Access Scope="LocalVariable" UId="74">
+    <Symbol UId="75">
+      <Component Name="PY_OFF" UId="76" />
+    </Symbol>
+  </Access>
+  <Token Text=")" UId="77" />
+  <Blank Num="1" UId="78" />
+  <Token Text="THEN" UId="79" />
+  <NewLine Num="1" UId="80" />
+  <Blank Num="4" UId="81" />
+  <NewLine Num="1" UId="82" />
+  <Blank Num="4" UId="83" />
+  <Access Scope="GlobalVariable" UId="84">
+    <Symbol UId="85">
+      <Component Name="MII_Interface_Data" UId="86" />
+      <Token Text="." UId="87" />
+      <Component Name="MII_METHODS" UId="88" />
+      <Token Text="." UId="89" />
+      <Component Name="M103_PY" UId="90" />
+      <Token Text="." UId="91" />
+      <Component Name="Inputs" UId="92" />
+      <Token Text="." UId="93" />
+      <Component Name="PLC_ID" UId="94" />
+    </Symbol>
+  </Access>
+  <Blank Num="1" UId="95" />
+  <Token Text=":=" UId="96" />
+  <Blank Num="1" UId="97" />
+  <Access Scope="GlobalVariable" UId="98">
+    <Symbol UId="99">
+      <Component Name="MII_Parameters" UId="100" />
+      <Token Text="." UId="101" />
+      <Component Name="Connection" UId="102" />
+      <Token Text="." UId="103" />
+      <Component Name="PLC_ID" UId="104" />
+    </Symbol>
+  </Access>
+  <Token Text=";" UId="105" />
+  <NewLine Num="1" UId="106" />
+  <Blank Num="4" UId="107" />
+  <Access Scope="GlobalVariable" UId="108">
+    <Symbol UId="109">
+      <Component Name="MII_Interface_Data" UId="110" />
+      <Token Text="." UId="111" />
+      <Component Name="MII_METHODS" UId="112" />
+      <Token Text="." UId="113" />
+      <Component Name="M103_PY" UId="114" />
+      <Token Text="." UId="115" />
+      <Component Name="Inputs" UId="116" />
+      <Token Text="." UId="117" />
+      <Component Name="PLANT" UId="118" />
+    </Symbol>
+  </Access>
+  <Blank Num="1" UId="119" />
+  <Token Text=":=" UId="120" />
+  <Blank Num="1" UId="121" />
+  <Access Scope="GlobalVariable" UId="122">
+    <Symbol UId="123">
+      <Component Name="MII_Parameters" UId="124" />
+      <Token Text="." UId="125" />
+      <Component Name="Connection" UId="126" />
+      <Token Text="." UId="127" />
+      <Component Name="PlantID" UId="128" />
+    </Symbol>
+  </Access>
+  <Token Text=";" UId="129" />
+  <NewLine Num="1" UId="130" />
+  <Blank Num="4" UId="131" />
+  <NewLine Num="1" UId="132" />
+  <Blank Num="4" UId="133" />
+  <Access Scope="GlobalVariable" UId="134">
+    <Symbol UId="135">
+      <Component Name="MII_Interface_Data" UId="136" />
+      <Token Text="." UId="137" />
+      <Component Name="MII_METHODS" UId="138" />
+      <Token Text="." UId="139" />
+      <Component Name="M103_PY" UId="140" />
+      <Token Text="." UId="141" />
+      <Component Name="Inputs" UId="142" />
+      <Token Text="." UId="143" />
+      <Component Name="PY_ON" UId="144" />
+    </Symbol>
+  </Access>
+  <Blank Num="1" UId="145" />
+  <Token Text=":=" UId="146" />
+  <Blank Num="1" UId="147" />
+  <Access Scope="LocalVariable" UId="148">
+    <Symbol UId="149">
+      <Component Name="PY_ON" UId="150" />
+    </Symbol>
+  </Access>
+  <Token Text=";" UId="151" />
+  <NewLine Num="1" UId="152" />
+  <Blank Num="4" UId="153" />
+  <Access Scope="GlobalVariable" UId="154">
+    <Symbol UId="155">
+      <Component Name="MII_Interface_Data" UId="156" />
+      <Token Text="." UId="157" />
+      <Component Name="MII_METHODS" UId="158" />
+      <Token Text="." UId="159" />
+      <Component Name="M103_PY" UId="160" />
+      <Token Text="." UId="161" />
+      <Component Name="Inputs" UId="162" />
+      <Token Text="." UId="163" />
+      <Component Name="PY_DOWN" UId="164" />
+    </Symbol>
+  </Access>
+  <Blank Num="1" UId="165" />
+  <Token Text=":=" UId="166" />
+  <Blank Num="1" UId="167" />
+  <Access Scope="LocalVariable" UId="168">
+    <Symbol UId="169">
+      <Component Name="PY_DOWN" UId="170" />
+    </Symbol>
+  </Access>
+  <Token Text=";" UId="171" />
+  <NewLine Num="1" UId="172" />
+  <Blank Num="4" UId="173" />
+  <Access Scope="GlobalVariable" UId="174">
+    <Symbol UId="175">
+      <Component Name="MII_Interface_Data" UId="176" />
+      <Token Text="." UId="177" />
+      <Component Name="MII_METHODS" UId="178" />
+      <Token Text="." UId="179" />
+      <Component Name="M103_PY" UId="180" />
+      <Token Text="." UId="181" />
+      <Component Name="Inputs" UId="182" />
+      <Token Text="." UId="183" />
+      <Component Name="PY_OFF" UId="184" />
+    </Symbol>
+  </Access>
+  <Blank Num="1" UId="185" />
+  <Token Text=":=" UId="186" />
+  <Blank Num="1" UId="187" />
+  <Access Scope="LocalVariable" UId="188">
+    <Symbol UId="189">
+      <Component Name="PY_OFF" UId="190" />
+    </Symbol>
+  </Access>
+  <Token Text=";" UId="191" />
+  <NewLine Num="1" UId="192" />
+  <Blank Num="4" UId="193" />
+  <NewLine Num="1" UId="194" />
+  <Blank Num="4" UId="195" />
+  <LineComment Inserted="false" NoClosingBracket="false" UId="196">
+    <Text UId="197">Call the method </Text>
+  </LineComment>
+  <NewLine Num="1" UId="198" />
+  <Blank Num="4" UId="199" />
+  <Access Scope="GlobalVariable" UId="200">
+    <Symbol UId="201">
+      <Component Name="1. DMC_setConnection_DB" UId="202" />
+      <Token Text="." UId="203" />
+      <Component Name="CallBuffer" UId="204">
+        <Token Text="[" UId="205" />
+        <Access Scope="LiteralConstant" UId="206">
+          <Constant UId="207">
+            <ConstantValue UId="209">7</ConstantValue>
+          </Constant>
+        </Access>
+        <Token Text="]" UId="210" />
+      </Component>
+    </Symbol>
+  </Access>
+  <Blank Num="1" UId="211" />
+  <Token Text=":=" UId="212" />
+  <Blank Num="1" UId="213" />
+  <Access Scope="LiteralConstant" UId="214">
+    <Constant UId="215">
+      <ConstantValue UId="217">TRUE</ConstantValue>
+    </Constant>
+  </Access>
+  <Token Text=";" UId="218" />
+  <NewLine Num="1" UId="219" />
+  <Blank Num="4" UId="220" />
+  <NewLine Num="1" UId="221" />
+  <Blank Num="4" UId="222" />
+  <Access Scope="LocalVariable" UId="223">
+    <Symbol UId="224">
+      <Component Name="PYOnTemp" UId="225" />
+    </Symbol>
+  </Access>
+  <Blank Num="1" UId="226" />
+  <Token Text=":=" UId="227" />
+  <Blank Num="1" UId="228" />
+  <Access Scope="LocalVariable" UId="229">
+    <Symbol UId="230">
+      <Component Name="PY_ON" UId="231" />
+    </Symbol>
+  </Access>
+  <Token Text=";" UId="232" />
+  <NewLine Num="1" UId="233" />
+  <Blank Num="4" UId="234" />
+  <Access Scope="LocalVariable" UId="235">
+    <Symbol UId="236">
+      <Component Name="PYDownTemp" UId="237" />
+    </Symbol>
+  </Access>
+  <Blank Num="1" UId="238" />
+  <Token Text=":=" UId="239" />
+  <Blank Num="1" UId="240" />
+  <Access Scope="LocalVariable" UId="241">
+    <Symbol UId="242">
+      <Component Name="PY_DOWN" UId="243" />
+    </Symbol>
+  </Access>
+  <Token Text=";" UId="244" />
+  <NewLine Num="1" UId="245" />
+  <Blank Num="4" UId="246" />
+  <Access Scope="LocalVariable" UId="247">
+    <Symbol UId="248">
+      <Component Name="PYOffTemp" UId="249" />
+    </Symbol>
+  </Access>
+  <Blank Num="1" UId="250" />
+  <Token Text=":=" UId="251" />
+  <Blank Num="1" UId="252" />
+  <Access Scope="LocalVariable" UId="253">
+    <Symbol UId="254">
+      <Component Name="PY_OFF" UId="255" />
+    </Symbol>
+  </Access>
+  <Token Text=";" UId="256" />
+  <NewLine Num="1" UId="257" />
+  <Token Text="END_IF" UId="258" />
+  <Token Text=";" UId="259" />
+</StructuredText></NetworkSource>
+          <ProgrammingLanguage>SCL</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="5" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="6" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+              <MultilingualTextItem ID="7" CompositionName="Items">
+                <AttributeList>
+                  <Culture>es-MX</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="8" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="9" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+              <MultilingualTextItem ID="A" CompositionName="Items">
+                <AttributeList>
+                  <Culture>es-MX</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <MultilingualText ID="B" CompositionName="Title">
+        <ObjectList>
+          <MultilingualTextItem ID="C" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+          <MultilingualTextItem ID="D" CompositionName="Items">
+            <AttributeList>
+              <Culture>es-MX</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+    </ObjectList>
+  </SW.Blocks.FB>
+</Document>

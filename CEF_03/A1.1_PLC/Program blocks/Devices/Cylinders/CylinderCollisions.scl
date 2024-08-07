@@ -1,0 +1,463 @@
+﻿FUNCTION "CylinderCollisions" : Void
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+
+BEGIN
+	
+	//***************** Collisions calls *****************
+	
+	REGION "CylinderGeneratedCalls_DB".MM2200_GrippingTubeFrontInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM2200_GrippingTubeFrontInstantr
+	    "CylinderGeneratedCalls_DB".MM2200_GrippingTubeFrontInstant.iNoCollisionBasic := true;
+	    "CylinderGeneratedCalls_DB".MM2200_GrippingTubeFrontInstant.iNoCollisionWork := true;
+	    "CylinderGeneratedCalls_DB".MM2200_GrippingTubeFrontInstant.iNoCollisionFree := true;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM2201_GrippingTubeRearInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM2201_GrippingTubeRearInstantr
+	    "CylinderGeneratedCalls_DB".MM2201_GrippingTubeRearInstant.iNoCollisionBasic := true;
+	    "CylinderGeneratedCalls_DB".MM2201_GrippingTubeRearInstant.iNoCollisionWork := true;
+	    "CylinderGeneratedCalls_DB".MM2201_GrippingTubeRearInstant.iNoCollisionFree := true;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM2220_HoldingSidememberInsideLeftInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM2220_HoldingSidememberInsideLeftInstantr
+	    "CylinderGeneratedCalls_DB".MM2220_HoldingSidememberInsideLeftInstant.iNoCollisionBasic := true;
+	    "CylinderGeneratedCalls_DB".MM2220_HoldingSidememberInsideLeftInstant.iNoCollisionWork := true;
+	    "CylinderGeneratedCalls_DB".MM2220_HoldingSidememberInsideLeftInstant.iNoCollisionFree := true;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM2221_HoldingSidememberInsideRightInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM2221_HoldingSidememberInsideRightInstantr
+	    "CylinderGeneratedCalls_DB".MM2221_HoldingSidememberInsideRightInstant.iNoCollisionBasic := true;
+	    "CylinderGeneratedCalls_DB".MM2221_HoldingSidememberInsideRightInstant.iNoCollisionWork := true;
+	    "CylinderGeneratedCalls_DB".MM2221_HoldingSidememberInsideRightInstant.iNoCollisionFree := true;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM2240_HoldingSidememberOutsideLeftInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM2240_HoldingSidememberOutsideLeftInstantr
+	    "CylinderGeneratedCalls_DB".MM2240_HoldingSidememberOutsideLeftInstant.iNoCollisionBasic := true;
+	    "CylinderGeneratedCalls_DB".MM2240_HoldingSidememberOutsideLeftInstant.iNoCollisionWork := true;
+	    "CylinderGeneratedCalls_DB".MM2240_HoldingSidememberOutsideLeftInstant.iNoCollisionFree := true;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM2241_HoldingSidememberOutsideRightInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM2241_HoldingSidememberOutsideRightInstantr
+	    "CylinderGeneratedCalls_DB".MM2241_HoldingSidememberOutsideRightInstant.iNoCollisionBasic := true;
+	    "CylinderGeneratedCalls_DB".MM2241_HoldingSidememberOutsideRightInstant.iNoCollisionWork := true;
+	    "CylinderGeneratedCalls_DB".MM2241_HoldingSidememberOutsideRightInstant.iNoCollisionFree := true;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM2500_GrippingTubeFrontInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM2500_GrippingTubeFrontInstantr
+	    "CylinderGeneratedCalls_DB".MM2500_GrippingTubeFrontInstant.iNoCollisionBasic := true;
+	    "CylinderGeneratedCalls_DB".MM2500_GrippingTubeFrontInstant.iNoCollisionWork := true;
+	    "CylinderGeneratedCalls_DB".MM2500_GrippingTubeFrontInstant.iNoCollisionFree := true;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM2501_GrippingTubeRearInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM2501_GrippingTubeRearInstantr
+	    "CylinderGeneratedCalls_DB".MM2501_GrippingTubeRearInstant.iNoCollisionBasic := true;
+	    "CylinderGeneratedCalls_DB".MM2501_GrippingTubeRearInstant.iNoCollisionWork := true;
+	    "CylinderGeneratedCalls_DB".MM2501_GrippingTubeRearInstant.iNoCollisionFree := true;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM2520_HoldingSidememberInsideLeftInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM2520_HoldingSidememberInsideLeftInstantr
+	    "CylinderGeneratedCalls_DB".MM2520_HoldingSidememberInsideLeftInstant.iNoCollisionBasic := true;
+	    "CylinderGeneratedCalls_DB".MM2520_HoldingSidememberInsideLeftInstant.iNoCollisionWork := true;
+	    "CylinderGeneratedCalls_DB".MM2520_HoldingSidememberInsideLeftInstant.iNoCollisionFree := true;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM2521_HoldingSidememberInsideRightInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM2521_HoldingSidememberInsideRightInstantr
+	    "CylinderGeneratedCalls_DB".MM2521_HoldingSidememberInsideRightInstant.iNoCollisionBasic := true;
+	    "CylinderGeneratedCalls_DB".MM2521_HoldingSidememberInsideRightInstant.iNoCollisionWork := true;
+	    "CylinderGeneratedCalls_DB".MM2521_HoldingSidememberInsideRightInstant.iNoCollisionFree := true;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM2540_HoldingSidememberOutsideLeftInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM2540_HoldingSidememberOutsideLeftInstantr
+	    "CylinderGeneratedCalls_DB".MM2540_HoldingSidememberOutsideLeftInstant.iNoCollisionBasic := true;
+	    "CylinderGeneratedCalls_DB".MM2540_HoldingSidememberOutsideLeftInstant.iNoCollisionWork := true;
+	    "CylinderGeneratedCalls_DB".MM2540_HoldingSidememberOutsideLeftInstant.iNoCollisionFree := true;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM2541_HoldingSidememberOutsideRightInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM2541_HoldingSidememberOutsideRightInstantr
+	    "CylinderGeneratedCalls_DB".MM2541_HoldingSidememberOutsideRightInstant.iNoCollisionBasic := true;
+	    "CylinderGeneratedCalls_DB".MM2541_HoldingSidememberOutsideRightInstant.iNoCollisionWork := true;
+	    "CylinderGeneratedCalls_DB".MM2541_HoldingSidememberOutsideRightInstant.iNoCollisionFree := true;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM300_ShiftingSupportRightInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM300_ShiftingSupportRightInstantr
+	    "CylinderGeneratedCalls_DB".MM300_ShiftingSupportRightInstant.iNoCollisionBasic := true;
+	    "CylinderGeneratedCalls_DB".MM300_ShiftingSupportRightInstant.iNoCollisionWork := true;
+	    "CylinderGeneratedCalls_DB".MM300_ShiftingSupportRightInstant.iNoCollisionFree := true;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM302_ShiftingSupportLeftInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM302_ShiftingSupportLeftInstantr
+	    "CylinderGeneratedCalls_DB".MM302_ShiftingSupportLeftInstant.iNoCollisionBasic := true;
+	    "CylinderGeneratedCalls_DB".MM302_ShiftingSupportLeftInstant.iNoCollisionWork := true;
+	    "CylinderGeneratedCalls_DB".MM302_ShiftingSupportLeftInstant.iNoCollisionFree := true;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM304_MovingStopRightInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM304_MovingStopRightInstantr
+	    "CylinderGeneratedCalls_DB".MM304_MovingStopRightInstant.iNoCollisionBasic := "DevicesData".Cylinders["MM304_MovingStopRight"].InBp OR
+	    "DevicesData".Cylinders["MM350_ShiftWedgeRight"].InBp;
+	    "CylinderGeneratedCalls_DB".MM304_MovingStopRightInstant.iNoCollisionWork := "DevicesData".Cylinders["MM304_MovingStopRight"].InWp OR
+	    "DevicesData".Cylinders["MM350_ShiftWedgeRight"].InBp;;
+	    "CylinderGeneratedCalls_DB".MM304_MovingStopRightInstant.iNoCollisionFree := true;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM306_MovingStopLeftInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM306_MovingStopLeftInstantr
+	    "CylinderGeneratedCalls_DB".MM306_MovingStopLeftInstant.iNoCollisionBasic := "DevicesData".Cylinders["MM306_MovingStopLeft"].InBp OR
+	    "DevicesData".Cylinders["MM352_ShiftWedgeLeft"].InBp;
+	    "CylinderGeneratedCalls_DB".MM306_MovingStopLeftInstant.iNoCollisionWork := "DevicesData".Cylinders["MM306_MovingStopLeft"].InWp OR
+	    "DevicesData".Cylinders["MM352_ShiftWedgeLeft"].InBp;
+	    "CylinderGeneratedCalls_DB".MM306_MovingStopLeftInstant.iNoCollisionFree := true;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM340_RivetingUnitRightInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM340_RivetingUnitRightInstantr
+	    "CylinderGeneratedCalls_DB".MM340_RivetingUnitRightInstant.iNoCollisionBasic := "DevicesData".Cylinders["MM344_RivetingSupportRight"].InBp;
+	    "CylinderGeneratedCalls_DB".MM340_RivetingUnitRightInstant.iNoCollisionWork := "DevicesData".Cylinders["MM344_RivetingSupportRight"].InBp;
+	    "CylinderGeneratedCalls_DB".MM340_RivetingUnitRightInstant.iNoCollisionFree := true;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM342_RivetingUnitLeftInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM342_RivetingUnitLeftInstantr
+	    "CylinderGeneratedCalls_DB".MM342_RivetingUnitLeftInstant.iNoCollisionBasic := "DevicesData".Cylinders["MM346_RivetingSupportLeft"].InBp;
+	    "CylinderGeneratedCalls_DB".MM342_RivetingUnitLeftInstant.iNoCollisionWork := "DevicesData".Cylinders["MM346_RivetingSupportLeft"].InBp;
+	    "CylinderGeneratedCalls_DB".MM342_RivetingUnitLeftInstant.iNoCollisionFree := true;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM344_RivetingSupportRightInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM344_RivetingSupportRightInstantr
+	    "CylinderGeneratedCalls_DB".MM344_RivetingSupportRightInstant.iNoCollisionBasic := true;
+	    "CylinderGeneratedCalls_DB".MM344_RivetingSupportRightInstant.iNoCollisionWork := true;
+	    "CylinderGeneratedCalls_DB".MM344_RivetingSupportRightInstant.iNoCollisionFree := true;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM346_RivetingSupportLeftInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM346_RivetingSupportLeftInstantr
+	    "CylinderGeneratedCalls_DB".MM346_RivetingSupportLeftInstant.iNoCollisionBasic := true;
+	    "CylinderGeneratedCalls_DB".MM346_RivetingSupportLeftInstant.iNoCollisionWork := true;
+	    "CylinderGeneratedCalls_DB".MM346_RivetingSupportLeftInstant.iNoCollisionFree := true;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM350_ShiftWedgeRightInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM350_ShiftWedgeRightInstantr
+	    "CylinderGeneratedCalls_DB".MM350_ShiftWedgeRightInstant.iNoCollisionBasic := true;
+	    "CylinderGeneratedCalls_DB".MM350_ShiftWedgeRightInstant.iNoCollisionWork := true;
+	    "CylinderGeneratedCalls_DB".MM350_ShiftWedgeRightInstant.iNoCollisionFree := true;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM352_ShiftWedgeLeftInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM352_ShiftWedgeLeftInstantr
+	    "CylinderGeneratedCalls_DB".MM352_ShiftWedgeLeftInstant.iNoCollisionBasic := true;
+	    "CylinderGeneratedCalls_DB".MM352_ShiftWedgeLeftInstant.iNoCollisionWork := true;
+	    "CylinderGeneratedCalls_DB".MM352_ShiftWedgeLeftInstant.iNoCollisionFree := true;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM104_AutoejectGripperLiftingInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM104_AutoejectGripperLiftingInstantr
+	    "CylinderGeneratedCalls_DB".MM104_AutoejectGripperLiftingInstant.iNoCollisionBasic := true;
+	    "CylinderGeneratedCalls_DB".MM104_AutoejectGripperLiftingInstant.iNoCollisionWork :=
+	    "DevicesData"."TA1-3MA".data.zones.inNOKpos
+	    OR
+	    "DevicesData"."TA1-3MA".data.zones.inOKpos AND
+	    (NOT "i4partPresent" OR
+	    "DevicesData".Cylinders["MM2500_GrippingTubeFront"].InBp AND
+	    "DevicesData".Cylinders["MM2520_HoldingSidememberInsideLeft"].InBp AND
+	    "DevicesData".Cylinders["MM2540_HoldingSidememberOutsideLeft"].InBp)
+	    OR
+	    "DevicesData"."TA1-3MA".data.zones.inST3jig AND
+	    (NOT "i3partPresent" OR
+	    "DevicesData".Cylinders["MM2500_GrippingTubeFront"].InBp AND
+	    "DevicesData".Cylinders["MM2520_HoldingSidememberInsideLeft"].InBp AND
+	    "DevicesData".Cylinders["MM2540_HoldingSidememberOutsideLeft"].InBp) AND
+	    "DevicesData".Cylinders["MM300_ShiftingSupportRight"].InBp AND
+	    "DevicesData".Cylinders["MM302_ShiftingSupportLeft"].InBp AND
+	    "DevicesData".Cylinders["MM340_RivetingUnitRight"].InBp AND
+	    "DevicesData".Cylinders["MM342_RivetingUnitLeft"].InBp AND
+	    "DevicesData".Cylinders["MM344_RivetingSupportRight"].InBp AND
+	    "DevicesData".Cylinders["MM346_RivetingSupportLeft"].InBp;
+	    "CylinderGeneratedCalls_DB".MM104_AutoejectGripperLiftingInstant.iNoCollisionFree := true;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM3100_SidememberSupportLeftInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM3100_SidememberSupportLeftInstantr
+	    "CylinderGeneratedCalls_DB".MM3100_SidememberSupportLeftInstant.iNoCollisionBasic := true;
+	    "CylinderGeneratedCalls_DB".MM3100_SidememberSupportLeftInstant.iNoCollisionWork := true;
+	    "CylinderGeneratedCalls_DB".MM3100_SidememberSupportLeftInstant.iNoCollisionFree := true;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM3101_SidememberSupportRightInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM3101_SidememberSupportRightInstantr
+	    "CylinderGeneratedCalls_DB".MM3101_SidememberSupportRightInstant.iNoCollisionBasic := true;
+	    "CylinderGeneratedCalls_DB".MM3101_SidememberSupportRightInstant.iNoCollisionWork := true;
+	    "CylinderGeneratedCalls_DB".MM3101_SidememberSupportRightInstant.iNoCollisionFree := true;
+	END_REGION
+	
+	//***************** timing and safety calls *****************
+	
+	REGION "CylinderGeneratedCalls_DB".MM2200_GrippingTubeFrontInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM2200_GrippingTubeFrontInstantr
+	    "CylinderGeneratedCalls_DB".MM2200_GrippingTubeFrontInstant.POWER_OK := "safety_signals"."3L+" OR TRUE;
+	    "CylinderGeneratedCalls_DB".MM2200_GrippingTubeFrontInstant.DELAY_BASIC := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM2200_GrippingTubeFrontInstant.DELAY_WORK := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM2200_GrippingTubeFrontInstant.DELAY_FREE := T#100mS;
+	    "CylinderGeneratedCalls_DB".MM2200_GrippingTubeFrontInstant.ERROR_TIME := T#10S;
+	    "CylinderGeneratedCalls_DB".MM2200_GrippingTubeFrontInstant.ValveDelay := T#0ms;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM2201_GrippingTubeRearInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM2201_GrippingTubeRearInstantr
+	    "CylinderGeneratedCalls_DB".MM2201_GrippingTubeRearInstant.POWER_OK := "safety_signals"."3L+" OR TRUE;
+	    "CylinderGeneratedCalls_DB".MM2201_GrippingTubeRearInstant.DELAY_BASIC := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM2201_GrippingTubeRearInstant.DELAY_WORK := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM2201_GrippingTubeRearInstant.DELAY_FREE := T#100mS;
+	    "CylinderGeneratedCalls_DB".MM2201_GrippingTubeRearInstant.ERROR_TIME := T#10S;
+	    "CylinderGeneratedCalls_DB".MM2201_GrippingTubeRearInstant.ValveDelay := T#0ms;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM2220_HoldingSidememberInsideLeftInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM2220_HoldingSidememberInsideLeftInstantr
+	    "CylinderGeneratedCalls_DB".MM2220_HoldingSidememberInsideLeftInstant.POWER_OK := "safety_signals"."3L+" OR TRUE;
+	    "CylinderGeneratedCalls_DB".MM2220_HoldingSidememberInsideLeftInstant.DELAY_BASIC := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM2220_HoldingSidememberInsideLeftInstant.DELAY_WORK := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM2220_HoldingSidememberInsideLeftInstant.DELAY_FREE := T#100mS;
+	    "CylinderGeneratedCalls_DB".MM2220_HoldingSidememberInsideLeftInstant.ERROR_TIME := T#10S;
+	    "CylinderGeneratedCalls_DB".MM2220_HoldingSidememberInsideLeftInstant.ValveDelay := T#0ms;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM2221_HoldingSidememberInsideRightInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM2221_HoldingSidememberInsideRightInstantr
+	    "CylinderGeneratedCalls_DB".MM2221_HoldingSidememberInsideRightInstant.POWER_OK := "safety_signals"."3L+" OR TRUE;
+	    "CylinderGeneratedCalls_DB".MM2221_HoldingSidememberInsideRightInstant.DELAY_BASIC := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM2221_HoldingSidememberInsideRightInstant.DELAY_WORK := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM2221_HoldingSidememberInsideRightInstant.DELAY_FREE := T#100mS;
+	    "CylinderGeneratedCalls_DB".MM2221_HoldingSidememberInsideRightInstant.ERROR_TIME := T#10S;
+	    "CylinderGeneratedCalls_DB".MM2221_HoldingSidememberInsideRightInstant.ValveDelay := T#0ms;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM2240_HoldingSidememberOutsideLeftInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM2240_HoldingSidememberOutsideLeftInstantr
+	    "CylinderGeneratedCalls_DB".MM2240_HoldingSidememberOutsideLeftInstant.POWER_OK := "safety_signals"."3L+" OR TRUE;
+	    "CylinderGeneratedCalls_DB".MM2240_HoldingSidememberOutsideLeftInstant.DELAY_BASIC := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM2240_HoldingSidememberOutsideLeftInstant.DELAY_WORK := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM2240_HoldingSidememberOutsideLeftInstant.DELAY_FREE := T#100mS;
+	    "CylinderGeneratedCalls_DB".MM2240_HoldingSidememberOutsideLeftInstant.ERROR_TIME := T#10S;
+	    "CylinderGeneratedCalls_DB".MM2240_HoldingSidememberOutsideLeftInstant.ValveDelay := T#0ms;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM2241_HoldingSidememberOutsideRightInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM2241_HoldingSidememberOutsideRightInstantr
+	    "CylinderGeneratedCalls_DB".MM2241_HoldingSidememberOutsideRightInstant.POWER_OK := "safety_signals"."3L+" OR TRUE;
+	    "CylinderGeneratedCalls_DB".MM2241_HoldingSidememberOutsideRightInstant.DELAY_BASIC := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM2241_HoldingSidememberOutsideRightInstant.DELAY_WORK := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM2241_HoldingSidememberOutsideRightInstant.DELAY_FREE := T#100mS;
+	    "CylinderGeneratedCalls_DB".MM2241_HoldingSidememberOutsideRightInstant.ERROR_TIME := T#10S;
+	    "CylinderGeneratedCalls_DB".MM2241_HoldingSidememberOutsideRightInstant.ValveDelay := T#0ms;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM2500_GrippingTubeFrontInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM2500_GrippingTubeFrontInstantr
+	    "CylinderGeneratedCalls_DB".MM2500_GrippingTubeFrontInstant.POWER_OK := true;
+	    "CylinderGeneratedCalls_DB".MM2500_GrippingTubeFrontInstant.DELAY_BASIC := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM2500_GrippingTubeFrontInstant.DELAY_WORK := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM2500_GrippingTubeFrontInstant.DELAY_FREE := T#100mS;
+	    "CylinderGeneratedCalls_DB".MM2500_GrippingTubeFrontInstant.ERROR_TIME := T#10S;
+	    "CylinderGeneratedCalls_DB".MM2500_GrippingTubeFrontInstant.ValveDelay := T#0ms;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM2501_GrippingTubeRearInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM2501_GrippingTubeRearInstantr
+	    "CylinderGeneratedCalls_DB".MM2501_GrippingTubeRearInstant.POWER_OK := true;
+	    "CylinderGeneratedCalls_DB".MM2501_GrippingTubeRearInstant.DELAY_BASIC := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM2501_GrippingTubeRearInstant.DELAY_WORK := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM2501_GrippingTubeRearInstant.DELAY_FREE := T#100mS;
+	    "CylinderGeneratedCalls_DB".MM2501_GrippingTubeRearInstant.ERROR_TIME := T#10S;
+	    "CylinderGeneratedCalls_DB".MM2501_GrippingTubeRearInstant.ValveDelay := T#0ms;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM2520_HoldingSidememberInsideLeftInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM2520_HoldingSidememberInsideLeftInstantr
+	    "CylinderGeneratedCalls_DB".MM2520_HoldingSidememberInsideLeftInstant.POWER_OK := true;
+	    "CylinderGeneratedCalls_DB".MM2520_HoldingSidememberInsideLeftInstant.DELAY_BASIC := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM2520_HoldingSidememberInsideLeftInstant.DELAY_WORK := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM2520_HoldingSidememberInsideLeftInstant.DELAY_FREE := T#100mS;
+	    "CylinderGeneratedCalls_DB".MM2520_HoldingSidememberInsideLeftInstant.ERROR_TIME := T#10S;
+	    "CylinderGeneratedCalls_DB".MM2520_HoldingSidememberInsideLeftInstant.ValveDelay := T#0ms;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM2521_HoldingSidememberInsideRightInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM2521_HoldingSidememberInsideRightInstantr
+	    "CylinderGeneratedCalls_DB".MM2521_HoldingSidememberInsideRightInstant.POWER_OK := true;
+	    "CylinderGeneratedCalls_DB".MM2521_HoldingSidememberInsideRightInstant.DELAY_BASIC := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM2521_HoldingSidememberInsideRightInstant.DELAY_WORK := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM2521_HoldingSidememberInsideRightInstant.DELAY_FREE := T#100mS;
+	    "CylinderGeneratedCalls_DB".MM2521_HoldingSidememberInsideRightInstant.ERROR_TIME := T#10S;
+	    "CylinderGeneratedCalls_DB".MM2521_HoldingSidememberInsideRightInstant.ValveDelay := T#0ms;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM2540_HoldingSidememberOutsideLeftInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM2540_HoldingSidememberOutsideLeftInstantr
+	    "CylinderGeneratedCalls_DB".MM2540_HoldingSidememberOutsideLeftInstant.POWER_OK := true;
+	    "CylinderGeneratedCalls_DB".MM2540_HoldingSidememberOutsideLeftInstant.DELAY_BASIC := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM2540_HoldingSidememberOutsideLeftInstant.DELAY_WORK := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM2540_HoldingSidememberOutsideLeftInstant.DELAY_FREE := T#100mS;
+	    "CylinderGeneratedCalls_DB".MM2540_HoldingSidememberOutsideLeftInstant.ERROR_TIME := T#10S;
+	    "CylinderGeneratedCalls_DB".MM2540_HoldingSidememberOutsideLeftInstant.ValveDelay := T#0ms;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM2541_HoldingSidememberOutsideRightInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM2541_HoldingSidememberOutsideRightInstantr
+	    "CylinderGeneratedCalls_DB".MM2541_HoldingSidememberOutsideRightInstant.POWER_OK := true;
+	    "CylinderGeneratedCalls_DB".MM2541_HoldingSidememberOutsideRightInstant.DELAY_BASIC := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM2541_HoldingSidememberOutsideRightInstant.DELAY_WORK := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM2541_HoldingSidememberOutsideRightInstant.DELAY_FREE := T#100mS;
+	    "CylinderGeneratedCalls_DB".MM2541_HoldingSidememberOutsideRightInstant.ERROR_TIME := T#10S;
+	    "CylinderGeneratedCalls_DB".MM2541_HoldingSidememberOutsideRightInstant.ValveDelay := T#0ms;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM300_ShiftingSupportRightInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM300_ShiftingSupportRightInstantr
+	    "CylinderGeneratedCalls_DB".MM300_ShiftingSupportRightInstant.POWER_OK := true;
+	    "CylinderGeneratedCalls_DB".MM300_ShiftingSupportRightInstant.DELAY_BASIC := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM300_ShiftingSupportRightInstant.DELAY_WORK := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM300_ShiftingSupportRightInstant.DELAY_FREE := T#100mS;
+	    "CylinderGeneratedCalls_DB".MM300_ShiftingSupportRightInstant.ERROR_TIME := T#10S;
+	    "CylinderGeneratedCalls_DB".MM300_ShiftingSupportRightInstant.ValveDelay := T#0ms;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM302_ShiftingSupportLeftInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM302_ShiftingSupportLeftInstantr
+	    "CylinderGeneratedCalls_DB".MM302_ShiftingSupportLeftInstant.POWER_OK := true;
+	    "CylinderGeneratedCalls_DB".MM302_ShiftingSupportLeftInstant.DELAY_BASIC := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM302_ShiftingSupportLeftInstant.DELAY_WORK := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM302_ShiftingSupportLeftInstant.DELAY_FREE := T#100mS;
+	    "CylinderGeneratedCalls_DB".MM302_ShiftingSupportLeftInstant.ERROR_TIME := T#10S;
+	    "CylinderGeneratedCalls_DB".MM302_ShiftingSupportLeftInstant.ValveDelay := T#0ms;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM304_MovingStopRightInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM304_MovingStopRightInstantr
+	    "CylinderGeneratedCalls_DB".MM304_MovingStopRightInstant.POWER_OK := true;
+	    "CylinderGeneratedCalls_DB".MM304_MovingStopRightInstant.DELAY_BASIC := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM304_MovingStopRightInstant.DELAY_WORK := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM304_MovingStopRightInstant.DELAY_FREE := T#100mS;
+	    "CylinderGeneratedCalls_DB".MM304_MovingStopRightInstant.ERROR_TIME := T#10S;
+	    "CylinderGeneratedCalls_DB".MM304_MovingStopRightInstant.ValveDelay := T#0ms;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM306_MovingStopLeftInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM306_MovingStopLeftInstantr
+	    "CylinderGeneratedCalls_DB".MM306_MovingStopLeftInstant.POWER_OK := true;
+	    "CylinderGeneratedCalls_DB".MM306_MovingStopLeftInstant.DELAY_BASIC := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM306_MovingStopLeftInstant.DELAY_WORK := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM306_MovingStopLeftInstant.DELAY_FREE := T#100mS;
+	    "CylinderGeneratedCalls_DB".MM306_MovingStopLeftInstant.ERROR_TIME := T#10S;
+	    "CylinderGeneratedCalls_DB".MM306_MovingStopLeftInstant.ValveDelay := T#0ms;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM340_RivetingUnitRightInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM340_RivetingUnitRightInstantr
+	    "CylinderGeneratedCalls_DB".MM340_RivetingUnitRightInstant.POWER_OK := true;
+	    "CylinderGeneratedCalls_DB".MM340_RivetingUnitRightInstant.DELAY_BASIC := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM340_RivetingUnitRightInstant.DELAY_WORK := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM340_RivetingUnitRightInstant.DELAY_FREE := T#100mS;
+	    "CylinderGeneratedCalls_DB".MM340_RivetingUnitRightInstant.ERROR_TIME := T#10S;
+	    "CylinderGeneratedCalls_DB".MM340_RivetingUnitRightInstant.ValveDelay := T#0ms;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM342_RivetingUnitLeftInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM342_RivetingUnitLeftInstantr
+	    "CylinderGeneratedCalls_DB".MM342_RivetingUnitLeftInstant.POWER_OK := true;
+	    "CylinderGeneratedCalls_DB".MM342_RivetingUnitLeftInstant.DELAY_BASIC := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM342_RivetingUnitLeftInstant.DELAY_WORK := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM342_RivetingUnitLeftInstant.DELAY_FREE := T#100mS;
+	    "CylinderGeneratedCalls_DB".MM342_RivetingUnitLeftInstant.ERROR_TIME := T#10S;
+	    "CylinderGeneratedCalls_DB".MM342_RivetingUnitLeftInstant.ValveDelay := T#0ms;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM344_RivetingSupportRightInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM344_RivetingSupportRightInstantr
+	    "CylinderGeneratedCalls_DB".MM344_RivetingSupportRightInstant.POWER_OK := true;
+	    "CylinderGeneratedCalls_DB".MM344_RivetingSupportRightInstant.DELAY_BASIC := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM344_RivetingSupportRightInstant.DELAY_WORK := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM344_RivetingSupportRightInstant.DELAY_FREE := T#100mS;
+	    "CylinderGeneratedCalls_DB".MM344_RivetingSupportRightInstant.ERROR_TIME := T#10S;
+	    "CylinderGeneratedCalls_DB".MM344_RivetingSupportRightInstant.ValveDelay := T#0ms;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM346_RivetingSupportLeftInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM346_RivetingSupportLeftInstantr
+	    "CylinderGeneratedCalls_DB".MM346_RivetingSupportLeftInstant.POWER_OK := true;
+	    "CylinderGeneratedCalls_DB".MM346_RivetingSupportLeftInstant.DELAY_BASIC := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM346_RivetingSupportLeftInstant.DELAY_WORK := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM346_RivetingSupportLeftInstant.DELAY_FREE := T#100mS;
+	    "CylinderGeneratedCalls_DB".MM346_RivetingSupportLeftInstant.ERROR_TIME := T#10S;
+	    "CylinderGeneratedCalls_DB".MM346_RivetingSupportLeftInstant.ValveDelay := T#0ms;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM350_ShiftWedgeRightInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM350_ShiftWedgeRightInstantr
+	    "CylinderGeneratedCalls_DB".MM350_ShiftWedgeRightInstant.POWER_OK := true;
+	    "CylinderGeneratedCalls_DB".MM350_ShiftWedgeRightInstant.DELAY_BASIC := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM350_ShiftWedgeRightInstant.DELAY_WORK := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM350_ShiftWedgeRightInstant.DELAY_FREE := T#100mS;
+	    "CylinderGeneratedCalls_DB".MM350_ShiftWedgeRightInstant.ERROR_TIME := T#10S;
+	    "CylinderGeneratedCalls_DB".MM350_ShiftWedgeRightInstant.ValveDelay := T#0ms;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM352_ShiftWedgeLeftInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM352_ShiftWedgeLeftInstantr
+	    "CylinderGeneratedCalls_DB".MM352_ShiftWedgeLeftInstant.POWER_OK := true;
+	    "CylinderGeneratedCalls_DB".MM352_ShiftWedgeLeftInstant.DELAY_BASIC := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM352_ShiftWedgeLeftInstant.DELAY_WORK := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM352_ShiftWedgeLeftInstant.DELAY_FREE := T#100mS;
+	    "CylinderGeneratedCalls_DB".MM352_ShiftWedgeLeftInstant.ERROR_TIME := T#10S;
+	    "CylinderGeneratedCalls_DB".MM352_ShiftWedgeLeftInstant.ValveDelay := T#0ms;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM104_AutoejectGripperLiftingInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM104_AutoejectGripperLiftingInstantr
+	    "CylinderGeneratedCalls_DB".MM104_AutoejectGripperLiftingInstant.POWER_OK := true;
+	    "CylinderGeneratedCalls_DB".MM104_AutoejectGripperLiftingInstant.DELAY_BASIC := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM104_AutoejectGripperLiftingInstant.DELAY_WORK := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM104_AutoejectGripperLiftingInstant.DELAY_FREE := T#100mS;
+	    "CylinderGeneratedCalls_DB".MM104_AutoejectGripperLiftingInstant.ERROR_TIME := T#10S;
+	    "CylinderGeneratedCalls_DB".MM104_AutoejectGripperLiftingInstant.ValveDelay := T#0ms;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM3100_SidememberSupportLeftInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM3100_SidememberSupportLeftInstantr
+	    "CylinderGeneratedCalls_DB".MM3100_SidememberSupportLeftInstant.POWER_OK := true;
+	    "CylinderGeneratedCalls_DB".MM3100_SidememberSupportLeftInstant.DELAY_BASIC := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM3100_SidememberSupportLeftInstant.DELAY_WORK := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM3100_SidememberSupportLeftInstant.DELAY_FREE := T#100mS;
+	    "CylinderGeneratedCalls_DB".MM3100_SidememberSupportLeftInstant.ERROR_TIME := T#10S;
+	    "CylinderGeneratedCalls_DB".MM3100_SidememberSupportLeftInstant.ValveDelay := T#0ms;
+	END_REGION
+	
+	REGION "CylinderGeneratedCalls_DB".MM3101_SidememberSupportRightInstant
+	    // Call Cylinder control "CylinderGeneratedCalls_DB".MM3101_SidememberSupportRightInstantr
+	    "CylinderGeneratedCalls_DB".MM3101_SidememberSupportRightInstant.POWER_OK := true;
+	    "CylinderGeneratedCalls_DB".MM3101_SidememberSupportRightInstant.DELAY_BASIC := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM3101_SidememberSupportRightInstant.DELAY_WORK := t#100ms;
+	    "CylinderGeneratedCalls_DB".MM3101_SidememberSupportRightInstant.DELAY_FREE := T#100mS;
+	    "CylinderGeneratedCalls_DB".MM3101_SidememberSupportRightInstant.ERROR_TIME := T#10S;
+	    "CylinderGeneratedCalls_DB".MM3101_SidememberSupportRightInstant.ValveDelay := T#0ms;
+	END_REGION
+	
+	
+	
+	
+END_FUNCTION
+

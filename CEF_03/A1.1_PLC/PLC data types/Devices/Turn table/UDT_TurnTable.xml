@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Document>
+  <Engineering version="V17" />
+  <DocumentInfo>
+    <Created>2024-08-07T21:44:15.1391834Z</Created>
+    <ExportSetting>WithDefaults</ExportSetting>
+    <InstalledProducts>
+      <Product>
+        <DisplayName>Totally Integrated Automation Portal</DisplayName>
+        <DisplayVersion>V17 Update 7</DisplayVersion>
+      </Product>
+      <OptionPackage>
+        <DisplayName>TIA Portal Openness</DisplayName>
+        <DisplayVersion>V17 Update 7</DisplayVersion>
+      </OptionPackage>
+      <OptionPackage>
+        <DisplayName>TIA Portal Version Control Interface</DisplayName>
+        <DisplayVersion>V17</DisplayVersion>
+      </OptionPackage>
+      <Product>
+        <DisplayName>SINAMICS Startdrive Advanced</DisplayName>
+        <DisplayVersion>V17 SP2</DisplayVersion>
+      </Product>
+      <OptionPackage>
+        <DisplayName>SINAMICS Startdrive G110M, G120, G120C, G120D, G120P, G115D</DisplayName>
+        <DisplayVersion>V17 SP2</DisplayVersion>
+      </OptionPackage>
+      <OptionPackage>
+        <DisplayName>SINAMICS Startdrive G130, G150, S120, S150, SINAMICS MV, S210</DisplayName>
+        <DisplayVersion>V17 SP2</DisplayVersion>
+      </OptionPackage>
+      <Product>
+        <DisplayName>STEP 7 Professional</DisplayName>
+        <DisplayVersion>V17 Update 7</DisplayVersion>
+      </Product>
+      <OptionPackage>
+        <DisplayName>STEP 7 Safety</DisplayName>
+        <DisplayVersion>V17 Update 6</DisplayVersion>
+      </OptionPackage>
+      <Product>
+        <DisplayName>WinCC Advanced / Unified PC</DisplayName>
+        <DisplayVersion>V17 Update 7</DisplayVersion>
+      </Product>
+    </InstalledProducts>
+  </DocumentInfo>
+  <SW.Types.PlcStruct ID="0">
+    <AttributeList>
+      <Interface><Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v5">
+  <Section Name="None">
+    <Member Name="Commands" Datatype="Struct"><AttributeList><BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute></AttributeList><Member Name="ManualMode" Datatype="&quot;UDT_TurnTableCommands&quot;"><AttributeList><BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute></AttributeList><Sections><Section Name="None"><Member Name="ReadyToJogCW" Datatype="Bool" /><Member Name="JogCW" Datatype="Bool" /><Member Name="ReadyToJogCCW" Datatype="Bool" /><Member Name="JogCCW" Datatype="Bool" /><Member Name="ReadyToStartCW" Datatype="Bool" /><Member Name="StartCW" Datatype="Bool" /><Member Name="ReadyToStartCCW" Datatype="Bool" /><Member Name="StartCCW" Datatype="Bool" /></Section></Sections></Member><Member Name="AutomaticMode" Datatype="&quot;UDT_TurnTableCommands&quot;"><AttributeList><BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="SetPoint" SystemDefined="true">true</BooleanAttribute></AttributeList><Sections><Section Name="None"><Member Name="ReadyToJogCW" Datatype="Bool" /><Member Name="JogCW" Datatype="Bool" /><Member Name="ReadyToJogCCW" Datatype="Bool" /><Member Name="JogCCW" Datatype="Bool" /><Member Name="ReadyToStartCW" Datatype="Bool" /><Member Name="StartCW" Datatype="Bool" /><Member Name="ReadyToStartCCW" Datatype="Bool" /><Member Name="StartCCW" Datatype="Bool" /></Section></Sections></Member></Member>
+    <Member Name="Status" Datatype="&quot;UDT_TurnTableStatus&quot;"><AttributeList><BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute></AttributeList><Sections><Section Name="None"><Member Name="Collision" Datatype="Bool" /><Member Name="Communication" Datatype="Bool" /><Member Name="EnabledForOneScan" Datatype="Bool" /><Member Name="IndexerInPositionForOneScan" Datatype="Bool" /><Member Name="CycleStep" Datatype="UInt" /><Member Name="CycleRunning" Datatype="Bool" /><Member Name="CycleFinished" Datatype="Bool" /><Member Name="CycleStopped" Datatype="Bool" /><Member Name="DoneCW" Datatype="Bool" /><Member Name="DoneCCW" Datatype="Bool" /><Member Name="SafetyPosition" Datatype="Bool" /><Member Name="BasicPosition" Datatype="Bool" /></Section></Sections></Member>
+    <Member Name="I/O" Datatype="&quot;UDT_TurnTable_I/O&quot;"><AttributeList><BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="SetPoint" SystemDefined="true">true</BooleanAttribute></AttributeList><Sections><Section Name="None"><Member Name="iTurnTableInSafetyPosition" Datatype="Bool" /><Member Name="Inputs" Datatype="&quot;UDT_TurnTableInputs&quot;"><Sections><Section Name="None"><Member Name="ReadyToEnable" Datatype="Bool" /><Member Name="EnableActive" Datatype="Bool" /><Member Name="Enabled" Datatype="Bool" /><Member Name="ReadyToStart" Datatype="Bool" /><Member Name="Operating" Datatype="Bool" /><Member Name="IndexerInPosition" Datatype="Bool" /><Member Name="StopIsSelected" Datatype="Bool" /><Member Name="AlarmTimeout" Datatype="Bool" /><Member Name="AlarmPositionRunOver" Datatype="Bool" /><Member Name="AlarmSafety" Datatype="Bool" /><Member Name="SumError" Datatype="Bool" /><Member Name="SumWarning" Datatype="Bool" /><Member Name="STOIsSelected" Datatype="Bool" /><Member Name="STOIsActive" Datatype="Bool" /><Member Name="WatchdogSend" Datatype="Bool" /></Section></Sections></Member><Member Name="Outputs" Datatype="&quot;UDT_TurnTableOutputs&quot;"><Sections><Section Name="None"><Member Name="Enable" Datatype="Bool" /><Member Name="Stop" Datatype="Bool" /><Member Name="CycleCW" Datatype="Bool" /><Member Name="CycleCCW" Datatype="Bool" /><Member Name="JogCW" Datatype="Bool" /><Member Name="JogCCW" Datatype="Bool" /><Member Name="ResetError" Datatype="Bool" /><Member Name="WatchdogReceive" Datatype="Bool" /></Section></Sections></Member></Section></Sections></Member>
+  </Section>
+</Sections></Interface>
+      <IsFailsafeCompliant>false</IsFailsafeCompliant>
+      <Name>UDT_TurnTable</Name>
+    </AttributeList>
+    <ObjectList>
+      <MultilingualText ID="1" CompositionName="Comment">
+        <ObjectList>
+          <MultilingualTextItem ID="2" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+          <MultilingualTextItem ID="3" CompositionName="Items">
+            <AttributeList>
+              <Culture>es-MX</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+      <MultilingualText ID="4" CompositionName="Title">
+        <ObjectList>
+          <MultilingualTextItem ID="5" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+          <MultilingualTextItem ID="6" CompositionName="Items">
+            <AttributeList>
+              <Culture>es-MX</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+    </ObjectList>
+  </SW.Types.PlcStruct>
+</Document>
