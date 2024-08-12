@@ -4,8 +4,8 @@ VERSION : 0.1
    VAR_TEMP 
       lctr1 : Int;
       lctr2 : Int;
-      cnt1 : Int;
-      cnt2 : Int;
+      messageType : Array[1..30] of Int;
+      messageDone : Array[1..30] of Int;
    END_VAR
 
 
@@ -17,40 +17,85 @@ BEGIN
 	    "DB_INST_AWAKE_SIGNAL"(ack_error:="Alarms".Reset);
 	END_REGION
 	
-	//Send messages
-	"DB_MAIN_IJCORE".CMD.TRC := "DB_MAIN_IJCORE".STAT.STA_OK;
-	
-	
-	
-	//Manage results
-	REGION STA Answer
-	    #cnt1 := 0;
-	    #cnt2 := 0;
-	    FOR #lctr1 := 1 TO "DB_ProductionProgramActual".Program.NumberOfReadings DO
-	        FOR #lctr2 := 1 TO "NumberOfmessages" DO
-	            IF "DB_ProductionProgramActual".Program.Readings[#lctr1].Enable AND
-	                ("DB_ProductionProgramActual".Program.Readings[#lctr1].Message[#lctr2].MessageType = 1) AND
-	                ("DB_ProductionProgramActual".Program.Readings[#lctr1].Message[#lctr2].MessageFlagNumber > 0) THEN
-	                #cnt1 += 1;
-	            END_IF;
-	            //Count aswer ok
-	            IF "DB_ProductionProgramActual".Program.Readings[#lctr1].Enable AND
-	                ("DB_ProductionProgramActual".Program.Readings[#lctr1].Message[#lctr2].MessageType = 1) AND
-	                ("DB_ProductionProgramActual".Program.Readings[#lctr1].Message[#lctr2].MessageFlagNumber > 0) AND
-	                "DB_INST_READINGS".Reading[#lctr1].IJC[#lctr2].Done THEN
-	                #cnt2 += 1;
-	            END_IF;
-	            
-	            IF #cnt1 = #cnt2 THEN
-	                "DB_MAIN_IJCORE".STAT.STA_OK := TRUE;
-	            ELSE
-	                "DB_MAIN_IJCORE".STAT.STA_OK := FALSE;
-	            END_IF;
-	            
-	        END_FOR;
+	//Manage answer
+	REGION Get All Answers
+	    FOR #lctr1 := 1 TO 30 DO
+	        #messageType[#lctr1] := 0;
+	        #messageDone[#lctr1] := 0;
 	    END_FOR;
-	    
+	    FOR #lctr1 := 1 TO "DB_ProductionProgramActual".Program.NumberOfReadings DO
+	            FOR #lctr2 := 1 TO "NumberOfmessages" DO
+	                IF "DB_ProductionProgramActual".Program.Readings[#lctr1].Enable AND
+	                    ("DB_ProductionProgramActual".Program.Readings[#lctr1].Message[#lctr2].MessageFlagNumber > 0) THEN
+	                    CASE "DB_ProductionProgramActual".Program.Readings[#lctr1].Message[#lctr2].MessageType OF
+	                        "STA":
+	                            #messageType["STA"] += 1;
+	                            //Count aswer ok
+	                            IF "DB_INST_READINGS".Reading[#lctr1].IJC[#lctr2].Done THEN
+	                                #messageDone["STA"] += 1;
+	                            END_IF;
+	                            IF #messageType["STA"] = #messageDone["STA"] THEN
+	                                "DB_MAIN_IJCORE".STAT.STA_OK := TRUE;
+	                            ELSE
+	                                "DB_MAIN_IJCORE".STAT.STA_OK := FALSE;
+	                            END_IF;
+	                        "TRC":
+	                            #messageType["TRC"] += 1;
+	                            IF "DB_INST_READINGS".Reading[#lctr1].IJC[#lctr2].Done THEN
+	                                #messageDone["TRC"] += 1;
+	                            END_IF;
+	                            IF #messageType["TRC"] = #messageDone["TRC"] THEN
+	                                "DB_MAIN_IJCORE".STAT.TRC_OK := TRUE;
+	                            ELSE
+	                                "DB_MAIN_IJCORE".STAT.TRC_OK := FALSE;
+	                            END_IF;
+	                            
+	                        "PFC":
+	                            #messageType["PFC"] += 1;
+	                            IF "DB_INST_READINGS".Reading[#lctr1].IJC[#lctr2].Done THEN
+	                                #messageDone["PFC"] += 1;
+	                            END_IF;
+	                            IF #messageType["PFC"] = #messageDone["PFC"] THEN
+	                                "DB_MAIN_IJCORE".STAT.PFC_OK := TRUE;
+	                            ELSE
+	                                "DB_MAIN_IJCORE".STAT.PFC_OK := FALSE;
+	                            END_IF;
+	                            
+	                        "CNF":
+	                            #messageType["CNF"] += 1;
+	                            IF "DB_INST_READINGS".Reading[#lctr1].IJC[#lctr2].Done THEN
+	                                #messageDone["CNF"] += 1;
+	                            END_IF;
+	                            IF #messageType["CNF"] = #messageDone["CNF"] THEN
+	                                "DB_MAIN_IJCORE".STAT.CNF_OK := TRUE;
+	                            ELSE
+	                                "DB_MAIN_IJCORE".STAT.CNF_OK := FALSE;
+	                            END_IF;
+	                            
+	                        "TRR":
+	                            #messageType["TRR"] += 1;
+	                            IF "DB_INST_READINGS".Reading[#lctr1].IJC[#lctr2].Done THEN
+	                                #messageDone["TRR"] += 1;
+	                            END_IF;
+	                            IF #messageType["TRR"] = #messageDone["TRR"] THEN
+	                                "DB_MAIN_IJCORE".STAT.TRR_OK := TRUE;
+	                            ELSE
+	                                "DB_MAIN_IJCORE".STAT.TRR_OK := FALSE;
+	                            END_IF;
+	                    END_CASE;
+	                END_IF;
+	            END_FOR;
+	        END_FOR;
 	END_REGION
+	
+	
+	//Process results
+	IF "sq_fitting_station_st3"."Set OK status".X THEN
+	    "DB_MAIN_IJCORE".STAT.ProcessResults := 1;
+	ELSIF "sq_fitting_station_st3"."Set NOK status".X THEN
+	    "DB_MAIN_IJCORE".STAT.ProcessResults := 2;
+	    ;
+	END_IF;
 	
 	
 	

@@ -94,7 +94,8 @@ BEGIN
 	        #State := 10; ///Transition to state 10
 	        
 	    10: // Wait for start command
-	        IF #Req THEN //If start command active
+	        IF #Req AND
+	            #ProcessStatus > 0  THEN //If start command active
 	            
 	            POKE(area := #DB, //Clear send flag
 	                 dbNumber := #DB_SEND,

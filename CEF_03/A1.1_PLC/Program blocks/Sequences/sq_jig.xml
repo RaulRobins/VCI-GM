@@ -2,7 +2,7 @@
 <Document>
   <Engineering version="V17" />
   <DocumentInfo>
-    <Created>2024-08-07T21:44:07.0461022Z</Created>
+    <Created>2024-08-12T18:10:47.0038076Z</Created>
     <ExportSetting>WithDefaults</ExportSetting>
     <InstalledProducts>
       <Product>
@@ -575,6 +575,10 @@
           </Action>
           <Action Event="S0" Qualifier="R">
             <Token Text="&quot;DB_MAIN_IJCORE&quot;.CMD.TRR" />
+            <Token Text="&#xA;" />
+          </Action>
+          <Action Event="S0" Qualifier="R">
+            <Token Text="&quot;DB_MAIN_IJCORE&quot;.CMD.PFC" />
             <Token Text="&#xA;" />
           </Action>
           <Action />
@@ -1150,10 +1154,6 @@
             <Token Text="&quot;DB_MAIN_IJCORE&quot;.CMD.PFC" />
             <Token Text="&#xA;" />
           </Action>
-          <Action Event="S0" Qualifier="R">
-            <Token Text="&quot;DB_MAIN_IJCORE&quot;.CMD.PFC" />
-            <Token Text="&#xA;" />
-          </Action>
           <Action Event="S1" Qualifier="S">
             <Token Text="&quot;DB_MAIN_IJCORE&quot;.CMD.CNF" />
             <Token Text="&#xA;" />
@@ -1280,7 +1280,7 @@
             <Token Text=")" />
             <Token Text="&#xA;" />
           </Action>
-          <Action Event="S1" Qualifier="S">
+          <Action Qualifier="S">
             <Token Text="&quot;DB_MAIN_IJCORE&quot;.CMD.TRR" />
             <Token Text="&#xA;" />
           </Action>
@@ -1361,10 +1361,6 @@
             <Token Text="&#xA;" />
           </Action>
           <Action Event="S1" Qualifier="S">
-            <Token Text="&quot;DB_MAIN_IJCORE&quot;.CMD.TRR" />
-            <Token Text="&#xA;" />
-          </Action>
-          <Action Event="S0" Qualifier="R">
             <Token Text="&quot;DB_MAIN_IJCORE&quot;.CMD.TRR" />
             <Token Text="&#xA;" />
           </Action>

@@ -10,7 +10,6 @@ VERSION : 1.1
          OK : Bool;
          NOK : Bool;
          Scan : String[70];
-         NFP : String[30];
          IJC : Array[1.."NumberOfmessages"] of Struct
             SendMsg : Bool;
             Done : Bool;
@@ -18,7 +17,6 @@ VERSION : 1.1
             State : USInt;
          END_STRUCT;
       END_STRUCT;
-      ReadingsDone : Bool;
       Errors : Array[1..2] of Word;
       Error { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} AT Errors : Array[1..2, 1..16] of Bool;
    END_VAR
@@ -31,6 +29,18 @@ VERSION : 1.1
       NumberOfReadings : Int;
       eType : Int;   // Error type 1:reading, 2:IJCore
       count : Int;
+      EmptyReading : Struct
+         Done : Bool;
+         OK : Bool;
+         NOK : Bool;
+         Scan : String[70];
+         IJC : Array[1.."NumberOfmessages"] of Struct
+            SendMsg : Bool;
+            Done : Bool;
+            Answer : Int;
+            State : USInt;
+         END_STRUCT;
+      END_STRUCT;
    END_VAR
 
    VAR CONSTANT 
@@ -80,7 +90,10 @@ BEGIN
 	                IF #tempHolder = "DB_ProductionProgramActual".Program.Readings[#lctr1].ReferenceToFound THEN
 	                    //Check data with recipe and copy to data in reading
 	                    #Reading[#lctr1].Scan := "DB_INST_DTM_READERS".READER["DB_ProductionProgramActual".Program.Readings[#lctr1].ReaderNumber].DataStr;
+	                    //Store scan data in autoposition buffer
+	                    "AutoPositions".St1_Table1.Readings[#lctr1].Scan := #Reading[#lctr1].Scan;
 	                    #Reading[#lctr1].OK := TRUE;
+	                    
 	                    #Reading[#lctr1].NOK := FALSE;
 	                ELSE
 	                    //Results NOK
@@ -89,20 +102,24 @@ BEGIN
 	                    #Reading[#lctr1].Scan := #blankStr;
 	                END_IF;
 	            END_IF;
-	            //Check for all readings complete
-	            IF #Reading[#lctr1].OK AND (#Reading[#lctr1].Scan <> #blankStr) OR NOT "DB_ProductionProgramActual".Program.Readings[#lctr1].Enable THEN
-	                #count += 1;
+	        END_FOR;
+	    END_IF;
+	END_REGION
+	
+	REGION Clear Data
+	    IF NOT "DevicesData".scanner.start THEN
+	        FOR #lctr1 := 1 TO "MaxDataReading" DO
+	            IF "DB_ProductionProgramActual".Program.Readings[#lctr1].ReaderNumber > 0 THEN
+	                "DB_INST_DTM_READERS".READER["DB_ProductionProgramActual".Program.Readings[#lctr1].ReaderNumber].Req := FALSE;
 	            END_IF;
-	            IF #count = "DB_ProductionProgramActual".Program.NumberOfReadings THEN
-	                #ReadingsDone := TRUE;
-	            END_IF;
+	            #Reading[#lctr1] := #EmptyReading;
 	        END_FOR;
 	    END_IF;
 	END_REGION
 	
 	REGION Traceability
 	    FOR #lctr1 := 1 TO #NumberOfReadings DO
-	        FOR #lctr2 := 1 TO 5 DO
+	        FOR #lctr2 := 1 TO "NumberOfmessages" DO
 	            CASE "DB_ProductionProgramActual".Program.Readings[#lctr1].Message[#lctr2].MessageType OF
 	                "STA":
 	                    //CALL STA
@@ -119,7 +136,7 @@ BEGIN
 	                    "FC_TRACE_PFC"(Req := "DB_MAIN_IJCORE".CMD.PFC,
 	                                   MessageNumber := "DB_ProductionProgramActual".Program.Readings[#lctr1].Message[#lctr2].MessageFlagNumber,
 	                                   TraceabilityMode := "DB_MAIN_IJCORE".Mode,
-	                                   NFP := "AutoPositions".St3_Fitting.Readings["DB_ProductionProgramActual".Program.Readings[#lctr1].MasterReadingNumber].Scan,
+	                                   NFP := "AutoPositions".St3_Fitting.Readings[1].Scan,
 	                                   Kanban := "DB_ProductionProgramActual".Program.FaureciaNumber,
 	                                   ErrReset := TRUE,
 	                                   MessageDone => #Reading[#lctr1].IJC[#lctr2].Done,
@@ -130,8 +147,8 @@ BEGIN
 	                    "FC_TRACE_TRR"(Req := "DB_MAIN_IJCORE".CMD.TRR,
 	                                   MessageNumber := "DB_ProductionProgramActual".Program.Readings[#lctr1].Message[#lctr2].MessageFlagNumber,
 	                                   TraceabilityMode := "DB_MAIN_IJCORE".Mode,
-	                                   NFP := "AutoPositions".St3_Fitting.Readings["DB_ProductionProgramActual".Program.Readings[#lctr1].MasterReadingNumber].Scan,
-	                                   ProcessStatus := 1,
+	                                   NFP := "AutoPositions".St3_Fitting.Readings[#lctr1].Scan,
+	                                   ProcessStatus :=  1,
 	                                   NumberOfProcess := 1,
 	                                   ErrReset := TRUE,
 	                                   MessageDone => #Reading[#lctr1].IJC[#lctr2].Done,
@@ -141,7 +158,7 @@ BEGIN
 	                    //CALL TRC
 	                "TRC":
 	                    IF "DB_ProductionProgramActual".Program.Readings[#lctr1].MasterReadingNumber > 0 THEN
-	                        "FC_READING_IJC_TRC"(Req := "DB_MAIN_IJCORE".CMD.TRC,
+	                        "FC_READING_IJC_TRC"(Req := #Reading[#lctr1].OK AND #Reading["DB_ProductionProgramActual".Program.Readings[#lctr1].MasterReadingNumber].Done,
 	                                             MessageNumber := "DB_ProductionProgramActual".Program.Readings[#lctr1].Message[#lctr2].MessageFlagNumber,
 	                                             TraceabilityMode := "DB_MAIN_IJCORE".Mode,
 	                                             NFP := #Reading["DB_ProductionProgramActual".Program.Readings[#lctr1].MasterReadingNumber].Scan,
@@ -152,26 +169,10 @@ BEGIN
 	                                             State := #Reading[#lctr1].IJC[#lctr2].State);
 	                    END_IF;
 	            END_CASE;
-	            
 	        END_FOR;
 	    END_FOR;
 	END_REGION
 	
-	
-	
-	
-	REGION Clear Data
-	    IF NOT "DevicesData".scanner.start THEN
-	        FOR #lctr1 := 1 TO "MaxDataReading" DO
-	            "DB_INST_DTM_READERS".READER["DB_ProductionProgramActual".Program.Readings[#lctr1].ReaderNumber].Req := FALSE;
-	            #Reading[#lctr1].Done := FALSE;
-	            #Reading[#lctr1].OK := FALSE;
-	            #Reading[#lctr1].NOK := FALSE;
-	            #ReadingsDone := FALSE;
-	            #Reading[#lctr1].Scan := #blankStr;
-	        END_FOR;
-	    END_IF;
-	END_REGION
 	
 	// REGION Error Management
 	//     #eType := 1;

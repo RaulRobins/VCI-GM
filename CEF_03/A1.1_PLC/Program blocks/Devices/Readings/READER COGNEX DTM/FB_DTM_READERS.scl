@@ -8,54 +8,58 @@ VERSION : 0.1
 
 BEGIN
 	//Call block reader 1
-	#READER[1](TriggerReady:= "DM_SMLH-TriggerReady",
-	           TriggerAck:="DM_SMLH-TriggerAck",
-	           ResultsAvailable:="DM_SMLH-Results Available",
-	           ResultID:="DM_SMLH-ResultID",
-	           ResultCode:="DM_SMLH-Result Code",
-	           ResultLenght:="DM_SMLH-Result Length",
-	           ResultData:="DM_SMLH-ResultData",
-	           TriggerEnable=>"DM_SMLH-TriggerEnable",
-	           Trigger=>"DM_SMLH-Trigger",
-	           ResultsAck=>"DM_SMLH-ResultsAck"
-	          );
+	#READER[1](Enable := "DevicesData".scanner.start,
+	                       TriggerReady := "DM_SMLH-TriggerReady",
+	                       TriggerAck := "DM_SMLH-TriggerAck",
+	                       ResultsAvailable := "DM_SMLH-Results Available",
+	                       ResultID := "DM_SMLH-ResultID",
+	                       ResultCode := "DM_SMLH-Result Code",
+	                       ResultLenght := "DM_SMLH-Result Length",
+	                       ResultData := "DM_SMLH-ResultData",
+	                       TriggerEnable => "DM_SMLH-TriggerEnable",
+	                       Trigger => "DM_SMLH-Trigger",
+	                       ResultsAck => "DM_SMLH-ResultsAck"
+	            );
 	
 	//Call block reader 2
-	          #READER[2](TriggerReady := "DM_SMRH-TriggerReady",
-	           TriggerAck := "DM_SMRH-TriggerAck",
-	           ResultsAvailable := "DM_SMRH-Results Available",
-	           ResultID := "DM_SMRH-ResultID",
-	           ResultCode := "DM_SMRH-Result Code",
-	           ResultLenght := "DM_SMRH-Result Length",
-	           ResultData := "DM_SMRH-ResultData",
-	           TriggerEnable => "DM_SMRH-TriggerEnable",
-	           Trigger => "DM_SMRH-Trigger",
-	           ResultsAck => "DM_SMRH-ResultsAck"
-	           );
-	
-	//Call block reader 3
-	           #READER[3](TriggerReady:= "DM_FT-TriggerReady",
-	           TriggerAck := "DM_FT-TriggerAck",
-	           ResultsAvailable := "DM_FT-Results Available",
-	           ResultID := "DM_FT-ResultID",
-	           ResultCode := "DM_FT-Result Code",
-	           ResultLenght := "DM_FT-Result Length",
-	           ResultData := "DM_FT-ResultData",
-	           TriggerEnable => "DM_FT-TriggerEnable",
-	           Trigger => "DM_FT-Trigger",
-	           ResultsAck => "DM_FT-ResultsAck");
-	
-	//Call block reader 4
-	#READER[4](TriggerReady:= "DM_RT-TriggerReady",
-	           TriggerAck := "DM_RT-TriggerAck",
-	           ResultsAvailable := "DM_RT-Results Available",
-	           ResultID := "DM_RT-ResultID",
-	           ResultCode := "DM_RT-Result Code",
-	           ResultLenght := "DM_RT-Result Length",
-	           ResultData := "DM_RT-ResultData",
-	           TriggerEnable => "DM_RT-TriggerEnable",
-	           Trigger => "DM_RT-Trigger",
-	           ResultsAck => "DM_RT-ResultsAck");
+	            #READER[2](Enable := "DevicesData".scanner.start,
+	                     TriggerReady := "DM_SMRH-TriggerReady",
+	                     TriggerAck := "DM_SMRH-TriggerAck",
+	                     ResultsAvailable := "DM_SMRH-Results Available",
+	                     ResultID := "DM_SMRH-ResultID",
+	                     ResultCode := "DM_SMRH-Result Code",
+	                     ResultLenght := "DM_SMRH-Result Length",
+	                     ResultData := "DM_SMRH-ResultData",
+	                     TriggerEnable => "DM_SMRH-TriggerEnable",
+	                     Trigger => "DM_SMRH-Trigger",
+	                     ResultsAck => "DM_SMRH-ResultsAck"
+	          );
+	          
+	          //Call block reader 3
+	          #READER[3](Enable := NOT #READER[1].Req,
+	                     TriggerReady := "DM_FT-TriggerReady",
+	                     TriggerAck := "DM_FT-TriggerAck",
+	                     ResultsAvailable := "DM_FT-Results Available",
+	                     ResultID := "DM_FT-ResultID",
+	                     ResultCode := "DM_FT-Result Code",
+	                     ResultLenght := "DM_FT-Result Length",
+	                     ResultData := "DM_FT-ResultData",
+	                     TriggerEnable => "DM_FT-TriggerEnable",
+	                     Trigger => "DM_FT-Trigger",
+	                     ResultsAck => "DM_FT-ResultsAck");
+	          
+	          //Call block reader 4
+	          #READER[4](Enable := NOT #READER[2].Req,
+	                     TriggerReady := "DM_RT-TriggerReady",
+	                     TriggerAck := "DM_RT-TriggerAck",
+	                     ResultsAvailable := "DM_RT-Results Available",
+	                     ResultID := "DM_RT-ResultID",
+	                     ResultCode := "DM_RT-Result Code",
+	                     ResultLenght := "DM_RT-Result Length",
+	                     ResultData := "DM_RT-ResultData",
+	                     TriggerEnable => "DM_RT-TriggerEnable",
+	                     Trigger => "DM_RT-Trigger",
+	                     ResultsAck => "DM_RT-ResultsAck");
 	
 	
 END_FUNCTION_BLOCK
