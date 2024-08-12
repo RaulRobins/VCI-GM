@@ -18,7 +18,8 @@ VERSION : 1.1
          END_STRUCT;
       END_STRUCT;
       Errors : Array[1..2] of Word;
-      Error { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} AT Errors : Array[1..2, 1..16] of Bool;
+      ErrorText : String[80];
+      ErrorExist : Bool;
    END_VAR
 
    VAR_TEMP 
@@ -27,7 +28,6 @@ VERSION : 1.1
       tempHolder : String;
       blankStr : String;
       NumberOfReadings : Int;
-      eType : Int;   // Error type 1:reading, 2:IJCore
       count : Int;
       EmptyReading : Struct
          Done : Bool;
@@ -174,37 +174,62 @@ BEGIN
 	END_REGION
 	
 	
-	// REGION Error Management
-	//     #eType := 1;
-	//     FOR #lctr1 := 1 TO #NumberOfReadings DO
-	//         IF #Reading[#lctr1].NOK THEN
-	//             #Error[#eType, 1] := TRUE;
-	//         END_IF;
+	REGION Error Management
+	    FOR #lctr1 := 1 TO #NumberOfReadings DO
+	        IF #Reading[#lctr1].NOK THEN
+	            #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
+	            #Errors[1].%X0 := TRUE;
+	        ELSE
+	            #Errors[1].%X0 := false;
+	        END_IF;
+	    END_FOR;
+	    
+	        FOR #lctr1 := 1 TO #NumberOfReadings DO
+	            FOR #lctr2 := 1 TO "NumberOfIJCoreMessages" DO
+	                CASE #Reading[#lctr1].IJC[#lctr2].Answer OF
+	                    -2:  // NFP not founded
+	                        #Errors[2].%X0 := TRUE;
+	                        #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
+	                        EXIT;
+	                    -3:  //Part number NOT inside BOM
+	                        #Errors[2].%X1 := TRUE;
+	                        #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
+	                        EXIT;
+	                    -4: // PFC not ok
+	                        #Errors[2].%X2 := TRUE;
+	                        #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
+	                        EXIT;
+	                    -5: //Component already used
+	                        #Errors[2].%X3 := TRUE;
+	                        #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
+	                        EXIT;
+	                    -6: //Module already used
+	                        #Errors[2].%X4 := true;
+	                        #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
+	                        EXIT;
+	                    -10: //Status NOK from previous operation
+	                        #Errors[2].%X5 := true;
+	                        #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
+	                        EXIT;
+	                    ELSE
+	                        #Errors[2] := 0;
+	                END_CASE;
+	            END_FOR;
+	        END_FOR;
+	        IF #Errors[1] > 0 OR
+	            #Errors[2] > 0 THEN
+	            #ErrorExist := true;
+	        ELSE
+	            #ErrorExist := false;
+	        END_IF;
+	        
+	        IF "Alarms".Reset THEN
+	            #ErrorText := '';
+	            #Errors[1] := 0;
+	            #Errors[2] := 0;
+	        END_IF;
 	
-	//         //IJCore Errors
-	//         FOR #lctr2 := 1 TO "NumberOfIJCoreMessages" DO
-	//             #eType := 2;
-	//             CASE #Reading[#lctr1].IJC[#lctr2].Answer OF
-	//                 -2:  // NFP not founded
-	//                     #Error[#eType, 1] := TRUE;
-	//                 -3:  //Part number NOT inside BOM
-	//                     #Error[#eType, 2] := TRUE;
-	//                 -4: // PFC not ok
-	//                     #Error[#eType, 3] := TRUE;
-	//                 -5: //Component already used
-	//                     #Error[#eType, 4] := TRUE;
-	//                 -6: //Module already used
-	//                     #Error[#eType, 5] := true;
-	//                 -10: //Status NOK from previous operation
-	//                     #Error[#eType, 6] := true;
-	//             END_CASE;
-	//         END_FOR;
-	//     END_FOR;
-	
-	//     FOR #lctr1 := 1 TO 2 DO
-	//         #Errors[#lctr1] := SWAP(#Errors[#lctr1]);
-	//     END_FOR;
-	// END_REGION
+	END_REGION
 	
 	
 	

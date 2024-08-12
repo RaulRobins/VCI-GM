@@ -97,6 +97,23 @@ BEGIN
 	    ;
 	END_IF;
 	
+	//Hmi indicator status
+	"DB_MAIN_IJCORE".hmiInd := 0;
+	IF "DB_MAIN_IJCORE".Enable AND
+	    NOT "DB_INST_AWAKE_SIGNAL".AwSignalTimeOutFault THEN
+	    CASE "DB_MAIN_IJCORE".Mode OF
+	        1:  // Full traceability
+	            "DB_MAIN_IJCORE".hmiInd:= 1 ;
+	        2:  // Traceability only
+	            "DB_MAIN_IJCORE".hmiInd := 2;
+	        3:  // Downgrade mode
+	            "DB_MAIN_IJCORE".hmiInd := 3;
+	    END_CASE;
+	    
+	ELSIF "DB_MAIN_IJCORE".Enable AND
+	    "DB_INST_AWAKE_SIGNAL".AwSignalTimeOutFault THEN
+	    "DB_MAIN_IJCORE".hmiInd := 4;
+	END_IF;
 	
 	
 	
