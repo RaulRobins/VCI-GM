@@ -136,7 +136,7 @@ BEGIN
 	                    "FC_TRACE_PFC"(Req := "DB_MAIN_IJCORE".CMD.PFC,
 	                                   MessageNumber := "DB_ProductionProgramActual".Program.Readings[#lctr1].Message[#lctr2].MessageFlagNumber,
 	                                   TraceabilityMode := "DB_MAIN_IJCORE".Mode,
-	                                   NFP := "AutoPositions".St3_Fitting.Readings[1].Scan,
+	                                   NFP := "AutoPositions".St3_Fitting.Readings[#lctr1].Scan,
 	                                   Kanban := "DB_ProductionProgramActual".Program.FaureciaNumber,
 	                                   ErrReset := TRUE,
 	                                   MessageDone => #Reading[#lctr1].IJC[#lctr2].Done,
@@ -148,7 +148,7 @@ BEGIN
 	                                   MessageNumber := "DB_ProductionProgramActual".Program.Readings[#lctr1].Message[#lctr2].MessageFlagNumber,
 	                                   TraceabilityMode := "DB_MAIN_IJCORE".Mode,
 	                                   NFP := "AutoPositions".St3_Fitting.Readings[#lctr1].Scan,
-	                                   ProcessStatus :=  1,
+	                                   ProcessStatus :="DB_MAIN_IJCORE".STAT.ProcessResults,
 	                                   NumberOfProcess := 1,
 	                                   ErrReset := TRUE,
 	                                   MessageDone => #Reading[#lctr1].IJC[#lctr2].Done,
@@ -168,6 +168,18 @@ BEGIN
 	                                             Answer := #Reading[#lctr1].IJC[#lctr2].Answer,
 	                                             State := #Reading[#lctr1].IJC[#lctr2].State);
 	                    END_IF;
+	                    
+	                    //CALL CNF
+	                "CNF":
+	                    "FC_READING_IJC_CNF"(Req:=#Reading[#lctr1].OK AND #Reading["DB_ProductionProgramActual".Program.Readings[#lctr1].MasterReadingNumber].Done,
+	                                         MessageNumber:="DB_ProductionProgramActual".Program.Readings[#lctr1].Message[#lctr2].MessageFlagNumber,
+	                                         TraceabilityMode:="DB_MAIN_IJCORE".Mode,
+	                                         NFP:="AutoPositions".St3_Fitting.Readings["DB_ProductionProgramActual".Program.Readings[#lctr1].MasterReadingNumber].Scan,
+	                                         Scan:="AutoPositions".St3_Fitting.Readings[#lctr1].Scan,
+	                                         ErrReset:=TRUE,
+	                                         MessageDone=>#Reading[#lctr1].IJC[#lctr2].Done,
+	                                         Answer:=#Reading[#lctr1].IJC[#lctr2].Answer,
+	                                         State:=#Reading[#lctr1].IJC[#lctr2].State);
 	            END_CASE;
 	        END_FOR;
 	    END_FOR;
@@ -179,41 +191,43 @@ BEGIN
 	        IF #Reading[#lctr1].NOK THEN
 	            #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
 	            #Errors[1].%X0 := TRUE;
-	        ELSE
-	            #Errors[1].%X0 := false;
+	            EXIT;
+	        // ELSE
+	        //     #Errors[1].%X0 := false;
 	        END_IF;
 	    END_FOR;
 	    
 	        FOR #lctr1 := 1 TO #NumberOfReadings DO
 	            FOR #lctr2 := 1 TO "NumberOfIJCoreMessages" DO
-	                CASE #Reading[#lctr1].IJC[#lctr2].Answer OF
-	                    -2:  // NFP not founded
-	                        #Errors[2].%X0 := TRUE;
-	                        #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
-	                        EXIT;
-	                    -3:  //Part number NOT inside BOM
-	                        #Errors[2].%X1 := TRUE;
-	                        #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
-	                        EXIT;
-	                    -4: // PFC not ok
-	                        #Errors[2].%X2 := TRUE;
-	                        #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
-	                        EXIT;
-	                    -5: //Component already used
-	                        #Errors[2].%X3 := TRUE;
-	                        #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
-	                        EXIT;
-	                    -6: //Module already used
-	                        #Errors[2].%X4 := true;
-	                        #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
-	                        EXIT;
-	                    -10: //Status NOK from previous operation
-	                        #Errors[2].%X5 := true;
-	                        #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
-	                        EXIT;
-	                    ELSE
-	                        #Errors[2] := 0;
-	                END_CASE;
+	                ;
+	                // CASE #Reading[#lctr1].IJC[#lctr2].Answer OF
+	                //     -2:  // NFP not founded
+	                //         #Errors[2].%X0 := TRUE;
+	                //         #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
+	                //         EXIT;
+	                //     -3:  //Part number NOT inside BOM
+	                //         #Errors[2].%X1 := TRUE;
+	                //         #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
+	                //         EXIT;
+	                //     -4: // PFC not ok
+	                //         #Errors[2].%X2 := TRUE;
+	                //         #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
+	                //         EXIT;
+	                //     -5: //Component already used
+	                //         #Errors[2].%X3 := TRUE;
+	                //         #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
+	                //         EXIT;
+	                //     -6: //Module already used
+	                //         #Errors[2].%X4 := true;
+	                //         #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
+	                //         EXIT;
+	                //     -10: //Status NOK from previous operation
+	                //         #Errors[2].%X5 := true;
+	                //         #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
+	                //         EXIT;
+	                //     ELSE
+	                //         #Errors[2] := 0;
+	                // END_CASE;
 	            END_FOR;
 	        END_FOR;
 	        IF #Errors[1] > 0 OR
@@ -223,7 +237,8 @@ BEGIN
 	            #ErrorExist := false;
 	        END_IF;
 	        
-	        IF "Alarms".Reset THEN
+	        IF "Alarms".Reset OR
+	            NOT "DevicesData".scanner.start THEN
 	            #ErrorText := '';
 	            #Errors[1] := 0;
 	            #Errors[2] := 0;

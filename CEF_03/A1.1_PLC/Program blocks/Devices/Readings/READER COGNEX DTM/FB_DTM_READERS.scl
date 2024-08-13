@@ -3,6 +3,7 @@
 VERSION : 0.1
    VAR 
       READER { S7_SetPoint := 'False'} : Array[1..5] of "FB_DTM";
+      SleepMode {InstructionName := 'TON_TIME'; LibVersion := '1.0'} : TON_TIME;
    END_VAR
 
 
@@ -60,6 +61,18 @@ BEGIN
 	                     TriggerEnable => "DM_RT-TriggerEnable",
 	                     Trigger => "DM_RT-Trigger",
 	                     ResultsAck => "DM_RT-ResultsAck");
+	          
+	          #SleepMode(IN := "DevicesData".scanner.start AND "iOpticalBarrier",
+	                     PT := T#600s);
+	          
+	          IF #SleepMode.Q THEN
+	              "DevicesData".scanner.start := False;
+	          ELSIF NOT #SleepMode.Q AND "sq_carousel_insertion_st1"."Insert parts".X THEN
+	              "DevicesData".scanner.start := true;
+	          END_IF;
+	          
+	          
+	                     
 	
 	
 END_FUNCTION_BLOCK
