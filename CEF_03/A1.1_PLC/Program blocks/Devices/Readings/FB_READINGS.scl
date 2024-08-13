@@ -1,13 +1,15 @@
 ﻿FUNCTION_BLOCK "FB_READINGS"
+TITLE = FB Readings
 { S7_Optimized_Access := 'FALSE' }
-VERSION : 0.1
+AUTHOR : 'Raul Robins'
+VERSION : 1.1
+//Function block to manage the readings with traceability messages 
    VAR 
       Reading : Array[1.."MaxDataReading"] of Struct
          Done : Bool;
          OK : Bool;
          NOK : Bool;
          Scan : String[70];
-         NFP : String[30];
          IJC : Array[1.."NumberOfmessages"] of Struct
             SendMsg : Bool;
             Done : Bool;
@@ -15,9 +17,9 @@ VERSION : 0.1
             State : USInt;
          END_STRUCT;
       END_STRUCT;
-      ReadingsDone : Bool;
       Errors : Array[1..2] of Word;
-      Error { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} AT Errors : Array[1..2, 1..16] of Bool;
+      ErrorText : String[80];
+      ErrorExist : Bool;
    END_VAR
 
    VAR_TEMP 
@@ -26,8 +28,19 @@ VERSION : 0.1
       tempHolder : String;
       blankStr : String;
       NumberOfReadings : Int;
-      eType : Int;   // Error type 1:reading, 2:IJCore
       count : Int;
+      EmptyReading : Struct
+         Done : Bool;
+         OK : Bool;
+         NOK : Bool;
+         Scan : String[70];
+         IJC : Array[1.."NumberOfmessages"] of Struct
+            SendMsg : Bool;
+            Done : Bool;
+            Answer : Int;
+            State : USInt;
+         END_STRUCT;
+      END_STRUCT;
    END_VAR
 
    VAR CONSTANT 
@@ -39,57 +52,49 @@ VERSION : 0.1
 
 
 BEGIN
-	//TITLE = 'READINGS'
-	//AUTHOR: RAUL ROBINS
-	//CREATED ON: 03/24/2023
-	//VERSION: 1.1
+	//=============================================================================
+	// FB_Readings 
+	//-----------------------------------------------------------------------------
+	// Engineering: TIA Portal (V17)
+	// Restrictions: -
+	// Functionality: Encapsulates readings and compare with configured data
+	//                call including connection handling and diagnosis
+	//-----------------------------------------------------------------------------
+	// Change log table:
+	// Version    Date         Author                     Changes applied
+	// 01.00.00   07.08.2024   Raul Robins                First released version
+	//=============================================================================
+	
 	
 	#NumberOfReadings := "DB_ProductionProgramActual".Program.NumberOfReadings;
 	
 	REGION Read code
-	    
-	    //Read request
 	    IF "DevicesData".scanner.start THEN
 	        FOR #lctr1 := 1 TO #NumberOfReadings DO
 	            IF "DB_ProductionProgramActual".Program.Readings[#lctr1].Enable AND
 	                NOT #Reading[#lctr1].Done THEN
+	                //Request new read
 	                "DB_INST_DTM_READERS".READER["DB_ProductionProgramActual".Program.Readings[#lctr1].ReaderNumber].Req := TRUE;
 	            END_IF;
 	            IF "DB_INST_DTM_READERS".READER["DB_ProductionProgramActual".Program.Readings[#lctr1].ReaderNumber].ResultsAvailable AND
 	                "DB_INST_DTM_READERS".READER["DB_ProductionProgramActual".Program.Readings[#lctr1].ReaderNumber].ResultLenght <> 0 THEN
+	                //Read done
 	                "DB_INST_DTM_READERS".READER["DB_ProductionProgramActual".Program.Readings[#lctr1].ReaderNumber].Req := FALSE;
 	                #Reading[#lctr1].Done := TRUE;
 	            END_IF;
-	            
-	            //Results
 	            IF #Reading[#lctr1].Done THEN
-	                //Compare strings
+	                //Copy readed data in temporal holder
 	                #tempHolder := MID(IN := "DB_INST_DTM_READERS".READER["DB_ProductionProgramActual".Program.Readings[#lctr1].ReaderNumber].DataStr,
 	                                   L := LEN("DB_ProductionProgramActual".Program.Readings[#lctr1].ReferenceToFound),
 	                                   P := "DB_ProductionProgramActual".Program.Readings[#lctr1].ReferenceStartPosition);
-	                
 	                IF #tempHolder = "DB_ProductionProgramActual".Program.Readings[#lctr1].ReferenceToFound THEN
-	                    //Results OK
+	                    //Check data with recipe and copy to data in reading
 	                    #Reading[#lctr1].Scan := "DB_INST_DTM_READERS".READER["DB_ProductionProgramActual".Program.Readings[#lctr1].ReaderNumber].DataStr;
+	                    //Store scan data in autoposition buffer
+	                    "AutoPositions".St1_Table1.Readings[#lctr1].Scan := #Reading[#lctr1].Scan;
 	                    #Reading[#lctr1].OK := TRUE;
+	                    
 	                    #Reading[#lctr1].NOK := FALSE;
-	                    
-	                    
-	                    //Copy  NFP 
-	                    //Master NFP
-	                    IF "DB_ProductionProgramActual".Program.Readings[#lctr1].LabelType = 2 THEN
-	                        #Reading[#lctr1].NFP := LEFT(IN := "DB_INST_DTM_READERS".READER["DB_ProductionProgramActual".Program.Readings[#lctr1].ReaderNumber].DataStr, L := 30);
-	                        //Secondary NFP
-	                    ELSIF "DB_ProductionProgramActual".Program.Readings[#lctr1].LabelType = 3 THEN
-	                        //Linked to created NFP
-	                        IF "DB_ProductionProgramActual".Program.Readings[1].MasterReadingNumber > 0 THEN
-	                            ;
-	                            //Linked to readed NFP
-	                        ELSIF "DB_ProductionProgramActual".Program.Readings[1].LinkedMasterNumber > 0 THEN
-	                            #Reading[#lctr1].NFP := #Reading["DB_ProductionProgramActual".Program.Readings[#lctr1].LinkedMasterNumber].NFP;
-	                        END_IF;
-	                        
-	                    END_IF;
 	                ELSE
 	                    //Results NOK
 	                    #Reading[#lctr1].OK := FALSE;
@@ -97,32 +102,27 @@ BEGIN
 	                    #Reading[#lctr1].Scan := #blankStr;
 	                END_IF;
 	            END_IF;
-	            //Count readings ok
-	            IF #Reading[#lctr1].OK AND (#Reading[#lctr1].Scan <> #blankStr) OR NOT "DB_ProductionProgramActual".Program.Readings[#lctr1].Enable THEN
-	                #count += 1;
-	            END_IF;
-	            IF #count = "DB_ProductionProgramActual".Program.NumberOfReadings THEN
-	                #ReadingsDone := TRUE;
-	            END_IF;
-	            //Copy readings to buffer data
-	            IF "sq_carousel_insertion_st1"."Set part present".X THEN
-	                "AutoPositions".St1_Table1.Readings[#lctr1].Scan := #Reading[#lctr1].Scan;
-	            END_IF;
-	            
-	            
 	        END_FOR;
 	    END_IF;
-	    
-	    
-	    
 	END_REGION
 	
-	REGION IJCore
+	REGION Clear Data
+	    IF NOT "DevicesData".scanner.start THEN
+	        FOR #lctr1 := 1 TO "MaxDataReading" DO
+	            IF "DB_ProductionProgramActual".Program.Readings[#lctr1].ReaderNumber > 0 THEN
+	                "DB_INST_DTM_READERS".READER["DB_ProductionProgramActual".Program.Readings[#lctr1].ReaderNumber].Req := FALSE;
+	            END_IF;
+	            #Reading[#lctr1] := #EmptyReading;
+	        END_FOR;
+	    END_IF;
+	END_REGION
+	
+	REGION Traceability
 	    FOR #lctr1 := 1 TO #NumberOfReadings DO
-	        //TRACE
-	        FOR #lctr2 := 1 TO 5 DO
+	        FOR #lctr2 := 1 TO "NumberOfmessages" DO
 	            CASE "DB_ProductionProgramActual".Program.Readings[#lctr1].Message[#lctr2].MessageType OF
 	                "STA":
+	                    //CALL STA
 	                    "FC_READING_IJC_STA"(Req := #Reading[#lctr1].OK,
 	                                         MessageNumber := "DB_ProductionProgramActual".Program.Readings[#lctr1].Message[#lctr2].MessageFlagNumber,
 	                                         TraceabilityMode := "DB_MAIN_IJCORE".Mode,
@@ -131,33 +131,34 @@ BEGIN
 	                                         MessageDone => #Reading[#lctr1].IJC[#lctr2].Done,
 	                                         Answer := #Reading[#lctr1].IJC[#lctr2].Answer,
 	                                         State := #Reading[#lctr1].IJC[#lctr2].State);
-	                    
+	                    //CALL PFC   
 	                "PFC":
 	                    "FC_TRACE_PFC"(Req := "DB_MAIN_IJCORE".CMD.PFC,
 	                                   MessageNumber := "DB_ProductionProgramActual".Program.Readings[#lctr1].Message[#lctr2].MessageFlagNumber,
 	                                   TraceabilityMode := "DB_MAIN_IJCORE".Mode,
-	                                   NFP := "AutoPositions".St3_Fitting.Readings["DB_ProductionProgramActual".Program.Readings[#lctr1].MasterReadingNumber].Scan,
+	                                   NFP := "AutoPositions".St3_Fitting.Readings[#lctr1].Scan,
 	                                   Kanban := "DB_ProductionProgramActual".Program.FaureciaNumber,
 	                                   ErrReset := TRUE,
 	                                   MessageDone => #Reading[#lctr1].IJC[#lctr2].Done,
 	                                   Answer => #Reading[#lctr1].IJC[#lctr2].Answer,
 	                                   State := #Reading[#lctr1].IJC[#lctr2].State);
-	                    
+	                    //CALL TRR
 	                "TRR":
 	                    "FC_TRACE_TRR"(Req := "DB_MAIN_IJCORE".CMD.TRR,
 	                                   MessageNumber := "DB_ProductionProgramActual".Program.Readings[#lctr1].Message[#lctr2].MessageFlagNumber,
 	                                   TraceabilityMode := "DB_MAIN_IJCORE".Mode,
-	                                   NFP := "AutoPositions".St3_Fitting.Readings["DB_ProductionProgramActual".Program.Readings[#lctr1].MasterReadingNumber].Scan,
-	                                   ProcessStatus := 1,
+	                                   NFP := "AutoPositions".St3_Fitting.Readings[#lctr1].Scan,
+	                                   ProcessStatus :="DB_MAIN_IJCORE".STAT.ProcessResults,
 	                                   NumberOfProcess := 1,
 	                                   ErrReset := TRUE,
 	                                   MessageDone => #Reading[#lctr1].IJC[#lctr2].Done,
 	                                   Answer => #Reading[#lctr1].IJC[#lctr2].Answer,
 	                                   State := #Reading[#lctr1].IJC[#lctr2].State);
 	                    
+	                    //CALL TRC
 	                "TRC":
 	                    IF "DB_ProductionProgramActual".Program.Readings[#lctr1].MasterReadingNumber > 0 THEN
-	                        "FC_READING_IJC_TRC"(Req := "DB_MAIN_IJCORE".CMD.TRC,
+	                        "FC_READING_IJC_TRC"(Req := #Reading[#lctr1].OK AND #Reading["DB_ProductionProgramActual".Program.Readings[#lctr1].MasterReadingNumber].Done,
 	                                             MessageNumber := "DB_ProductionProgramActual".Program.Readings[#lctr1].Message[#lctr2].MessageFlagNumber,
 	                                             TraceabilityMode := "DB_MAIN_IJCORE".Mode,
 	                                             NFP := #Reading["DB_ProductionProgramActual".Program.Readings[#lctr1].MasterReadingNumber].Scan,
@@ -167,63 +168,83 @@ BEGIN
 	                                             Answer := #Reading[#lctr1].IJC[#lctr2].Answer,
 	                                             State := #Reading[#lctr1].IJC[#lctr2].State);
 	                    END_IF;
-	                ELSE:
-	                    ;
 	                    
+	                    //CALL CNF
+	                "CNF":
+	                    "FC_READING_IJC_CNF"(Req:=#Reading[#lctr1].OK AND #Reading["DB_ProductionProgramActual".Program.Readings[#lctr1].MasterReadingNumber].Done,
+	                                         MessageNumber:="DB_ProductionProgramActual".Program.Readings[#lctr1].Message[#lctr2].MessageFlagNumber,
+	                                         TraceabilityMode:="DB_MAIN_IJCORE".Mode,
+	                                         NFP:="AutoPositions".St3_Fitting.Readings["DB_ProductionProgramActual".Program.Readings[#lctr1].MasterReadingNumber].Scan,
+	                                         Scan:="AutoPositions".St3_Fitting.Readings[#lctr1].Scan,
+	                                         ErrReset:=TRUE,
+	                                         MessageDone=>#Reading[#lctr1].IJC[#lctr2].Done,
+	                                         Answer:=#Reading[#lctr1].IJC[#lctr2].Answer,
+	                                         State:=#Reading[#lctr1].IJC[#lctr2].State);
 	            END_CASE;
-	            
 	        END_FOR;
 	    END_FOR;
+	END_REGION
+	
+	
+	REGION Error Management
+	    FOR #lctr1 := 1 TO #NumberOfReadings DO
+	        IF #Reading[#lctr1].NOK THEN
+	            #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
+	            #Errors[1].%X0 := TRUE;
+	            EXIT;
+	        // ELSE
+	        //     #Errors[1].%X0 := false;
+	        END_IF;
+	    END_FOR;
 	    
-	END_REGION
-	
-	
-	
-	
-	REGION Clear Data
-	    IF NOT "DevicesData".scanner.start THEN
-	        FOR #lctr1 := 1 TO "MaxDataReading" DO
-	            "DB_INST_DTM_READERS".READER["DB_ProductionProgramActual".Program.Readings[#lctr1].ReaderNumber].Req := FALSE;
-	            #Reading[#lctr1].Done := FALSE;
-	            #Reading[#lctr1].OK := FALSE;
-	            #Reading[#lctr1].NOK := FALSE;
-	            #ReadingsDone := FALSE;
-	            #Reading[#lctr1].Scan := #blankStr;
+	        FOR #lctr1 := 1 TO #NumberOfReadings DO
+	            FOR #lctr2 := 1 TO "NumberOfIJCoreMessages" DO
+	                ;
+	                // CASE #Reading[#lctr1].IJC[#lctr2].Answer OF
+	                //     -2:  // NFP not founded
+	                //         #Errors[2].%X0 := TRUE;
+	                //         #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
+	                //         EXIT;
+	                //     -3:  //Part number NOT inside BOM
+	                //         #Errors[2].%X1 := TRUE;
+	                //         #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
+	                //         EXIT;
+	                //     -4: // PFC not ok
+	                //         #Errors[2].%X2 := TRUE;
+	                //         #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
+	                //         EXIT;
+	                //     -5: //Component already used
+	                //         #Errors[2].%X3 := TRUE;
+	                //         #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
+	                //         EXIT;
+	                //     -6: //Module already used
+	                //         #Errors[2].%X4 := true;
+	                //         #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
+	                //         EXIT;
+	                //     -10: //Status NOK from previous operation
+	                //         #Errors[2].%X5 := true;
+	                //         #ErrorText := "DB_ProductionProgramActual".Program.Readings[#lctr1].Name;
+	                //         EXIT;
+	                //     ELSE
+	                //         #Errors[2] := 0;
+	                // END_CASE;
+	            END_FOR;
 	        END_FOR;
-	    END_IF;
+	        IF #Errors[1] > 0 OR
+	            #Errors[2] > 0 THEN
+	            #ErrorExist := true;
+	        ELSE
+	            #ErrorExist := false;
+	        END_IF;
+	        
+	        IF "Alarms".Reset OR
+	            NOT "DevicesData".scanner.start THEN
+	            #ErrorText := '';
+	            #Errors[1] := 0;
+	            #Errors[2] := 0;
+	        END_IF;
+	
 	END_REGION
-	
-	// REGION Error Management
-	//     #eType := 1;
-	//     FOR #lctr1 := 1 TO #NumberOfReadings DO
-	//         IF #Reading[#lctr1].NOK THEN
-	//             #Error[#eType, 1] := TRUE;
-	//         END_IF;
-	
-	//         //IJCore Errors
-	//         FOR #lctr2 := 1 TO "NumberOfIJCoreMessages" DO
-	//             #eType := 2;
-	//             CASE #Reading[#lctr1].IJC[#lctr2].Answer OF
-	//                 -2:  // NFP not founded
-	//                     #Error[#eType, 1] := TRUE;
-	//                 -3:  //Part number NOT inside BOM
-	//                     #Error[#eType, 2] := TRUE;
-	//                 -4: // PFC not ok
-	//                     #Error[#eType, 3] := TRUE;
-	//                 -5: //Component already used
-	//                     #Error[#eType, 4] := TRUE;
-	//                 -6: //Module already used
-	//                     #Error[#eType, 5] := true;
-	//                 -10: //Status NOK from previous operation
-	//                     #Error[#eType, 6] := true;
-	//             END_CASE;
-	//         END_FOR;
-	//     END_FOR;
-	
-	//     FOR #lctr1 := 1 TO 2 DO
-	//         #Errors[#lctr1] := SWAP(#Errors[#lctr1]);
-	//     END_FOR;
-	// END_REGION
 	
 	
 	
