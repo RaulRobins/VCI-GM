@@ -1,0 +1,67 @@
+﻿FUNCTION "GetStrJDay" : String
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_TEMP 
+      julianDayDint : DInt;
+      DateTime {InstructionName := 'DTL'; LibVersion := '1.0'} : DTL;
+      return : Int;
+      LeapYear : DInt;
+      julianDayHolder : String;
+   END_VAR
+
+   VAR CONSTANT 
+      "__JAN" : USInt := 1;
+      "__FEB" : USInt := 2;
+      "__MAR" : USInt := 3;
+      "__APR" : USInt := 4;
+      "__MAY" : USInt := 5;
+      "__JUN" : USInt := 6;
+      "__JUL" : USInt := 7;
+      "__AUG" : USInt := 8;
+      "__SEP" : USInt := 9;
+      "__OCT" : USInt := 10;
+      "__NOV" : USInt := 11;
+      "__DEC" : USInt := 12;
+   END_VAR
+
+
+BEGIN
+	#return := RD_LOC_T(#DateTime);
+	#LeapYear := #DateTime.YEAR MOD 4;
+	
+	//CALC JDAY
+	CASE #DateTime.MONTH OF
+	    #"__JAN": #julianDayDint := #DateTime.DAY;
+	    #"__FEB": #julianDayDint := (#DateTime.DAY + DINT#31);
+	    #"__MAR": #julianDayDint := (#DateTime.DAY + DINT#59);
+	    #"__APR": #julianDayDint := (#DateTime.DAY + DINT#90);
+	    #"__MAY": #julianDayDint := (#DateTime.DAY + DINT#120);
+	    #"__JUN": #julianDayDint := (#DateTime.DAY + DINT#151);
+	    #"__JUL": #julianDayDint := (#DateTime.DAY + DINT#181);
+	    #"__AUG": #julianDayDint := (#DateTime.DAY + DINT#212);
+	    #"__SEP": #julianDayDint := (#DateTime.DAY + DINT#243);
+	    #"__OCT": #julianDayDint := (#DateTime.DAY + DINT#273);
+	    #"__NOV": #julianDayDint := (#DateTime.DAY + DINT#304);
+	    #"__DEC": #julianDayDint := (#DateTime.DAY + DINT#334);
+	END_CASE;
+	
+	//IF LEAP YEAR
+	IF #LeapYear = 0 AND #DateTime.MONTH > 2 THEN
+	    #julianDayDint := #julianDayDint + 1;
+	    ;
+	END_IF;
+	
+	//JULIAN DAY IN STRING FORMAT
+	#julianDayHolder := DINT_TO_STRING(IN := ABS_DINT(IN := #julianDayDint));
+	#julianDayHolder := DELETE(IN := #julianDayHolder, L := 1, P := 1);
+	IF #julianDayDint < 10 THEN
+	    #GetStrJDay := CONCAT_STRING(IN1 := '00', IN2 := #julianDayHolder);
+	ELSIF #julianDayDint >= 10 AND #julianDayDint < 100 THEN
+	    #GetStrJDay := CONCAT_STRING(IN1 := '0', IN2 := #julianDayHolder);
+	ELSE
+	    #GetStrJDay := #julianDayHolder;
+	END_IF;
+	
+	
+END_FUNCTION
+

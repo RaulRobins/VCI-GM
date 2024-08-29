@@ -1,0 +1,296 @@
+﻿FUNCTION_BLOCK "FB_ControlPrinter"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_INPUT 
+      printNewLabel : Bool;
+      printLastLabel : Bool;
+      printBlackLabel : Bool;
+      resetLabelCounter : Bool;
+      resetErrors : Bool;
+   END_VAR
+   VAR_INPUT RETAIN
+      typeOfLabel : Int;
+   END_VAR
+   VAR_INPUT 
+      optionAutoResetCounter : Int;
+      REF_TO_PRINT_PLANT_NUMER_3DIGIT : String[10];
+      NFP : String[30];
+      Traceability : Bool;
+      line : String[1];
+      reference : "udt_referenceMainInfo";
+   END_VAR
+
+   VAR_OUTPUT 
+      printDone : Bool;
+      printBusy : Bool;
+      printError : Bool;
+      printerStatus : Word;
+   END_VAR
+
+   VAR 
+      tramToSendToPrinter : Array[0..6000] of Char;
+      seqDataPreparation : Int;
+      tramToPrepareToSend { S7_SetPoint := 'True'} : Array[1..20] of String;
+      savePrintNewLabel : Bool;
+   END_VAR
+   VAR RETAIN
+      "counter" : Int;
+      DBcomToPrinter {InstructionName := 'TCON_IP_v4'; LibVersion := '1.0'; S7_SetPoint := 'False'} : TCON_IP_v4;
+   END_VAR
+   VAR 
+      tSendC {InstructionName := 'TSEND_C'; LibVersion := '3.0'} : TSEND_C;
+   END_VAR
+
+   VAR_TEMP 
+      dateAndTime {InstructionName := 'DTL'; LibVersion := '1.0'} : DTL;
+      dateTimeStr : String;
+      "date" : String[10];
+      "time" : String[8];
+      year : String[2];
+      MFGhour : String[1];
+      JulianDay : String[3];
+      errCode : DInt;
+      pcars : DInt;
+      forCounter : Int;
+      counterStr : String[4];
+      cnt : DInt;
+      i : Int;
+      dummy : Int;
+      holder : String;
+      nfpToPrint : String[8];
+      PN : String[8];
+   END_VAR
+
+   VAR CONSTANT 
+      fieldSeparator : String := '^FS';
+      RS : String := '\1E';
+      GS : String := '\1D';
+      EOT : String := '\04';
+   END_VAR
+
+
+BEGIN
+	
+	//***********************************************************CALCULATE DAY NUMBER **************************************
+	#errCode:= RD_LOC_T(#dateAndTime);
+	#dateTimeStr := "GetStrDateTime"("date" := #dateAndTime, separator := '/');
+	#date := LEFT_STRING(IN := #dateTimeStr, L := 10);
+	#year := MID(IN := #dateTimeStr, L := 2, P := 9);
+	#time := MID(IN := #dateTimeStr, L := 8, P := 12);
+	#JulianDay := "GetStrJDay"();
+	#MFGhour := USINT_TO_CHAR(#dateAndTime.HOUR + 65);
+	
+	//********************************************* SEQUENCE MANAGE TO DATA PRINT **************************************
+	//
+	//>>>>>> STEP-0- >>>>>> waiting for start printing
+	IF (#printNewLabel AND #seqDataPreparation = 0) THEN
+	    IF #printNewLabel THEN
+	        #savePrintNewLabel := TRUE;
+	        #seqDataPreparation := 1;
+	    END_IF;
+	END_IF;
+	
+	//>>>>>> STEP-1- >>>>>> INITIALISE DATA TO PRINT
+	IF #seqDataPreparation = 1 THEN
+	    // INITILISE DATA OF TRAM TO SEND
+	    // 
+	    IF #typeOfLabel = 0 THEN //NO LABEL
+	        FOR #i := 1 TO 20 DO
+	            #tramToPrepareToSend[#i] := '';
+	        END_FOR;
+	        
+	    ELSIF #typeOfLabel = 1 THEN //NFP LABEL
+	        #tramToPrepareToSend[1] := '^XA^PW378'; //START FORMAT   
+	        #tramToPrepareToSend[2] := '^BY126,126^FT169,175^BXN,7,200,0,0,1,~^FH\^FD';//DATAMATRIX
+	        #tramToPrepareToSend[3] := '1234567891234567891234567891'; 
+	        #tramToPrepareToSend[4] := '^FS^FT25,162^A0N,29,28^FH\^FD'; //REFERENCE
+	        #tramToPrepareToSend[5] := '12345678'; 
+	        #tramToPrepareToSend[6] := '^FS^FT25,124^A0N,25,24^FH\^FD'; //DATE
+	        #tramToPrepareToSend[7] := 'DD/MM/YY'; //
+	        #tramToPrepareToSend[8] := '^FS^FT25,87^A0N,29,28^FH\^FD'; // TIME
+	        #tramToPrepareToSend[9] := 'hh:mm:ss';
+	        #tramToPrepareToSend[10] := '^FS^FT26,44^A0N,29,28^FH\^FD';//DESCRIPTION
+	        #tramToPrepareToSend[11] := '1234567891';
+	        #tramToPrepareToSend[12] := '^FS^FT25,196^A0N,21,21^FH\^FD';//READABLE CODE
+	        #tramToPrepareToSend[13] := '1234567891234567891234567891';
+	        #tramToPrepareToSend[20] := '^PQ1,0,1,Y^XZ';//END FORMAT
+	        #counter += 1;
+	        
+	    ELSIF #typeOfLabel = 2 THEN //CUSTOMER LABEL
+	        #tramToPrepareToSend[1] := '^XA'; //START FORMAT   
+	        #tramToPrepareToSend[2] := '^XFE:GM_FINAL.zpl';//CALL TEMPLATE
+	        #tramToPrepareToSend[3] := '^FN1^FH\^FD[)>\1E06\1DY00000000000000\1DP00000000\1D12V000000000\1DT0000000000000000\1E\04^FS'; //DATAMATRIX
+	        #tramToPrepareToSend[4] := '^FN2^FD1234^FS'; //GM PART NUMBER 
+	        #tramToPrepareToSend[5] := '^FN3^FD5678^FS'; //GM PART NUMBER
+	        #tramToPrepareToSend[6] := '^FN4^FD12345678901234^FS'; //VPPS
+	        #tramToPrepareToSend[7] := '^FN5^FD123456789^FS'; //DUNS
+	        #tramToPrepareToSend[8] := '^FN6^FDLSYYDDDA2B4CDSEQ^FS'; //TRACE CODE
+	        #tramToPrepareToSend[9] := '^FN7^FDdd/mm/yyyy^FS'; //DATE
+	        #tramToPrepareToSend[10] := '^FN8^FDhh:mm:ss^FS'; //TIME
+	        #tramToPrepareToSend[11] := '^FN9^FD12345678^FS'; //FAURECIA NUMBER
+	        #tramToPrepareToSend[12] := '^FN10^FD12345678^FS'; //NFP
+	        #tramToPrepareToSend[13] := '^FN11^FDLINEA 3^FS'; //LINE
+	        #tramToPrepareToSend[20] := '^PQ1,0,1,Y^XZ';//END FORMAT
+	        #counter += 1;
+	    END_IF;
+	    #seqDataPreparation := 2;
+	END_IF;
+	
+	
+	//PREPARATION OF LABEL COUNTER **************************************
+	#counterStr := "LabelCounterFormat"(counts := #counter, format := 'DEC', len := 3);
+	IF  #counter > 999 THEN
+	    #counter := 0;
+	END_IF;
+	
+	// AUTO RESET COUNTER PER HOUR
+	IF #optionAutoResetCounter = 1 THEN
+	    IF #dateAndTime.MINUTE = 0 AND #dateAndTime.SECOND <= 2 THEN
+	        #counter := 0;
+	    END_IF;
+	END_IF;
+	
+	
+	//----------------------------------------------------------------------------------------------------------------
+	//>>>>>> STEP-2- >>>>>> MODIFY CONCERNED DATA AS DATE; TIME; REFERENCE; YEAR DAY; PRODUCT REFERENCE.
+	IF #seqDataPreparation = 2 THEN
+	    //DATAMATRIX
+	    IF #typeOfLabel = 1 THEN //NFP LABEL
+	        IF #Traceability THEN
+	            #tramToPrepareToSend[3] := #NFP;
+	            #tramToPrepareToSend[13] := #NFP;
+	        END_IF;
+	        
+	        IF NOT #Traceability THEN
+	            #tramToPrepareToSend[3] := #line;  //line number
+	            #tramToPrepareToSend[3] := CONCAT(IN1 := #tramToPrepareToSend[3], IN2 := 'P');  //label type
+	            #tramToPrepareToSend[3] := CONCAT(IN1 := #tramToPrepareToSend[3], IN2 := #counterStr);  //internal sequence number
+	            #tramToPrepareToSend[3] := CONCAT(IN1 := #tramToPrepareToSend[3], IN2 := #MFGhour);
+	            #tramToPrepareToSend[3] := CONCAT(IN1 := #tramToPrepareToSend[3], IN2 := #JulianDay);
+	            #tramToPrepareToSend[3] := CONCAT(IN1 := #tramToPrepareToSend[3], IN2 := "model".name[0]);
+	            #tramToPrepareToSend[3] := CONCAT(IN1 := #tramToPrepareToSend[3], IN2 := 'R01');
+	            #tramToPrepareToSend[3] := CONCAT(IN1 := #tramToPrepareToSend[3], IN2 := #REF_TO_PRINT_PLANT_NUMER_3DIGIT);
+	            #tramToPrepareToSend[3] := CONCAT(IN1 := #tramToPrepareToSend[3], IN2 := #year);
+	            #tramToPrepareToSend[13] := #tramToPrepareToSend[3];
+	        END_IF;
+	        
+	        
+	        //DATE
+	        #tramToPrepareToSend[7] := #date;
+	        
+	        //TIME
+	        #tramToPrepareToSend[9] := #time;
+	        
+	        //REFERENCE
+	        #tramToPrepareToSend[5] := "model".name[0];
+	        
+	        //DESCRIPTION
+	        #tramToPrepareToSend[11] := "model".Description[0];
+	        
+	        ;
+	        
+	        
+	    ELSIF #typeOfLabel = 2 THEN //CUSTOMER LABEL
+	        
+	        //GM PART NUMBER 1-2
+	        #tramToPrepareToSend[4] := REPLACE(IN1 := #tramToPrepareToSend[4], IN2 := (MID(IN := #reference.customerNumber, L := 4, P := 1)), L := 4, P := FIND(IN1 := #tramToPrepareToSend[4], IN2 := '1234'));
+	        #tramToPrepareToSend[5] := REPLACE(IN1 := #tramToPrepareToSend[5], IN2 := (MID(IN := #reference.customerNumber, L := 4, P := 5)), L := 4, P := FIND(IN1 := #tramToPrepareToSend[5], IN2 := '5678'));
+	        
+	        // VPPS
+	        #tramToPrepareToSend[6] := REPLACE(IN1 := #tramToPrepareToSend[6], IN2 := #reference.vpps, L := 14, P := FIND(IN1 := #tramToPrepareToSend[6], IN2 := '12345678901234'));
+	        
+	        // MANUFACTURING DUNS
+	        #tramToPrepareToSend[7] := REPLACE(IN1 := #tramToPrepareToSend[7], IN2 := #reference.duns, L := 9, P := FIND(IN1 := #tramToPrepareToSend[7], IN2 := '123456789'));
+	        
+	        // TRACE CODE GM
+	        //L : LINEA MACHINE
+	        #tramToPrepareToSend[8] := REPLACE(IN1 := #tramToPrepareToSend[8], IN2 := #line[1], L := 1, P := (FIND(IN1 := #tramToPrepareToSend[8], IN2 := 'L')));
+	        //S : SHIFT
+	        #tramToPrepareToSend[8] := REPLACE(IN1 := #tramToPrepareToSend[8], IN2 := #MFGhour, L := 1, P := (FIND(IN1 := #tramToPrepareToSend[8], IN2 := 'S')));
+	        //YY : YEAR
+	        #tramToPrepareToSend[8] := REPLACE(IN1 := #tramToPrepareToSend[8], IN2 := #year, L := 2, P := (FIND(IN1 := #tramToPrepareToSend[8], IN2 := 'YY')));
+	        //DDD : JULIAN DAY
+	        #tramToPrepareToSend[8] := REPLACE(IN1 := #tramToPrepareToSend[8], IN2 := #JulianDay, L := 3, P := (FIND(IN1 := #tramToPrepareToSend[8], IN2 := 'DDD')));
+	        //REF FAS 
+	        #tramToPrepareToSend[8] := REPLACE(IN1 := #tramToPrepareToSend[8], IN2 := RIGHT(IN := #reference.partNumber, L := 4), L := 4, P := (FIND(IN1 := #tramToPrepareToSend[8], IN2 := 'A2B4')));
+	        //REV
+	        #tramToPrepareToSend[8] := REPLACE(IN1 := #tramToPrepareToSend[8], IN2 := LEFT(IN := #reference.rev, L := 2), L := 2, P := (FIND(IN1 := #tramToPrepareToSend[8], IN2 := 'CD')));
+	        //SEQN : LABEL COUNTER
+	        #tramToPrepareToSend[8] := REPLACE(IN1 := #tramToPrepareToSend[8], IN2 := RIGHT(IN := #counterStr, L := 3), L := 3, P := (FIND(IN1 := #tramToPrepareToSend[8], IN2 := 'SEQ')));
+	        
+	        
+	        //Data Matrix
+	        //Y : VPPS
+	        #tramToPrepareToSend[3] := REPLACE(IN1 := #tramToPrepareToSend[3], IN2 := LEFT(IN := #reference.vpps, L := 14), L := 14, P := (FIND(IN1 := #tramToPrepareToSend[3], IN2 := 'Y') + 1));
+	        //P : GM PART NUMBER
+	        #tramToPrepareToSend[3] := REPLACE(IN1 := #tramToPrepareToSend[3], IN2 := LEFT(IN := #reference.customerNumber, L := 8), L := 8, P := (FIND(IN1 := #tramToPrepareToSend[3], IN2 := 'P') + 1));
+	        //V : DUNS
+	        #tramToPrepareToSend[3] := REPLACE(IN1 := #tramToPrepareToSend[3], IN2 := LEFT(IN := #reference.duns, L := 9), L := 9, P := (FIND(IN1 := #tramToPrepareToSend[3], IN2 := 'V') + 1));
+	        //T : GM TRACE CODE
+	        #tramToPrepareToSend[3] := REPLACE(IN1 := #tramToPrepareToSend[3], IN2 := MID(IN := #tramToPrepareToSend[8], L := 16, P := 8), L := 16, P := (FIND(IN1 := #tramToPrepareToSend[3], IN2 := 'T') + 1));
+	        //DATE
+	        #tramToPrepareToSend[9] := REPLACE(IN1 := #tramToPrepareToSend[9], IN2 := #date, L := 10, P := (FIND(IN1 := #tramToPrepareToSend[9], IN2 := 'dd/mm/yyyy')));
+	        //TIME
+	        #tramToPrepareToSend[10] := REPLACE(IN1 := #tramToPrepareToSend[10], IN2 := #time, L := 8, P := (FIND(IN1 := #tramToPrepareToSend[10], IN2 := 'hh:mm:ss')));
+	        //FAURECIA NUMBER
+	        #PN := MID(IN := #NFP, L := 8, P := 9);
+	        #tramToPrepareToSend[11] := REPLACE(IN1 := #tramToPrepareToSend[11], IN2 := #PN, L := 8, P := (FIND(IN1 := #tramToPrepareToSend[11], IN2 := '12345678')));
+	        //NFP
+	        #nfpToPrint := LEFT(IN := #NFP, L := 8);
+	        #tramToPrepareToSend[12] := REPLACE(IN1 := #tramToPrepareToSend[12], IN2 := #nfpToPrint, L := 8, P := (FIND(IN1 := #tramToPrepareToSend[12], IN2 := '12345678')));
+	    END_IF;
+	    #seqDataPreparation := 3;
+	END_IF;
+	
+	
+	//>>>>>> STEP-3- >>>>>> COPY TO TRAM PRINTER TO SEND
+	IF #seqDataPreparation = 3 THEN
+	    //RESET DB TRAM TO SEND 
+	    FILL_BLK(IN := ' ',
+	             COUNT := 6000,
+	             OUT => #tramToSendToPrinter[0]);
+	    #pcars := 0;
+	   // FILL TRAM TO SEND TO PRINTER
+	    FOR #forCounter := 1 TO 20 DO
+	        Strg_TO_Chars(Strg := #tramToPrepareToSend[#forCounter],
+	                      pChars := #pcars,
+	                      Cnt => #cnt,
+	                      Chars := #tramToSendToPrinter);
+	        #pcars := #pcars + #cnt;
+	    END_FOR;
+	    #seqDataPreparation := 4;
+	END_IF;
+	
+	// CONNECTION TO PRINTER PARAMETERS
+	#DBcomToPrinter.ConnectionType := 16#0B;
+	#DBcomToPrinter.InterfaceId := 64;
+	#DBcomToPrinter.ID := 10;
+	#DBcomToPrinter.ActiveEstablished := TRUE;
+	#DBcomToPrinter.LocalPort := 0;
+	#tSendC(REQ:=(#seqDataPreparation = 4),
+	        CONT:=TRUE,
+	        LEN:=0,
+	        DONE=>#printDone,
+	        BUSY=>#printBusy,
+	        ERROR=>#printError,
+	        STATUS=>#printerStatus,
+	        CONNECT:=#DBcomToPrinter,
+	        DATA:=#tramToSendToPrinter
+	);
+	IF #seqDataPreparation = 4 AND #printNewLabel THEN
+	    #printDone := TRUE;
+	    ;
+	END_IF;
+	
+	
+	//>>>>>> STEP-X- >>>>>> END OF SEQUENCE: WAITING 
+	//
+	IF #seqDataPreparation = 4 AND NOT (#printNewLabel) THEN
+	    #printDone := FALSE;
+	    #savePrintNewLabel := FALSE;
+	    #seqDataPreparation := 0;
+	END_IF;
+	
+	
+END_FUNCTION_BLOCK
+
