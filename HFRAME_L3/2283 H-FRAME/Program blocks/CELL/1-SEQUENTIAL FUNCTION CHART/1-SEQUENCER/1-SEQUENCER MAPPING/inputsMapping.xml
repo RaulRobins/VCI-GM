@@ -2,7 +2,7 @@
 <Document>
   <Engineering version="V17" />
   <DocumentInfo>
-    <Created>2024-08-29T18:23:42.7898755Z</Created>
+    <Created>2024-09-02T21:27:54.0688981Z</Created>
     <ExportSetting>WithDefaults</ExportSetting>
     <InstalledProducts>
       <Product>
@@ -2712,7 +2712,7 @@
               <MultilingualTextItem ID="95" CompositionName="Items">
                 <AttributeList>
                   <Culture>en-US</Culture>
-                  <Text>A20.- SPARE</Text>
+                  <Text>A20.- READING 1</Text>
                 </AttributeList>
               </MultilingualTextItem>
               <MultilingualTextItem ID="96" CompositionName="Items">
@@ -2805,7 +2805,7 @@
               <MultilingualTextItem ID="9C" CompositionName="Items">
                 <AttributeList>
                   <Culture>en-US</Culture>
-                  <Text>A21.-  SPARE</Text>
+                  <Text>A21.-  READING 2</Text>
                 </AttributeList>
               </MultilingualTextItem>
               <MultilingualTextItem ID="9D" CompositionName="Items">
@@ -2898,7 +2898,7 @@
               <MultilingualTextItem ID="A3" CompositionName="Items">
                 <AttributeList>
                   <Culture>en-US</Culture>
-                  <Text>A22.- SPARE</Text>
+                  <Text>A22.- READING 3</Text>
                 </AttributeList>
               </MultilingualTextItem>
               <MultilingualTextItem ID="A4" CompositionName="Items">
@@ -2991,7 +2991,7 @@
               <MultilingualTextItem ID="AA" CompositionName="Items">
                 <AttributeList>
                   <Culture>en-US</Culture>
-                  <Text>A23.- SPARE</Text>
+                  <Text>A23.- READING 4</Text>
                 </AttributeList>
               </MultilingualTextItem>
               <MultilingualTextItem ID="AB" CompositionName="Items">
@@ -3084,7 +3084,7 @@
               <MultilingualTextItem ID="B1" CompositionName="Items">
                 <AttributeList>
                   <Culture>en-US</Culture>
-                  <Text>A24.- SPARE</Text>
+                  <Text>A24.- READING 5</Text>
                 </AttributeList>
               </MultilingualTextItem>
               <MultilingualTextItem ID="B2" CompositionName="Items">
