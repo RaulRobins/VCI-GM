@@ -1,0 +1,112 @@
+﻿FUNCTION_BLOCK "IODiagnostic"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR 
+      DeviceNumber : Int;
+      DeviceNumberOld : Int;
+      InputAdress : Int;
+      OutputAdress : Int;
+      InputImage : Array[1.."IOImageSize"] of Byte;
+      OutputImage : Array[1.."IOImageSize"] of Byte;
+      InputAdresses : Array[1.."IOImageSize"] of Int;
+      OutputAdresses : Array[1.."IOImageSize"] of Int;
+      SingleAdressInput : Int;
+      SingleAdressOutput : Int;
+      SingleInput : Byte;
+      SingleOutput : Byte;
+      res : Byte;
+   END_VAR
+
+   VAR_TEMP 
+      i : Int;
+   END_VAR
+
+
+BEGIN
+	
+	//Detect new device selected
+	IF #DeviceNumber <> #DeviceNumberOld THEN
+	    CASE #DeviceNumber OF
+	        1:
+	            #InputAdress := 0;
+	            #OutputAdress := 0;
+	        10:
+	            #InputAdress := 380;
+	            #OutputAdress := 380;
+	        30:
+	            #InputAdress := 0;
+	            #OutputAdress := 60;
+	        31:
+	            #InputAdress := 0;
+	            #OutputAdress := 65;
+	        51:
+	            #InputAdress := 0;
+	            #OutputAdress := 30;
+	        60:
+	            #InputAdress := 1000;
+	            #OutputAdress := 1000;
+	        61:
+	            #InputAdress := 2000;
+	            #OutputAdress := 2000;
+	        62:
+	            #InputAdress := 3000;
+	            #OutputAdress := 3000;
+	        63:
+	            #InputAdress := 4000;
+	            #OutputAdress := 4000;
+	        70:
+	            #InputAdress := 100;
+	            #OutputAdress := 100;
+	        71:
+	            #InputAdress := 120;
+	            #OutputAdress := 120;
+	        72:
+	            #InputAdress := 140;
+	            #OutputAdress := 140;
+	        73:
+	            #InputAdress := 160;
+	            #OutputAdress := 160;
+	        74:
+	            #InputAdress := 180;
+	            #OutputAdress := 180;
+	        75:
+	            #InputAdress := 200;
+	            #OutputAdress := 200;
+	        76:
+	            #InputAdress := 220;
+	            #OutputAdress := 220;
+	        77:
+	            #InputAdress := 240;
+	            #OutputAdress := 240;
+	        78:
+	            #InputAdress := 260;
+	            #OutputAdress := 260;
+	        80:
+	            #InputAdress := 400;
+	            #OutputAdress := 400;
+	        81:
+	            #InputAdress := 400;
+	            #OutputAdress := 400;
+	        90:
+	            #InputAdress := 300;
+	            #OutputAdress := 300;
+	    END_CASE;
+	END_IF;
+	#DeviceNumberOld := #DeviceNumber;
+	
+	FOR #i := 1 TO "IOImageSize" DO
+	    #OutputAdresses[#i] := #OutputAdress - 1 + #i;
+	    #InputAdresses[#i] := #InputAdress - 1 + #i;
+	    #InputImage[#i] := PEEK(area := B#16#81, dbNumber := 0, byteOffset := INT_TO_DINT(IN := #i - 1 + #InputAdress));
+	    #OutputImage[#i] := PEEK(area := B#16#82, dbNumber := 0, byteOffset := INT_TO_DINT(IN := #i - 1 + #OutputAdress));
+	END_FOR;
+	
+	#SingleInput := PEEK(area := B#16#81, dbNumber := 0, byteOffset := INT_TO_DINT(IN := #SingleAdressInput));
+	#SingleOutput := PEEK(area := B#16#82, dbNumber := 0, byteOffset := INT_TO_DINT(IN := #SingleAdressOutput));
+	            
+	           
+	
+	
+	
+END_FUNCTION_BLOCK
+

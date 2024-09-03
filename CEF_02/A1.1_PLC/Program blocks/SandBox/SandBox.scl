@@ -1,0 +1,8 @@
+﻿FUNCTION_BLOCK "SandBox"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+
+BEGIN
+	;
+END_FUNCTION_BLOCK
+

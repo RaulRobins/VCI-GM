@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Document>
+  <Engineering version="V17" />
+  <DocumentInfo>
+    <Created>2024-09-03T21:54:54.8322856Z</Created>
+    <ExportSetting>WithDefaults</ExportSetting>
+    <InstalledProducts>
+      <Product>
+        <DisplayName>Totally Integrated Automation Portal</DisplayName>
+        <DisplayVersion>V17 Update 7</DisplayVersion>
+      </Product>
+      <OptionPackage>
+        <DisplayName>TIA Portal Openness</DisplayName>
+        <DisplayVersion>V17 Update 7</DisplayVersion>
+      </OptionPackage>
+      <OptionPackage>
+        <DisplayName>TIA Portal Version Control Interface</DisplayName>
+        <DisplayVersion>V17</DisplayVersion>
+      </OptionPackage>
+      <Product>
+        <DisplayName>SINAMICS Startdrive Advanced</DisplayName>
+        <DisplayVersion>V17 SP2</DisplayVersion>
+      </Product>
+      <OptionPackage>
+        <DisplayName>SINAMICS Startdrive G110M, G120, G120C, G120D, G120P, G115D</DisplayName>
+        <DisplayVersion>V17 SP2</DisplayVersion>
+      </OptionPackage>
+      <OptionPackage>
+        <DisplayName>SINAMICS Startdrive G130, G150, S120, S150, SINAMICS MV, S210</DisplayName>
+        <DisplayVersion>V17 SP2</DisplayVersion>
+      </OptionPackage>
+      <Product>
+        <DisplayName>STEP 7 Professional</DisplayName>
+        <DisplayVersion>V17 Update 7</DisplayVersion>
+      </Product>
+      <OptionPackage>
+        <DisplayName>STEP 7 Safety</DisplayName>
+        <DisplayVersion>V17 Update 6</DisplayVersion>
+      </OptionPackage>
+      <Product>
+        <DisplayName>WinCC Advanced / Unified PC</DisplayName>
+        <DisplayVersion>V17 Update 7</DisplayVersion>
+      </Product>
+    </InstalledProducts>
+  </DocumentInfo>
+  <SW.Blocks.GlobalDB ID="0">
+    <AttributeList>
+      <AutoNumber>false</AutoNumber>
+      <DBAccessibleFromOPCUA>true</DBAccessibleFromOPCUA>
+      <DBAccessibleFromWebserver>true</DBAccessibleFromWebserver>
+      <HeaderAuthor />
+      <HeaderFamily />
+      <HeaderName />
+      <HeaderVersion>0.1</HeaderVersion>
+      <Interface><Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v5">
+  <Section Name="Static">
+    <Member Name="Program" Datatype="&quot;UDT_ProductionProgram&quot;" Remanence="NonRetain" Accessibility="Public"><AttributeList><BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="SetPoint" SystemDefined="true">true</BooleanAttribute></AttributeList><Sections><Section Name="None"><Member Name="Name" Datatype="String[50]"><StartValue>'startup'</StartValue></Member><Member Name="CupformingParametersLeft" Datatype="&quot;UDT_FittingParameters&quot;"><Sections><Section Name="None"><Member Name="DigiforceProgram" Datatype="Int"><StartValue>1</StartValue></Member><Member Name="FinalSpeed" Datatype="Real"><StartValue>25.0</StartValue></Member><Member Name="ApproachSpeed" Datatype="Real"><StartValue>25.0</StartValue></Member><Member Name="FinalForce" Datatype="Real"><StartValue>10.0</StartValue></Member><Member Name="ApproachForce" Datatype="Real"><StartValue>10.0</StartValue></Member><Member Name="EndWayImmediate" Datatype="Real"><StartValue>2.55</StartValue></Member><Member Name="EndWayWithTimeout" Datatype="Real"><StartValue>3.0</StartValue></Member><Member Name="SwitchingWay" Datatype="Real"><StartValue>20.0</StartValue></Member><Member Name="EndWayTimeout" Datatype="Time"><StartValue>T#300MS</StartValue></Member></Section></Sections></Member><Member Name="CupformingParametersRight" Datatype="&quot;UDT_FittingParameters&quot;"><Sections><Section Name="None"><Member Name="DigiforceProgram" Datatype="Int"><StartValue>1</StartValue></Member><Member Name="FinalSpeed" Datatype="Real"><StartValue>25.0</StartValue></Member><Member Name="ApproachSpeed" Datatype="Real"><StartValue>25.0</StartValue></Member><Member Name="FinalForce" Datatype="Real"><StartValue>10.0</StartValue></Member><Member Name="ApproachForce" Datatype="Real"><StartValue>10.0</StartValue></Member><Member Name="EndWayImmediate" Datatype="Real"><StartValue>2.7</StartValue></Member><Member Name="EndWayWithTimeout" Datatype="Real"><StartValue>3.0</StartValue></Member><Member Name="SwitchingWay" Datatype="Real"><StartValue>20.0</StartValue></Member><Member Name="EndWayTimeout" Datatype="Time"><StartValue>T#300MS</StartValue></Member></Section></Sections></Member><Member Name="St1Insertion" Datatype="Array[1..20] of Bool"><Subelement Path="1"><StartValue>TRUE</StartValue></Subelement><Subelement Path="2"><StartValue>FALSE</StartValue></Subelement><Subelement Path="3"><StartValue>TRUE</StartValue></Subelement><Subelement Path="4"><StartValue>TRUE</StartValue></Subelement><Subelement Path="5"><StartValue>TRUE</StartValue></Subelement><Subelement Path="6"><StartValue>FALSE</StartValue></Subelement><Subelement Path="7"><StartValue>TRUE</StartValue></Subelement><Subelement Path="8"><StartValue>FALSE</StartValue></Subelement><Subelement Path="9"><StartValue>TRUE</StartValue></Subelement><Subelement Path="10"><StartValue>TRUE</StartValue></Subelement><Subelement Path="11"><StartValue>FALSE</StartValue></Subelement><Subelement Path="12"><StartValue>TRUE</StartValue></Subelement><Subelement Path="13"><StartValue>TRUE</StartValue></Subelement><Subelement Path="14"><StartValue>TRUE</StartValue></Subelement><Subelement Path="15"><StartValue>TRUE</StartValue></Subelement><Subelement Path="16"><StartValue>TRUE</StartValue></Subelement><Subelement Path="17"><StartValue>TRUE</StartValue></Subelement><Subelement Path="18"><StartValue>FALSE</StartValue></Subelement><Subelement Path="19"><StartValue>TRUE</StartValue></Subelement><Subelement Path="20"><StartValue>FALSE</StartValue></Subelement></Member><Member Name="St1InsertionUsed" Datatype="Array[1..20] of Bool"><Subelement Path="1"><StartValue>TRUE</StartValue></Subelement><Subelement Path="2"><StartValue>TRUE</StartValue></Subelement><Subelement Path="3"><StartValue>TRUE</StartValue></Subelement><Subelement Path="4"><StartValue>TRUE</StartValue></Subelement><Subelement Path="5"><StartValue>TRUE</StartValue></Subelement><Subelement Path="6"><StartValue>TRUE</StartValue></Subelement><Subelement Path="7"><StartValue>TRUE</StartValue></Subelement><Subelement Path="8"><StartValue>FALSE</StartValue></Subelement><Subelement Path="9"><StartValue>TRUE</StartValue></Subelement><Subelement Path="10"><StartValue>TRUE</StartValue></Subelement><Subelement Path="11"><StartValue>TRUE</StartValue></Subelement><Subelement Path="12"><StartValue>TRUE</StartValue></Subelement><Subelement Path="13"><StartValue>TRUE</StartValue></Subelement><Subelement Path="14"><StartValue>TRUE</StartValue></Subelement><Subelement Path="15"><StartValue>TRUE</StartValue></Subelement><Subelement Path="16"><StartValue>TRUE</StartValue></Subelement><Subelement Path="17"><StartValue>TRUE</StartValue></Subelement><Subelement Path="18"><StartValue>TRUE</StartValue></Subelement><Subelement Path="19"><StartValue>TRUE</StartValue></Subelement><Subelement Path="20"><StartValue>FALSE</StartValue></Subelement></Member><Member Name="FaureciaNumber" Datatype="String"><StartValue>'2567208X'</StartValue></Member><Member Name="FaureciaNumberStartChar" Datatype="Int"><StartValue>9</StartValue></Member><Member Name="FaureciaNumberLength" Datatype="Int"><StartValue>8</StartValue></Member><Member Name="MechanicalType" Datatype="Int"><StartValue>0</StartValue></Member><Member Name="Camera_program" Datatype="Array[0..4] of USInt" /><Member Name="Riveting_program_left" Datatype="Array[0..2] of USInt" /><Member Name="Riveting_program_right" Datatype="Array[0..2] of USInt" /><Member Name="Total_number_of_rivets_4" Datatype="Bool" /><Member Name="NumberOfReadings" Datatype="Int" /><Member Name="Readings" Datatype="Array[1..4] of &quot;UDT_ProductionReadings&quot;"><Sections><Section Name="None"><Member Name="Enable" Datatype="Bool" /><Member Name="ReaderNumber" Datatype="USInt" /><Member Name="Name" Datatype="WString[30]" /><Member Name="LabelType" Datatype="USInt" /><Member Name="ReferenceToFound" Datatype="WString[30]" /><Member Name="ReferenceStartPosition" Datatype="USInt" /><Member Name="ReferenceLenght" Datatype="USInt" /><Member Name="MasterReadingNumber" Datatype="USInt" /><Member Name="LinkedMasterNumber" Datatype="USInt" /><Member Name="Message" Datatype="Array[1..6] of &quot;UDT_IJCoreReadingMessage&quot;"><Sections><Section Name="None"><Member Name="MessageType" Datatype="USInt" /><Member Name="MessageFlagNumber" Datatype="UInt" /></Section></Sections></Member></Section></Sections></Member></Section></Sections></Member>
+    <Member Name="ProgrammNumber" Datatype="Int" Remanence="NonRetain" Accessibility="Public"><AttributeList><BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="SetPoint" SystemDefined="true">true</BooleanAttribute></AttributeList><StartValue>5</StartValue></Member>
+    <Member Name="Load" Datatype="Bool" Remanence="NonRetain" Accessibility="Public"><AttributeList><BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute></AttributeList><StartValue>FALSE</StartValue></Member>
+    <Member Name="Save" Datatype="Bool" Remanence="NonRetain" Accessibility="Public"><AttributeList><BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute></AttributeList><StartValue>FALSE</StartValue></Member>
+    <Member Name="CanBeChanged" Datatype="Bool" Remanence="NonRetain" Accessibility="Public"><AttributeList><BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute></AttributeList><StartValue>FALSE</StartValue></Member>
+  </Section>
+</Sections></Interface>
+      <IsOnlyStoredInLoadMemory>false</IsOnlyStoredInLoadMemory>
+      <IsRetainMemResEnabled>false</IsRetainMemResEnabled>
+      <IsWriteProtectedInAS>false</IsWriteProtectedInAS>
+      <MemoryLayout>Optimized</MemoryLayout>
+      <MemoryReserve>100</MemoryReserve>
+      <Name>DB_ProductionProgramActual</Name>
+      <Number>6101</Number>
+      <ProgrammingLanguage>DB</ProgrammingLanguage>
+    </AttributeList>
+    <ObjectList>
+      <MultilingualText ID="1" CompositionName="Comment">
+        <ObjectList>
+          <MultilingualTextItem ID="2" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+          <MultilingualTextItem ID="3" CompositionName="Items">
+            <AttributeList>
+              <Culture>es-MX</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+      <MultilingualText ID="4" CompositionName="Title">
+        <ObjectList>
+          <MultilingualTextItem ID="5" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+          <MultilingualTextItem ID="6" CompositionName="Items">
+            <AttributeList>
+              <Culture>es-MX</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+    </ObjectList>
+  </SW.Blocks.GlobalDB>
+</Document>

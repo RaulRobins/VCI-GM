@@ -1,0 +1,100 @@
+﻿FUNCTION_BLOCK "sequences_main"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+
+BEGIN
+	
+	"sq_robot_"(OFF_SQ := NOT "sq_robot_".INIT_SQ,
+	            INIT_SQ := "ModeSelection_DB".mode.activeMode = "mode_2_base" OR
+	            "ModeSelection_DB".mode.activeMode = "mode_3_automat" OR
+	            "ModeSelection_DB".mode.activeMode = "mode_4_semiautomat",
+	            ACK_EF := "Alarms".Reset);
+	
+	"sq_carousel_main_"(OFF_SQ := NOT "sq_carousel_main_".INIT_SQ,
+	                    INIT_SQ := "ModeSelection_DB".mode.activeMode = "mode_2_base" OR
+	                    "ModeSelection_DB".mode.activeMode = "mode_3_automat" OR
+	                    "ModeSelection_DB".mode.activeMode = "mode_4_semiautomat",
+	                    ACK_EF := "Alarms".Reset);
+	
+	"sq_carousel_insertion_st1"(OFF_SQ := NOT "sq_carousel_insertion_st1".INIT_SQ,
+	                            INIT_SQ := "ModeSelection_DB".mode.activeMode = "mode_2_base" OR
+	                            "ModeSelection_DB".mode.activeMode = "mode_3_automat" OR
+	                            "ModeSelection_DB".mode.activeMode = "mode_4_semiautomat",
+	                            ACK_EF := "Alarms".Reset);
+	
+	"sq_carousel_unloading_st2"(OFF_SQ := NOT "sq_carousel_unloading_st2".INIT_SQ,
+	                            INIT_SQ := "ModeSelection_DB".mode.activeMode = "mode_2_base" OR
+	                            "ModeSelection_DB".mode.activeMode = "mode_3_automat" OR
+	                            "ModeSelection_DB".mode.activeMode = "mode_4_semiautomat",
+	                            ACK_EF := "Alarms".Reset);
+	
+	"sq_fitting_station_st3"(OFF_SQ := NOT "sq_fitting_station_st3".INIT_SQ,
+	                         INIT_SQ := "ModeSelection_DB".mode.activeMode = "mode_2_base" OR
+	                         "ModeSelection_DB".mode.activeMode = "mode_3_automat" OR
+	                         "ModeSelection_DB".mode.activeMode = "mode_4_semiautomat",
+	                         ACK_EF := "Alarms".Reset);
+	
+	"sq_autoeject_DB"(OFF_SQ := NOT "sq_autoeject_DB".INIT_SQ,
+	                  INIT_SQ := "ModeSelection_DB".mode.activeMode = "mode_2_base" OR
+	                  "ModeSelection_DB".mode.activeMode = "mode_3_automat" OR
+	                  "ModeSelection_DB".mode.activeMode = "mode_4_semiautomat",
+	                  ACK_EF := "Alarms".Reset);
+	
+	"sq_hanger_manipulator"(OFF_SQ := NOT "sq_hanger_manipulator".INIT_SQ,
+	                    INIT_SQ := "ModeSelection_DB".mode.activeMode = "mode_2_base" OR
+	                    "ModeSelection_DB".mode.activeMode = "mode_3_automat" OR
+	                    "ModeSelection_DB".mode.activeMode = "mode_4_semiautomat",
+	                    ACK_EF := "Alarms".Reset);
+	
+	
+	
+	"PartsDataTransfer_DB"();
+	
+	
+	
+	"sq_autoeject_DB".base :=
+	"DevicesData"."TA1-3MA".AxisRef AND
+	"DevicesData"."TA1-3MA".data.zones.inNOKpos AND
+	"DevicesData".Cylinders["MM104_AutoejectGripperLifting"].InBp AND
+	(
+	NOT "AutoPositions".AE_Gripper.PartPresent AND
+	NOT "iAEtubePresentFront" AND NOT "iAEtubePresentRear" AND
+	"DevicesData".Cylinders["MM2500_GrippingTubeFront"].InBp AND
+	"DevicesData".Cylinders["MM2520_HoldingSidememberInsideLeft"].InBp AND
+	"DevicesData".Cylinders["MM2540_HoldingSidememberOutsideLeft"].InBp
+	OR
+	"AutoPositions".AE_Gripper.PartPresent AND
+	"iAEtubePresentFront" AND "iAEtubePresentRear" AND
+	"DevicesData".Cylinders["MM2500_GrippingTubeFront"].InWp AND
+	"DevicesData".Cylinders["MM2520_HoldingSidememberInsideLeft"].InWp AND
+	"DevicesData".Cylinders["MM2540_HoldingSidememberOutsideLeft"].InWp
+	);
+	
+	
+	IF NOT "SystemHMI".AutomaticMode THEN
+	    "AutoInfo".EndProduction := FALSE;
+	END_IF;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+END_FUNCTION_BLOCK
+

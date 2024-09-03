@@ -1,0 +1,46 @@
+﻿FUNCTION_BLOCK "Devices_Diagnostic"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_INPUT 
+      DPIdentifier : HW_IOSYSTEM;
+      PNIdentifier : HW_IOSYSTEM;
+   END_VAR
+
+   VAR_OUTPUT 
+      PNmissing : Bool;
+   END_VAR
+
+   VAR 
+      PNConfigured : Array[0..1023] of Bool;
+      PNFaulty : Array[0..1023] of Bool;
+      PNDisabled : Array[0..1023] of Bool;
+      PNExist : Array[0..1023] of Bool;
+      DPConfigured : Array[0..1023] of Bool;
+      DPFaulty : Array[0..1023] of Bool;
+      DPDisabled : Array[0..1023] of Bool;
+      DPExist : Array[0..1023] of Bool;
+   END_VAR
+
+   VAR_TEMP 
+      ret : Int;
+   END_VAR
+
+
+BEGIN
+	IF #PNIdentifier > 0 THEN
+	    #ret := DeviceStates(LADDR := #PNIdentifier, MODE := 1, STATE := #PNConfigured);
+	    #ret := DeviceStates(LADDR := #PNIdentifier, MODE := 2, STATE := #PNFaulty);
+	    #ret := DeviceStates(LADDR := #PNIdentifier, MODE := 3, STATE := #PNDisabled);
+	    #ret := DeviceStates(LADDR := #PNIdentifier, MODE := 4, STATE := #PNExist);
+	END_IF;
+	
+	IF #DPIdentifier > 0 THEN
+	    #ret := DeviceStates(LADDR := #DPIdentifier, MODE := 1, STATE := #DPConfigured);
+	    #ret := DeviceStates(LADDR := #DPIdentifier, MODE := 2, STATE := #DPFaulty);
+	    #ret := DeviceStates(LADDR := #DPIdentifier, MODE := 3, STATE := #DPDisabled);
+	    #ret := DeviceStates(LADDR := #DPIdentifier, MODE := 4, STATE := #DPExist);
+	END_IF;
+	
+	#PNmissing := #PNConfigured <> #PNExist;
+END_FUNCTION_BLOCK
+

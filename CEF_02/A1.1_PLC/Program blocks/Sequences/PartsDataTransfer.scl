@@ -1,0 +1,123 @@
+﻿FUNCTION_BLOCK "PartsDataTransfer"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR 
+      gripperClose {InstructionName := 'R_TRIG'; LibVersion := '1.0'; S7_SetPoint := 'False'} : R_TRIG;
+      gripperOpen {InstructionName := 'R_TRIG'; LibVersion := '1.0'} : R_TRIG;
+      gripperOpenPartial {InstructionName := 'R_TRIG'; LibVersion := '1.0'} : R_TRIG;
+   END_VAR
+
+   VAR_TEMP 
+      i : USInt;
+   END_VAR
+
+
+BEGIN
+	#gripperClose(CLK := "DevicesData".Cylinders["MM2200_GrippingTubeFront"].ToWp (* AND "DevicesData".Cylinders["MM2220_HoldingSidememberInsideLeft"].ToWp*));
+	#gripperOpen(CLK := "DevicesData".Cylinders["MM2200_GrippingTubeFront"].ToBp AND "DevicesData".Cylinders["MM2220_HoldingSidememberInsideLeft"].ToBp);
+	#gripperOpenPartial(CLK := "DevicesData".Cylinders["MM2200_GrippingTubeFront"].ToBp);
+	
+	REGION #init empty position
+	    "AutoPositions".emptyPos.IJCType := 0;
+	    "AutoPositions".emptyPos.PartNOK := FALSE;
+	    "AutoPositions".emptyPos.PartPresent := FALSE;
+	    "AutoPositions".emptyPos.Reference := 0;
+	    "AutoPositions".emptyPos.Scan := '';
+	    FILL_BLK(IN := FALSE,
+	             COUNT := 256,
+	             OUT => "AutoPositions".emptyPos.PartErrors[0]);
+	    FILL_BLK(IN := FALSE,
+	             COUNT := 16,
+	             OUT => "AutoPositions".emptyPos.FinishedOperations[0]);
+	    FILL_BLK(IN := FALSE,
+	             COUNT := 16,
+	             OUT => "AutoPositions".emptyPos.StFinished[0]);
+	END_REGION
+	
+	IF "sq_robot_"."Pickup part from carousel".X AND #gripperClose.Q THEN
+	    "AutoPositions".R1_Gripper := "AutoPositions".St2_Table2;
+	    "AutoPositions".St2_Table2 := "AutoPositions".emptyPos;
+	END_IF;
+	
+	IF "sq_robot_"."Dropoff part to jig".X AND #gripperOpenPartial.Q THEN
+	    "AutoPositions".St3_Fitting := "AutoPositions".R1_Gripper;
+	    "AutoPositions".R1_Gripper := "AutoPositions".emptyPos;
+	END_IF;
+	
+	IF "sq_autoeject_DB"."Close gripper - part pickup".S1 THEN
+	    "AutoPositions".AE_Gripper := "AutoPositions".St3_Fitting;
+	    "AutoPositions".St3_Fitting := "AutoPositions".emptyPos;
+	END_IF;
+	
+	IF "sq_autoeject_DB"."Open gripper - OK part dropoff".S1 THEN
+	    "AutoPositions".St4_OKposition := "AutoPositions".AE_Gripper;
+	    "AutoPositions".AE_Gripper := "AutoPositions".emptyPos;
+	END_IF;
+	
+	IF "sq_robot_"."Pickup part from autoeject".X AND #gripperClose.Q THEN
+	    "AutoPositions".R1_Gripper := "AutoPositions".St4_OKposition;
+	    "AutoPositions".St4_OKposition := "AutoPositions".emptyPos;
+	END_IF;
+	
+	IF "sq_robot_"."Dropoff part to manipulator level1".X AND #gripperOpen.Q THEN
+	    IF NOT "StationParameters".GhostMode THEN
+	        IF "PartHolderData".OKholderReadySideA THEN
+	            "PartHolderData".OkUpperStockAmountSideA := "PartHolderData".OkUpperStockAmountSideA + 1;
+	        END_IF;
+	        IF "PartHolderData".OKholderReadySideB THEN
+	            "PartHolderData".OkUpperStockAmountSideB := "PartHolderData".OkUpperStockAmountSideB + 1;
+	        END_IF;
+	    END_IF;
+	    "AutoPositions".R1_Gripper := "AutoPositions".emptyPos;
+	END_IF;
+	
+	IF "sq_robot_"."Dropoff part to manipulator level2".X AND #gripperOpen.Q THEN
+	    IF NOT "StationParameters".GhostMode THEN
+	        IF "PartHolderData".OKholderReadySideA THEN
+	            "PartHolderData".OkLowerStockAmountSideA := "PartHolderData".OkLowerStockAmountSideA + 1;
+	        END_IF;
+	        IF "PartHolderData".OKholderReadySideB THEN
+	            "PartHolderData".OkLowerStockAmountSideB := "PartHolderData".OkLowerStockAmountSideB + 1;
+	        END_IF;
+	    END_IF;
+	    "AutoPositions".R1_Gripper := "AutoPositions".emptyPos;
+	END_IF;
+	
+	IF "sq_robot_"."Dropoff part to slide".X AND #gripperOpen.Q THEN
+	    "AutoPositions".R1_Gripper := "AutoPositions".emptyPos;
+	END_IF;
+	
+	IF "sq_autoeject_DB"."Open gripper - NOK part dropoff".S1 THEN
+	    IF NOT "StationParameters".GhostMode THEN
+	        "PartHolderData".NOKBoxAmount := "PartHolderData".NOKBoxAmount + 1;
+	    END_IF;
+	    "AutoPositions".AE_Gripper := "AutoPositions".emptyPos;
+	END_IF;
+	
+	REGION Erase position
+	    IF "AutoInfo".EraseStation[1] THEN
+	        "AutoPositions".St1_Table1 := "AutoPositions".emptyPos;
+	    END_IF;
+	    IF "AutoInfo".EraseStation[2] THEN
+	        "AutoPositions".St2_Table2 := "AutoPositions".emptyPos;
+	    END_IF;
+	    IF "AutoInfo".EraseStation[3] THEN
+	        "AutoPositions".St3_Fitting := "AutoPositions".emptyPos;
+	    END_IF;
+	    IF "AutoInfo".EraseStation[4] THEN
+	        "AutoPositions".R1_Gripper := "AutoPositions".emptyPos;
+	    END_IF;
+	    IF "AutoInfo".EraseStation[5] THEN
+	        "AutoPositions".AE_Gripper := "AutoPositions".emptyPos;
+	    END_IF;
+	    IF "AutoInfo".EraseStation[6] THEN
+	        "AutoPositions".St4_OKposition := "AutoPositions".emptyPos;
+	    END_IF;
+	    
+	    FOR #i := 1 TO 6 DO
+	        "AutoInfo".EraseStation[#i] := 0;
+	    END_FOR;
+	END_REGION
+	
+END_FUNCTION_BLOCK
+

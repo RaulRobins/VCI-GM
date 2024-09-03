@@ -1,0 +1,25 @@
+﻿FUNCTION_BLOCK "HMIMain"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR 
+      res : Bool;
+   END_VAR
+
+
+BEGIN
+	//screen number
+	"HMIData".HMI.ActualScreenNumber:="HMIData".HMI.ScreenData[2];
+	
+	//Manual command
+	"HMIData".ManualCommand := 0;
+	//"ModeSelectionData".ManualMode := true;
+	
+	IF "HMIData".ManualCommandHMI > 0 AND "SystemHMI".ManualMode THEN
+	    "HMIData".ManualCommand := "HMIData".ManualCommandHMI;
+	    "HMIData".ManualCommandHMI := 0;
+	ELSE
+	    "HMIData".ManualCommandHMI := 0;
+	END_IF;
+	
+END_FUNCTION_BLOCK
+

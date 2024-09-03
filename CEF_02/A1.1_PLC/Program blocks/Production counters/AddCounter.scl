@@ -1,0 +1,37 @@
+﻿FUNCTION "AddCounter" : Void
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_INPUT 
+      OK : Bool;
+   END_VAR
+
+   VAR_TEMP 
+      reference : Int;
+      shift : Int;
+   END_VAR
+
+
+BEGIN
+	IF "DB_ProductionProgramActual".ProgrammNumber > 0 AND "DB_ProductionProgramActual".ProgrammNumber <= "NumberOfProductionPrograms" THEN
+	    #reference := "DB_ProductionProgramActual".ProgrammNumber;
+	    #shift := "DB_DateTimeAndShifts_Instance".ShiftStatus.ShiftNumber;
+	    IF #shift > 3 OR #shift < 1 THEN
+	        #shift := 1;
+	    END_IF;
+	    
+	    IF #OK THEN
+	        "DB_ProductionCountersList".Program[#reference].Product[1].Overall.Ok := "DB_ProductionCountersList".Program[#reference].Product[1].Overall.Ok + 1;
+	        "DB_ProductionCountersList".Program[#reference].Product[1].Shift[#shift].Ok := "DB_ProductionCountersList".Program[#reference].Product[1].Shift[#shift].Ok + 1;
+	        "DB_ProductionCountersList".Machine.Ok := "DB_ProductionCountersList".Machine.Ok + 1;
+	    ELSE
+	        "DB_ProductionCountersList".Program[#reference].Product[1].Overall.Nok := "DB_ProductionCountersList".Program[#reference].Product[1].Overall.Nok + 1;
+	        "DB_ProductionCountersList".Program[#reference].Product[1].Shift[#shift].Nok := "DB_ProductionCountersList".Program[#reference].Product[1].Shift[#shift].Nok + 1;
+	        "DB_ProductionCountersList".Machine.Nok := "DB_ProductionCountersList".Machine.Nok + 1;
+	    END_IF;
+	    IF "DB_ProductionCountersEdit".ProgramNumber = #reference
+	    THEN
+	        "DB_ProductionCountersEdit".ProductCounters := "DB_ProductionCountersList".Program[#reference];
+	    END_IF;
+	END_IF;
+END_FUNCTION
+
