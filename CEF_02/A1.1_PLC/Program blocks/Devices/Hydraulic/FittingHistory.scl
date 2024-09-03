@@ -1,0 +1,69 @@
+﻿FUNCTION_BLOCK "FittingHistory"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_INPUT 
+      iNewCycle : Bool;
+      iData : "UDT_Results_Cupforming";
+   END_VAR
+
+   VAR RETAIN
+      history { S7_SetPoint := 'False'} : Array[0..99] of "UDT_Results_Cupforming";
+   END_VAR
+   VAR 
+      pageData : Array[0..9] of "UDT_Results_Cupforming";
+   END_VAR
+   VAR RETAIN
+      pageNumber { S7_SetPoint := 'True'} : USInt;
+   END_VAR
+   VAR 
+      resetHistory : Bool;
+      R_TRIG_Instance {InstructionName := 'R_TRIG'; LibVersion := '1.0'} : R_TRIG;
+   END_VAR
+
+   VAR_TEMP 
+      i : USInt;
+      retval : Int;
+   END_VAR
+
+
+BEGIN
+	#R_TRIG_Instance(CLK:=#iNewCycle);
+	
+	IF #R_TRIG_Instance.Q THEN
+	    #retval := MOVE_BLK_VARIANT(SRC := #history, COUNT := 99, SRC_INDEX := 0, DEST_INDEX := 1, DEST => #history);
+	    #history[0] := #iData;
+	END_IF;
+	
+	CASE #pageNumber OF
+	    0..9:
+	        #retval := MOVE_BLK_VARIANT(SRC := #history, COUNT := 10, SRC_INDEX := #pageNumber * 10, DEST_INDEX := 0, DEST => #pageData);
+	    ELSE
+	        #pageNumber := 0;
+	END_CASE;
+	
+	IF #resetHistory THEN
+	    #resetHistory := FALSE;
+	    #history[0].MaxForce := 0.0;
+	    #history[0].MinimalWay := 0.0;
+	    #history[0].MaxZposition := 0.0;
+	    #history[0].OK := FALSE;
+	    #history[0].parameters.DigiforceProgram := 0;
+	    #history[0].parameters.FinalSpeed := 0.0;
+	    #history[0].parameters.ApproachSpeed := 0.0;
+	    #history[0].parameters.FinalForce := 0.0;
+	    #history[0].parameters.ApproachForce := 0.0;
+	    #history[0].parameters.ApproachForce := 0.0;
+	    #history[0].parameters.EndWayImmediate := 0.0;
+	    #history[0].parameters.EndWayWithTimeout := 0.0;
+	    #history[0].parameters.SwitchingWay := 0.0;
+	    #history[0].parameters.EndWayTimeout:=t#0s;
+	    FOR #i := 1 TO 99 DO
+	        #history[#i] := #history[0];
+	    END_FOR;
+	END_IF;
+	
+	
+	
+	
+END_FUNCTION_BLOCK
+

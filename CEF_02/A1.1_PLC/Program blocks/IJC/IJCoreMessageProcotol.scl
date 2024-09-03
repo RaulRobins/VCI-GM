@@ -1,0 +1,299 @@
+﻿FUNCTION_BLOCK "IJCoreMessageProcotol"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_INPUT 
+      MessageType : Int;
+      MessageNumber : DInt;
+      TraceabilityMode : UInt;
+      SendMessage : Bool;
+      MasterNFP : Bool;
+      iNFP : String;
+      Data : String;
+      Kanban : String[11];
+      ProcessStatus : UInt;
+      ErrReset : Bool;
+   END_VAR
+
+   VAR_OUTPUT 
+      oNFP : String[30];
+      MessageDone : Bool;
+      Answer : DInt;
+      Fault : DInt;
+   END_VAR
+
+   VAR_IN_OUT 
+      SeqStep : UInt;
+   END_VAR
+
+   VAR 
+      SEND_OFFSET : Struct
+         SW : DInt;
+         MSG : DInt;
+      END_STRUCT;
+      REC_OFFSET : Struct
+         SW : DInt;
+         MSG : DInt;
+         ANS : DInt;
+      END_STRUCT;
+   END_VAR
+
+   VAR_TEMP 
+      i : Int;
+   END_VAR
+
+   VAR CONSTANT 
+      "DB" : Byte := 16#84;
+      CLEAR : Word := 16#0000;
+      MINUS1 : Word := 16#FFFF;
+      PLUS1 : Word := 16#0001;
+      DB_REC : DB_ANY := 1006;
+      DB_SEND : DB_ANY := 1005;
+      Blank : String := '';
+      CNF : Int := 1;
+      TRS : Int := 2;
+      TRI : Int := 3;
+      TRE : Int := 4;
+      STA : Int := 5;
+      ANDON : Int := 6;
+      TRR : Int := 7;
+      TRW : Int := 8;
+      PFC : Int := 9;
+      NFP : Int := 10;
+      CMA : Int := 11;
+      TMA : Int := 12;
+      TRB : Int := 13;
+      TRC : Int := 14;
+   END_VAR
+
+
+BEGIN
+	//TITLE = 'IJCORE PROTOCOL'
+	//AUTHOR: RAUL ROBINS
+	//CREATED ON: 03/24/2023
+	//VERSION: 3.0
+	
+	
+	
+	IF #MessageNumber < 1 OR
+	    #MessageType < 0 THEN //If message number 0 end function
+	    RETURN;
+	END_IF;
+	
+	
+	IF NOT #SendMessage THEN // Error Reset
+	    #SeqStep := 0;
+	END_IF;
+	
+	#SEND_OFFSET.SW := (#MessageNumber * 2) + 2; //Calc message send sw offset
+	#SEND_OFFSET.MSG := ((#MessageNumber - 1) * 80) + 604; // Calc send message offset
+	#REC_OFFSET.SW := (#MessageNumber - 1) * 2; // Calc receive sw offset
+	#REC_OFFSET.ANS := ((#MessageNumber - 1) * 32) + 600; // Calc receive answer offset
+	#REC_OFFSET.MSG := ((#MessageNumber - 1) * 32) + 602; // Calc receive message offset
+	
+	
+	CASE #SeqStep OF
+	    0: // Initial State
+	        #MessageDone := FALSE;
+	        #Answer := 0;
+	        #Fault := 0;
+	        POKE(area := #DB, //Clear send flag
+	             dbNumber := #DB_SEND,
+	             byteOffset := #SEND_OFFSET.SW,
+	             value := #MINUS1);
+	        POKE(area := #DB, //Clear receive flag
+	             dbNumber := #DB_REC,
+	             byteOffset := #REC_OFFSET.SW,
+	             value := #MINUS1);
+	        #oNFP := #Blank;
+	        #SeqStep := 10; ///Transition to state 10
+	        
+	    10: // Wait for start command
+	        IF #SendMessage THEN //If start command active
+	            
+	            #MessageDone := FALSE;
+	            #Answer := 0;
+	            #Fault := 0;
+	            #oNFP := #Blank;
+	            
+	            POKE(area := #DB, //Clear send flag
+	                 dbNumber := #DB_SEND,
+	                 byteOffset := #SEND_OFFSET.SW,
+	                 value := #MINUS1);
+	            POKE(area := #DB, //Clear receive flag
+	                 dbNumber := #DB_REC,
+	                 byteOffset := #REC_OFFSET.SW,
+	                 value := #MINUS1);
+	            POKE(area := #DB, // Clear answer 
+	                 dbNumber := #DB_REC,
+	                 byteOffset := #REC_OFFSET.ANS,
+	                 value := #CLEAR);
+	            
+	            FOR #i := 0 TO 79 BY 1 DO //Clear all send array
+	                POKE(area := #DB,
+	                     dbNumber := #DB_SEND,
+	                     byteOffset := (#SEND_OFFSET.MSG + #i),
+	                     value := '$00');
+	            END_FOR;
+	            FOR #i := 0 TO 29 BY 1 DO //Clear all receive array
+	                POKE(area := #DB,
+	                     dbNumber := #DB_REC,
+	                     byteOffset := (#REC_OFFSET.MSG + #i),
+	                     value := '$00');
+	            END_FOR;
+	            #SeqStep := 20; //Transition to state 20
+	        END_IF;
+	        
+	    20: // Create message to send
+	        FOR #i := 0 TO 7 BY 1 DO //Copy NFP to DB to send
+	            POKE(area := #DB,
+	                 dbNumber := #DB_SEND,
+	                 byteOffset := (#SEND_OFFSET.MSG + #i),
+	                 value := #iNFP[#i + 1]);
+	        END_FOR;
+	        CASE #MessageType OF
+	                
+	                
+	            #CNF, #TRB:
+	                
+	                POKE(area := #DB,
+	                     dbNumber := #DB_SEND,
+	                     byteOffset := (#SEND_OFFSET.MSG + 8),
+	                     value := '7');
+	                POKE(area := #DB,
+	                     dbNumber := #DB_SEND,
+	                     byteOffset := (#SEND_OFFSET.MSG + 9),
+	                     value := '0');
+	                FOR #i := 0 TO 70 BY 1 DO
+	                    POKE(area := #DB,
+	                         dbNumber := #DB_SEND,
+	                         byteOffset := (#SEND_OFFSET.MSG + #i + 10),
+	                         value := #Data[#i + 1]);
+	                END_FOR;
+	          
+	
+	                
+	            #TRI, #TRR:
+	                POKE(area := #DB, //Set the process status of the message
+	                     dbNumber := #DB_SEND,
+	                     byteOffset := (#SEND_OFFSET.MSG + 8),
+	                     value := UINT_TO_CHAR(#ProcessStatus + 48));
+	                
+	            #STA:
+	                FOR #i := 0 TO 7 BY 1 DO //Copy NFP to DB to send
+	                    POKE(area := #DB,
+	                         dbNumber := #DB_SEND,
+	                         byteOffset := (#SEND_OFFSET.MSG + #i),
+	                         value := #iNFP[#i + 1]);
+	                END_FOR;
+	                IF #MasterNFP THEN
+	                    #oNFP := #iNFP;
+	                END_IF;
+	                
+	                
+	            #PFC:
+	                POKE(area := #DB,
+	                     dbNumber := #DB_SEND,
+	                     byteOffset := (#SEND_OFFSET.MSG + 8),
+	                     value := '0');
+	                POKE(area := #DB,
+	                     dbNumber := #DB_SEND,
+	                     byteOffset := (#SEND_OFFSET.MSG + 9),
+	                     value := '8');
+	                FOR #i := 0 TO 7 BY 1 DO
+	                    POKE(area := #DB,
+	                         dbNumber := #DB_SEND,
+	                         byteOffset := (#SEND_OFFSET.MSG + #i + 10),
+	                         value := #Kanban[#i + 1]);
+	                END_FOR;
+	                
+	                
+	            #NFP:
+	                POKE(area := #DB,
+	                     dbNumber := #DB_SEND,
+	                     byteOffset := (#SEND_OFFSET.MSG),
+	                     value := '0');
+	                POKE(area := #DB,
+	                     dbNumber := #DB_SEND,
+	                     byteOffset := (#SEND_OFFSET.MSG + 1),
+	                     value := '8');
+	                FOR #i := 1 TO 8 BY 1 DO
+	                    POKE(area := #DB,
+	                         dbNumber := #DB_SEND,
+	                         byteOffset := (#SEND_OFFSET.MSG + #i + 1),
+	                         value := #Kanban[#i]);
+	                END_FOR;
+	                
+	            #CMA, #TMA:
+	                FOR #i := 0 TO 7 BY 1 DO
+	                    POKE(area := #DB,
+	                         dbNumber := #DB_SEND,
+	                         byteOffset := (#SEND_OFFSET.MSG + #i + 8),
+	                         value := #Data[#i + 1]);
+	                END_FOR;
+	                
+	            #TRC:
+	                ;
+	                
+	        END_CASE;
+	        
+	        
+	        
+	        #SeqStep := 30; // Transition to state 30
+	        
+	    30: //Set flag to "1" to inform that PLC is ready to send (DB5 Ó 1005)
+	        POKE(area := #DB,//Set flag to "1" to inform that PLC is ready to send
+	             dbNumber := #DB_SEND,
+	             byteOffset := #SEND_OFFSET.SW,
+	             value := #PLUS1);
+	        #SeqStep := 40; // Transition to state 40
+	        
+	        
+	    40: //Wait to IJCORE response with "-1"
+	        IF (PEEK_WORD(area := #DB, dbNumber := #DB_SEND, byteOffset := #SEND_OFFSET.SW) = #MINUS1)
+	        THEN
+	            #SeqStep := 50; // Transition to state 50
+	        END_IF;
+	        
+	    50: //Check if IJCORE have answer from DB Receive
+	        IF (PEEK_WORD(area := #DB, dbNumber := #DB_REC, byteOffset := #REC_OFFSET.SW) = #PLUS1)
+	        THEN
+	            #Answer := PEEK_WORD(area := #DB, dbNumber := #DB_REC, byteOffset := #REC_OFFSET.ANS); //Copy answer from IJCORE
+	            IF #Answer <> #PLUS1 THEN
+	                #Fault := #Answer;
+	            END_IF;
+	            #SeqStep := 60; // Transition to state 100
+	        END_IF;
+	        
+	    60: //Change Flag to "-1"
+	        POKE(area := #DB, //Set "-1" to IJCORE
+	             dbNumber := #DB_REC,
+	             byteOffset := #REC_OFFSET.SW,
+	             value := #MINUS1);
+	        #SeqStep := 100; // Transition to state 100
+	        
+	        
+	    100: //Sequence done
+	        CASE #TraceabilityMode OF
+	            1:// Full traceability
+	                IF #Answer = 1 THEN
+	                    #MessageDone := TRUE;
+	                ELSE
+	                    #MessageDone := FALSE;
+	                END_IF;
+	            2:// Traceability only
+	                #MessageDone := TRUE;
+	        END_CASE;
+	        
+	        IF NOT #SendMessage THEN
+	            #SeqStep := 0; // Transition to state 0
+	        END_IF;
+	END_CASE;
+	
+	
+	
+	
+	
+	
+	
+END_FUNCTION_BLOCK
+

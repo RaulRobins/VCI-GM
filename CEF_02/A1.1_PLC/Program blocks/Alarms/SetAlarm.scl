@@ -1,0 +1,25 @@
+﻿FUNCTION "SetAlarm" : Void
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_INPUT 
+      AlarmNumber : Int;
+      Cell : Int;
+      Station : Int;
+   END_VAR
+
+
+BEGIN
+	IF #AlarmNumber < 1 OR #AlarmNumber > "AlarmsCount" THEN
+	    RETURN;
+	END_IF;
+	
+	IF "Alarms".Alarm[#AlarmNumber] = false AND NOT "Alarms".Reset THEN
+	    //"LoggerAddAlarm"(AlarmID := #AlarmNumber,
+	     //                #Cell := #Cell,
+	     //                #Station := #Station);
+	                     ;
+	END_IF;
+	
+	"Alarms".Alarm[#AlarmNumber] := true;
+END_FUNCTION
+
