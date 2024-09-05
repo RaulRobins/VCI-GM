@@ -1,0 +1,161 @@
+﻿FUNCTION_BLOCK "5. Call_M005_VARIABILITY"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_INPUT 
+      "type" : WString;   // Event type (production, equipment, IT)
+      businessGroup : WString;   // S = FAS; I = FIS; E = FCM; C = FCE; A = SAS
+      technoCode : WString;   // Technology code
+      location : WString;   // The defect location
+      defectTypeCode : WString;   // Individually set by each plant
+      defectNumber : Array[1..#dataSize] of DInt;   // Defect number
+      x : Bool;   // False = by location; True = by number
+   END_VAR
+
+   VAR_OUTPUT 
+      variabilityCode : WString[8] := WSTRING#'XXXXXXXX';   // Output
+      status : WString := WSTRING#'';   // Output
+   END_VAR
+
+   VAR 
+      variabilityIndex : Array[1..32] of WString[1] := [WSTRING#'1', WSTRING#'2', WSTRING#'3', WSTRING#'4', WSTRING#'5', WSTRING#'6', WSTRING#'7', WSTRING#'8', WSTRING#'9', WSTRING#'A', WSTRING#'B', WSTRING#'C', WSTRING#'D', WSTRING#'E', WSTRING#'F', WSTRING#'G', WSTRING#'H', WSTRING#'I', WSTRING#'J', WSTRING#'K', WSTRING#'L', WSTRING#'M', WSTRING#'N', WSTRING#'O', WSTRING#'P', WSTRING#'Q', WSTRING#'R', WSTRING#'S', WSTRING#'T', WSTRING#'U', WSTRING#'V', WSTRING#'X'];
+      actualValue : Array[1..#dataSize] of DInt;
+      timestamp {InstructionName := 'DTL'; LibVersion := '1.0'} : DTL;
+      datestring : String;
+      aux : Struct
+         "bool" : Bool;
+         idx : Int;
+         "dword" : DWord;
+         dword2 : DWord;
+         tempArray : Array[1..32] of Bool;
+         tempArray2 : Array[1..32] of Bool;
+      END_STRUCT;
+   END_VAR
+
+   VAR_TEMP 
+      i : Int;
+      ret : Int;
+   END_VAR
+
+   VAR CONSTANT 
+      dataSize : Int := 32;   // Size of the array that contains the defect codes
+   END_VAR
+
+
+BEGIN
+	// Get local time
+	#ret := RD_LOC_T(#timestamp);
+	
+	// Convert Date/hour to string
+	#datestring := "LGF_DTLtoString_ISO"("date" := #timestamp,
+	                                     separator := '-');
+	#datestring := REPLACE(IN1 := #datestring, IN2 := 'T', L := 1, P := 11);
+	
+	// Get the PLC ID and Plant ID from HMI input
+	"MII_Interface_Data".MII_METHODS.M005_VARIABILITY.Inputs.PLC_ID := "MII_Parameters".Connection.PLC_ID;
+	"MII_Interface_Data".MII_METHODS.M005_VARIABILITY.Inputs.PLANT := "MII_Parameters".Connection.PlantID;
+	
+	FOR #i := 1 TO 32 DO
+	    IF #defectNumber[#i] <> #actualValue[#i] AND NOT "1. DMC_setConnection_DB".CallBuffer[8] THEN
+	        REGION DIGIT 1
+	            // Get equipment variability code from HMI
+	            #variabilityCode := REPLACE(IN1 := #variabilityCode, IN2 := #type, L := 1, P := 1);
+	        END_REGION
+	        
+	        REGION DIGIT 2
+	            // Get the business code from HMI
+	            #variabilityCode := REPLACE(IN1 := #variabilityCode, IN2 := #businessGroup, L := 1, P := 2);
+	        END_REGION
+	        
+	        REGION DIGIT 3 AND 4
+	            // Get techno code from HMI
+	            #variabilityCode := REPLACE(IN1 := #variabilityCode, IN2 := #technoCode, L := 2, P := 3);
+	        END_REGION
+	        
+	        
+	        // Depends on the way variability tags are gathered: false means by location and true means by number
+	        IF NOT #x THEN
+	            REGION DIGIT 5 (1)
+	                // Writes 'x' in Digit 5 of variability code
+	                #variabilityCode := REPLACE(IN1 := #variabilityCode, IN2 := WSTRING#'x', L := 1, P := 5);
+	            END_REGION
+	            
+	            
+	            IF NOT #aux."bool" THEN
+	                // Convert DInt to array of bits
+	                #aux."dword" := DINT_TO_DWORD(#defectNumber[#i]);
+	                SCATTER(IN := #aux."dword",
+	                        OUT => #aux.tempArray);
+	                
+	                #aux."bool" := true;
+	            END_IF;
+	            
+	            // Verify each bit individually looking for updates
+	            FOR #aux.idx := 1 TO 32 DO
+	                IF #aux.tempArray[#aux.idx] <> #aux.tempArray2[#aux.idx] THEN
+	                    REGION DIGIT 8 (1)
+	                        // Writes the position of the error in the DInt
+	                        #variabilityCode := REPLACE(IN1 := #variabilityCode, IN2 := #variabilityIndex[#aux.idx], L := 1, P := 8);
+	                    END_REGION
+	                    
+	                    // Stores the current value of the bit
+	                    #aux.tempArray2[#aux.idx] := #aux.tempArray[#aux.idx];
+	                    
+	                    // Convert back the array of bits into DInt
+	                    GATHER(IN := #aux.tempArray2,
+	                           OUT => #aux.dword2);
+	                    #actualValue[#i] := DWORD_TO_DINT(#aux.dword2);
+	                    
+	                    IF #aux."bool" AND #defectNumber[#i] = #actualValue[#i] THEN
+	                        #aux."bool" := false;
+	                    END_IF;
+	                    
+	                    
+	                    GOTO jumpLoop;
+	                END_IF;
+	            END_FOR;
+	        ELSE
+	            REGION DIGIT 5 (2)
+	                // Get station number
+	                #variabilityCode := REPLACE(IN1 := #variabilityCode, IN2 := #location, L := 1, P := 5);
+	            END_REGION
+	            
+	            REGION DIGIT 8 (2)
+	                // Writes 'x' in Digit 8 of variability code
+	                #variabilityCode := REPLACE(IN1 := #variabilityCode, IN2 := WSTRING#'x', L := 1, P := 8);
+	            END_REGION
+	            
+	            // Saves the current value of the error string
+	            #actualValue[#i] := #defectNumber[#i];
+	        END_IF;
+	        
+	    jumpLoop:
+	        
+	        REGION DIGIT 6
+	            // Get variability type
+	            #variabilityCode := REPLACE(IN1 := #variabilityCode, IN2 := #defectTypeCode, L := 1, P := 6);
+	        END_REGION
+	        
+	        REGION DIGIT 7
+	            // Writes the event code number
+	            #variabilityCode := REPLACE(IN1 := #variabilityCode, IN2 := #variabilityIndex[#i], L := 1, P := 7);
+	        END_REGION
+	        
+	        // Writes the variability code
+	        "MII_Interface_Data".MII_METHODS.M005_VARIABILITY.Inputs.VARIABILITY_CODE := #variabilityCode;
+	        
+	        // Writes status tag value depending on error position
+	        "MII_Interface_Data".MII_METHODS.M005_VARIABILITY.Inputs.STATUS := STRING_TO_WSTRING("LGF_IntToString"(#defectNumber[#i]));
+	        #status := STRING_TO_WSTRING("LGF_IntToString"(#defectNumber[#i]));
+	        
+	        //Writes the error timestamp 
+	        "MII_Interface_Data".MII_METHODS.M005_VARIABILITY.Inputs.TIMESTAMP := MID(IN := STRING_TO_WSTRING(#datestring), L := 19, P := 1);
+	        
+	        //Call the method 
+	        "1. DMC_setConnection_DB".CallBuffer[8] := TRUE;
+	        
+	        EXIT;
+	    END_IF;
+	END_FOR;
+	
+END_FUNCTION_BLOCK
+

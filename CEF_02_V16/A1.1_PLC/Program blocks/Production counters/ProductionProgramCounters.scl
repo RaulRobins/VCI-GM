@@ -1,0 +1,64 @@
+﻿FUNCTION_BLOCK "ProductionProgramCounters"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR 
+      referenceOld : Int;
+      shiftToDelete : Int;
+   END_VAR
+
+   VAR_TEMP 
+      i : UInt;
+   END_VAR
+
+
+BEGIN
+	IF "DB_ProductionCountersEdit".ProgramNumber < 1 OR "DB_ProductionCountersEdit".ProgramNumber > "NumberOfProductionPrograms" THEN
+	    "DB_ProductionCountersEdit".ProgramNumber := 1;
+	    #referenceOld := 0;
+	END_IF;
+	//Check new reference in edit
+	IF #referenceOld <> "DB_ProductionCountersEdit".ProgramNumber THEN
+	    IF "DB_ProductionCountersEdit".ProgramNumber > 0 AND "DB_ProductionCountersEdit".ProgramNumber <= "NumberOfProductionPrograms" THEN
+	        "DB_ProductionCountersEdit".ProgramName := "DB_ProductionProgramList".Program["DB_ProductionCountersEdit".ProgramNumber].Name;
+	        "DB_ProductionCountersEdit".ProductCounters := "DB_ProductionCountersList".Program["DB_ProductionCountersEdit".ProgramNumber];
+	    END_IF;
+	    #referenceOld := "DB_ProductionCountersEdit".ProgramNumber;
+	END_IF;
+	
+	//Delete counters
+	IF "DB_ProductionCountersEdit".DeleteCounters > 0 AND "DB_ProductionCountersEdit".DeleteCounters < 4 THEN
+	    IF "DB_ProductionCountersEdit".ProgramNumber > 0 AND "DB_ProductionCountersEdit".ProgramNumber <= "NumberOfProductionPrograms" THEN
+	        #shiftToDelete := "DB_ProductionCountersEdit".DeleteCounters;
+	        "DB_ProductionCountersList".Program["DB_ProductionCountersEdit".ProgramNumber].Product[1].Shift[#shiftToDelete].Ok := 0;
+	        "DB_ProductionCountersList".Program["DB_ProductionCountersEdit".ProgramNumber].Product[1].Shift[#shiftToDelete].Nok := 0;
+	        "DB_ProductionCountersEdit".ProductCounters := "DB_ProductionCountersList".Program["DB_ProductionCountersEdit".ProgramNumber];
+	        FOR #i := 1 TO 50 DO
+	            "PartErrorsCounter".CountersRef["DB_ProductionCountersEdit".ProgramNumber].Counters[#shiftToDelete, #i] := 0;
+	        END_FOR;
+	    END_IF;
+	    "DB_ProductionCountersEdit".DeleteCounters := 0;
+	END_IF;
+	        
+	    
+	//Auto reset shift counters
+	IF "DB_DateTimeAndShifts_Instance".ShiftStatus.Shift1Started THEN
+	    FOR #i := 1 TO "NumberOfProductionPrograms" DO
+	        "DB_ProductionCountersList".Program[#i].Product[1].Shift[1].Ok := 0;
+	        "DB_ProductionCountersList".Program[#i].Product[1].Shift[1].Nok := 0;
+	    END_FOR;
+	END_IF;
+	IF "DB_DateTimeAndShifts_Instance".ShiftStatus.Shift2Started THEN
+	    FOR #i := 1 TO "NumberOfProductionPrograms" DO
+	        "DB_ProductionCountersList".Program[#i].Product[1].Shift[2].Ok := 0;
+	        "DB_ProductionCountersList".Program[#i].Product[1].Shift[2].Nok := 0;
+	    END_FOR;
+	END_IF;
+	IF "DB_DateTimeAndShifts_Instance".ShiftStatus.Shift3Started THEN
+	    FOR #i := 1 TO "NumberOfProductionPrograms" DO
+	        "DB_ProductionCountersList".Program[#i].Product[1].Shift[3].Ok := 0;
+	        "DB_ProductionCountersList".Program[#i].Product[1].Shift[3].Nok := 0;
+	    END_FOR;
+	END_IF;
+	
+END_FUNCTION_BLOCK
+

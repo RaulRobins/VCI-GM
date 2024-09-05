@@ -1,0 +1,81 @@
+﻿FUNCTION_BLOCK "Manipulator_main"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR 
+      PUT_Instance {InstructionName := 'PUT'; LibVersion := '1.3'; S7_SetPoint := 'False'} : PUT;
+      GET_Instance {InstructionName := 'GET'; LibVersion := '1.3'; S7_SetPoint := 'False'} : GET;
+      GetStatusMem : Word;
+      PutStatusMem : Word;
+      GetCounterNDR : ULInt;
+      PutCounterDone : ULInt;
+      GetCounterNDR_last : ULInt;
+      PutCounterDone_last : ULInt;
+      GetCommOK : Bool;
+      PutCommOK : Bool;
+      R_TRIG_GetNDR {InstructionName := 'R_TRIG'; LibVersion := '1.0'; S7_SetPoint := 'False'} : R_TRIG;
+      R_TRIG_PutDone {InstructionName := 'R_TRIG'; LibVersion := '1.0'; S7_SetPoint := 'False'} : R_TRIG;
+      IEC_Timer_GetCommOK {InstructionName := 'TOF_TIME'; LibVersion := '1.0'} : TOF_TIME;
+      IEC_Timer_PutCommOK {InstructionName := 'TOF_TIME'; LibVersion := '1.0'} : TOF_TIME;
+   END_VAR
+
+
+BEGIN
+	REGION GET
+	    #GET_Instance(ID := W#16#100,
+	                  ADDR_1 := P#db1002.dbx0.0 byte 100,
+	                  RD_1 := P#db1002.dbx0.0 byte 100);
+	    IF #GET_Instance.ERROR THEN
+	        #GetStatusMem := #GET_Instance.STATUS;
+	    END_IF;
+	    IF #GET_Instance.NDR THEN
+	        #GetStatusMem := 0;
+	    END_IF;
+	    #R_TRIG_GetNDR(CLK := #GET_Instance.NDR);
+	    IF #R_TRIG_GetNDR.Q THEN
+	        #GetCounterNDR := #GetCounterNDR + 1;
+	    END_IF;
+	    #GET_Instance.REQ := NOT #GET_Instance.REQ;
+	END_REGION
+	
+	"Manipulator<<<Main".counter := "Manipulator>>>Main".counter + 1;
+	"Manipulator<<<Main".robotOutOfZone := "iR1OutOfSt4" ;
+	"Manipulator<<<Main".airSupplyStatus := "safety_signals".doorUnlocked;
+	
+	IF "DB_MainData".MachineMode >= 3 THEN
+	    "Manipulator<<<Main".automaticModeActive := TRUE;
+	END_IF;
+	    
+	
+	REGION comm diagnostic
+	    #IEC_Timer_GetCommOK(IN := #GetCounterNDR <> #GetCounterNDR_last,
+	   PT := t#1s,
+	   Q => #GetCommOK);
+	    #IEC_Timer_PutCommOK(IN := #PutCounterDone <> #PutCounterDone_last,
+	   PT := t#1s,
+	   Q => #PutCommOK);
+	    #GetCounterNDR_last := #GetCounterNDR;
+	    #PutCounterDone_last := #PutCounterDone;
+	END_REGION
+	
+	REGION PUT
+	    #PUT_Instance(ID := W#16#100,
+	                  ADDR_1 := P#db1001.dbx0.0 byte 100,
+	                  SD_1 := P#db1001.dbx0.0 byte 100);
+	    #PUT_Instance.REQ := NOT #PUT_Instance.REQ;
+	    IF #PUT_Instance.ERROR THEN
+	        #PutStatusMem := #PUT_Instance.STATUS;
+	    END_IF;
+	    IF #PUT_Instance.DONE THEN
+	        #PutStatusMem := 0;
+	    END_IF;
+	    #R_TRIG_PutDone(CLK:=#PUT_Instance.DONE);
+	    IF #R_TRIG_PutDone.Q THEN
+	        #PutCounterDone := #PutCounterDone + 1;
+	    END_IF;
+	END_REGION
+	
+	
+	
+	
+END_FUNCTION_BLOCK
+

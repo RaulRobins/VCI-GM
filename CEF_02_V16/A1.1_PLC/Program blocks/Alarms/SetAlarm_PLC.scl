@@ -1,0 +1,36 @@
+﻿FUNCTION_BLOCK "SetAlarm_PLC"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_INPUT 
+      iAlarmCondition : Bool;
+      iReset : Bool;
+      iTime : Time;
+   END_VAR
+
+   VAR_OUTPUT 
+      AlarmToSet : Bool;
+   END_VAR
+
+   VAR 
+      IEC_Timer_0_Instance {InstructionName := 'TON_TIME'; LibVersion := '1.0'} : TON_TIME;
+      AlarmToSetWork { S7_SetPoint := 'True'} : Bool;
+   END_VAR
+
+
+BEGIN
+	#IEC_Timer_0_Instance(IN := #iAlarmCondition,
+	                      PT := #iTime);
+	
+	IF #iReset AND NOT #iAlarmCondition THEN
+	    #AlarmToSetWork := FALSE;
+	END_IF;
+	
+	IF #iTime <= t#0s THEN
+	    #AlarmToSetWork := #AlarmToSetWork OR #iAlarmCondition;
+	ELSE
+	    #AlarmToSetWork := #AlarmToSetWork OR #IEC_Timer_0_Instance.Q;
+	END_IF;
+	
+	#AlarmToSet := #AlarmToSetWork;
+END_FUNCTION_BLOCK
+

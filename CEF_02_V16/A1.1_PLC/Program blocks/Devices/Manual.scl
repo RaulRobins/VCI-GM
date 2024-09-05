@@ -1,0 +1,70 @@
+﻿FUNCTION_BLOCK "Manual"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR 
+      res : Bool;
+      R_TRIG_MM220bp {InstructionName := 'R_TRIG'; LibVersion := '1.0'} : R_TRIG;
+      R_TRIG_MM220wp {InstructionName := 'R_TRIG'; LibVersion := '1.0'} : R_TRIG;
+      R_TRIG_MM222bp {InstructionName := 'R_TRIG'; LibVersion := '1.0'} : R_TRIG;
+      R_TRIG_MM222wp {InstructionName := 'R_TRIG'; LibVersion := '1.0'} : R_TRIG;
+      R_TRIG_MM224bp {InstructionName := 'R_TRIG'; LibVersion := '1.0'} : R_TRIG;
+      R_TRIG_MM224wp {InstructionName := 'R_TRIG'; LibVersion := '1.0'} : R_TRIG;
+   END_VAR
+
+
+BEGIN
+	
+	REGION hydraulics
+	    IF "HMIData".ManualCommand = 10012 THEN
+	        "DevicesData".Hydraulic.StartMotor := true;
+	    END_IF;
+	    IF "HMIData".ManualCommand = 10011 THEN
+	        "DevicesData".Hydraulic.StartMotor := FALSE;
+	    END_IF;
+	    IF "iOilTemperature65" OR NOT "iOilLowLevelOK" OR NOT "iOilHighLevekOK" THEN
+	        "DevicesData".Hydraulic.StartMotor := FALSE;
+	    END_IF;
+	END_REGION
+	
+	REGION DMC scanner
+	    IF "SystemHMI".ManualMode THEN
+	        IF "HMIData".ManualCommand = 3015 THEN
+	            "DevicesData".scanner.start := TRUE;
+	        END_IF;
+	        IF "DevicesData".scanner.newData THEN
+	            "AutoInfo".ExtractedScan := "DevicesData".scanner.data;
+	        END_IF;
+	    END_IF;
+	END_REGION
+	REGION robot
+	    IF "ModeSelection_DB".mode.activeMode = "mode_1_manual" OR NOT "ModeSelection_DB".mode.switch.auto  OR
+	        "ModeSelection_DB".mode.activeMode = "mode_0_not_selected" THEN
+	        #R_TRIG_MM220bp(CLK := "iR1_MM220grippingTubeToBp");
+	        #R_TRIG_MM220wp(CLK := "iR1_MM220grippingTubeToWp");
+	        #R_TRIG_MM222bp(CLK := "iR1_MM222holdingSidememberInsideToBp");
+	        #R_TRIG_MM222wp(CLK := "iR1_MM222holdingSidememberInsideToWp");
+	        #R_TRIG_MM224bp(CLK := "iR1_MM224holdingSidememberOutsideToBp");
+	        #R_TRIG_MM224wp(CLK := "iR1_MM224holdingSidememberOutsideToWp");
+	        IF #R_TRIG_MM220bp.Q THEN
+	            "HMIData".ManualCommand := 1000;
+	        END_IF;
+	        IF #R_TRIG_MM220wp.Q THEN
+	            "HMIData".ManualCommand := 2000;
+	        END_IF;
+	        IF #R_TRIG_MM222bp.Q THEN
+	            "HMIData".ManualCommand := 1002;
+	        END_IF;
+	        IF #R_TRIG_MM222wp.Q THEN
+	            "HMIData".ManualCommand := 2002;
+	        END_IF;
+	        IF #R_TRIG_MM224bp.Q THEN
+	            "HMIData".ManualCommand := 1004;
+	        END_IF;
+	        IF #R_TRIG_MM224wp.Q THEN
+	            "HMIData".ManualCommand := 2004;
+	        END_IF;
+	    END_IF;
+	END_REGION
+	
+END_FUNCTION_BLOCK
+
