@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Document>
+  <Engineering version="V16" />
+  <DocumentInfo>
+    <Created>2024-09-05T17:40:15.1009646Z</Created>
+    <ExportSetting>WithDefaults</ExportSetting>
+    <InstalledProducts>
+      <Product>
+        <DisplayName>Totally Integrated Automation Portal</DisplayName>
+        <DisplayVersion>V16 Update 6</DisplayVersion>
+      </Product>
+      <OptionPackage>
+        <DisplayName>TIA Portal Version Control Interface</DisplayName>
+        <DisplayVersion>V16 Update 2</DisplayVersion>
+      </OptionPackage>
+      <OptionPackage>
+        <DisplayName>TIA Portal Openness</DisplayName>
+        <DisplayVersion>V16 Update 6</DisplayVersion>
+      </OptionPackage>
+      <Product>
+        <DisplayName>STEP 7 Professional</DisplayName>
+        <DisplayVersion>V16 Update 6</DisplayVersion>
+      </Product>
+      <OptionPackage>
+        <DisplayName>STEP 7 Safety</DisplayName>
+        <DisplayVersion>V16</DisplayVersion>
+      </OptionPackage>
+      <Product>
+        <DisplayName>WinCC Advanced</DisplayName>
+        <DisplayVersion>V16 Update 6</DisplayVersion>
+      </Product>
+    </InstalledProducts>
+  </DocumentInfo>
+  <SW.Types.PlcStruct ID="0">
+    <AttributeList>
+      <Interface><Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v4">
+  <Section Name="None">
+    <Member Name="LeftCupforming" Datatype="&quot;UDT_Results_Cupforming&quot;"><AttributeList><BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute></AttributeList><Sections><Section Name="None"><Member Name="MaxForce" Datatype="Real" /><Member Name="MinimalWay" Datatype="Real" /><Member Name="MaxZposition" Datatype="Real" /><Member Name="OK" Datatype="Bool" /><Member Name="NOK" Datatype="Bool" /><Member Name="parameters" Datatype="&quot;UDT_FittingParameters&quot;"><Sections><Section Name="None"><Member Name="DigiforceProgram" Datatype="Int" /><Member Name="FinalSpeed" Datatype="Real" /><Member Name="ApproachSpeed" Datatype="Real" /><Member Name="FinalForce" Datatype="Real" /><Member Name="ApproachForce" Datatype="Real" /><Member Name="EndWayImmediate" Datatype="Real" /><Member Name="EndWayWithTimeout" Datatype="Real" /><Member Name="SwitchingWay" Datatype="Real" /><Member Name="EndWayTimeout" Datatype="Time" /></Section></Sections></Member></Section></Sections></Member>
+    <Member Name="RightCupforming" Datatype="&quot;UDT_Results_Cupforming&quot;"><AttributeList><BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute></AttributeList><Sections><Section Name="None"><Member Name="MaxForce" Datatype="Real" /><Member Name="MinimalWay" Datatype="Real" /><Member Name="MaxZposition" Datatype="Real" /><Member Name="OK" Datatype="Bool" /><Member Name="NOK" Datatype="Bool" /><Member Name="parameters" Datatype="&quot;UDT_FittingParameters&quot;"><Sections><Section Name="None"><Member Name="DigiforceProgram" Datatype="Int" /><Member Name="FinalSpeed" Datatype="Real" /><Member Name="ApproachSpeed" Datatype="Real" /><Member Name="FinalForce" Datatype="Real" /><Member Name="ApproachForce" Datatype="Real" /><Member Name="EndWayImmediate" Datatype="Real" /><Member Name="EndWayWithTimeout" Datatype="Real" /><Member Name="SwitchingWay" Datatype="Real" /><Member Name="EndWayTimeout" Datatype="Time" /></Section></Sections></Member></Section></Sections></Member>
+    <Member Name="LeftRiveting1" Datatype="&quot;UDT_Friedrich&quot;"><AttributeList><BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute></AttributeList><Sections><Section Name="None"><Member Name="Start" Datatype="Bool" /><Member Name="PrgNumber" Datatype="Int" /><Member Name="Ready" Datatype="Bool" /><Member Name="Running" Datatype="Bool" /><Member Name="OK" Datatype="Bool" /><Member Name="NOK" Datatype="Bool" /><Member Name="H1OK" Datatype="Bool" /><Member Name="H2OK" Datatype="Bool" /><Member Name="TimeOK" Datatype="Bool" /><Member Name="StartError" Datatype="Bool" /><Member Name="LastH1" Datatype="Real" /><Member Name="LastH2" Datatype="Real" /><Member Name="LastTime" Datatype="Real" /><Member Name="LastZ1" Datatype="Real" /><Member Name="Error" Datatype="Bool" /><Member Name="NewData" Datatype="Bool" /><Member Name="Z1OK" Datatype="Bool" /><Member Name="NewDataAfterStart" Datatype="Bool" /><Member Name="LastZ2" Datatype="Real" /></Section></Sections></Member>
+    <Member Name="LeftRiveting2" Datatype="&quot;UDT_Friedrich&quot;"><AttributeList><BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute></AttributeList><Sections><Section Name="None"><Member Name="Start" Datatype="Bool" /><Member Name="PrgNumber" Datatype="Int" /><Member Name="Ready" Datatype="Bool" /><Member Name="Running" Datatype="Bool" /><Member Name="OK" Datatype="Bool" /><Member Name="NOK" Datatype="Bool" /><Member Name="H1OK" Datatype="Bool" /><Member Name="H2OK" Datatype="Bool" /><Member Name="TimeOK" Datatype="Bool" /><Member Name="StartError" Datatype="Bool" /><Member Name="LastH1" Datatype="Real" /><Member Name="LastH2" Datatype="Real" /><Member Name="LastTime" Datatype="Real" /><Member Name="LastZ1" Datatype="Real" /><Member Name="Error" Datatype="Bool" /><Member Name="NewData" Datatype="Bool" /><Member Name="Z1OK" Datatype="Bool" /><Member Name="NewDataAfterStart" Datatype="Bool" /><Member Name="LastZ2" Datatype="Real" /></Section></Sections></Member>
+    <Member Name="RightRiveting1" Datatype="&quot;UDT_Friedrich&quot;"><AttributeList><BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute></AttributeList><Sections><Section Name="None"><Member Name="Start" Datatype="Bool" /><Member Name="PrgNumber" Datatype="Int" /><Member Name="Ready" Datatype="Bool" /><Member Name="Running" Datatype="Bool" /><Member Name="OK" Datatype="Bool" /><Member Name="NOK" Datatype="Bool" /><Member Name="H1OK" Datatype="Bool" /><Member Name="H2OK" Datatype="Bool" /><Member Name="TimeOK" Datatype="Bool" /><Member Name="StartError" Datatype="Bool" /><Member Name="LastH1" Datatype="Real" /><Member Name="LastH2" Datatype="Real" /><Member Name="LastTime" Datatype="Real" /><Member Name="LastZ1" Datatype="Real" /><Member Name="Error" Datatype="Bool" /><Member Name="NewData" Datatype="Bool" /><Member Name="Z1OK" Datatype="Bool" /><Member Name="NewDataAfterStart" Datatype="Bool" /><Member Name="LastZ2" Datatype="Real" /></Section></Sections></Member>
+    <Member Name="RightRiveting2" Datatype="&quot;UDT_Friedrich&quot;"><AttributeList><BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute><BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute></AttributeList><Sections><Section Name="None"><Member Name="Start" Datatype="Bool" /><Member Name="PrgNumber" Datatype="Int" /><Member Name="Ready" Datatype="Bool" /><Member Name="Running" Datatype="Bool" /><Member Name="OK" Datatype="Bool" /><Member Name="NOK" Datatype="Bool" /><Member Name="H1OK" Datatype="Bool" /><Member Name="H2OK" Datatype="Bool" /><Member Name="TimeOK" Datatype="Bool" /><Member Name="StartError" Datatype="Bool" /><Member Name="LastH1" Datatype="Real" /><Member Name="LastH2" Datatype="Real" /><Member Name="LastTime" Datatype="Real" /><Member Name="LastZ1" Datatype="Real" /><Member Name="Error" Datatype="Bool" /><Member Name="NewData" Datatype="Bool" /><Member Name="Z1OK" Datatype="Bool" /><Member Name="NewDataAfterStart" Datatype="Bool" /><Member Name="LastZ2" Datatype="Real" /></Section></Sections></Member>
+  </Section>
+</Sections></Interface>
+      <IsFailsafeCompliant>false</IsFailsafeCompliant>
+      <Name>UDT_MeasuredPartData</Name>
+    </AttributeList>
+    <ObjectList>
+      <MultilingualText ID="1" CompositionName="Comment">
+        <ObjectList>
+          <MultilingualTextItem ID="2" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+          <MultilingualTextItem ID="3" CompositionName="Items">
+            <AttributeList>
+              <Culture>es-MX</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+      <MultilingualText ID="4" CompositionName="Title">
+        <ObjectList>
+          <MultilingualTextItem ID="5" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+          <MultilingualTextItem ID="6" CompositionName="Items">
+            <AttributeList>
+              <Culture>es-MX</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+    </ObjectList>
+  </SW.Types.PlcStruct>
+</Document>
